@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="28">
+      <Unit0>
+        <Filename Value="rcpspoc.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="rcpspoc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="5"/>
+        <UsageCount Value="62"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="projectdata.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="projectdata"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="72" Y="84"/>
+        <UsageCount Value="62"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="ssgs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ssgs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2"/>
+        <CursorPos X="47" Y="68"/>
+        <UsageCount Value="62"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="topsort.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="topsort"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="12"/>
+        <CursorPos X="56" Y="56"/>
+        <UsageCount Value="62"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="profit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="profit"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="17" Y="75"/>
+        <UsageCount Value="62"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="helpers.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="helpers"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="89" Y="27"/>
+        <UsageCount Value="59"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="printing.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="printing"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="16" Y="17"/>
+        <UsageCount Value="59"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="ssgsoc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ssgsoc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="15"/>
+        <CursorPos X="10" Y="9"/>
+        <UsageCount Value="58"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="main"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="130"/>
+        <CursorPos X="11" Y="149"/>
+        <UsageCount Value="54"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="operators.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="operators"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="40" Y="37"/>
+        <UsageCount Value="49"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="gassgsoc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgsoc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="25" Y="5"/>
+        <UsageCount Value="39"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="individual.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="individual"/>
+        <IsVisibleTab Value="True"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="30" Y="37"/>
+        <UsageCount Value="39"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="stopwatch.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="stopwatch"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="25" Y="18"/>
+        <UsageCount Value="23"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="parallelfitness.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="parallelfitness"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="60" Y="38"/>
+        <UsageCount Value="23"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="constants.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="constants"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="22" Y="13"/>
+        <UsageCount Value="23"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="gassgs.pas"/>
+        <UnitName Value="gassgs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="162"/>
+        <CursorPos X="18" Y="10"/>
+        <UsageCount Value="20"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="geneticalgorithm.pas"/>
+        <UnitName Value="geneticalgorithm"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="74" Y="31"/>
+        <UsageCount Value="34"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="psplibreader.pas"/>
+        <UnitName Value="psplibreader"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="55" Y="16"/>
+        <UsageCount Value="22"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="projdata.pas"/>
+        <UnitName Value="projdata"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="11" Y="1"/>
+        <UsageCount Value="18"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\mathh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="49"/>
+        <CursorPos X="14" Y="80"/>
+        <UsageCount Value="8"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="ssgs-oc.pas"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="8" Y="2"/>
+        <UsageCount Value="18"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="schedvis.pas"/>
+        <UnitName Value="schedvis"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="17"/>
+        <UsageCount Value="18"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\sysutils\diskh.inc"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="19"/>
+        <UsageCount Value="10"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="..\..\..\..\Downloads\omnithreadlibrary-read-only\OtlOptions.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="31" Y="32"/>
+        <UsageCount Value="10"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="..\..\..\..\Downloads\omnithreadlibrary-read-only\OtlCommon.pas"/>
+        <UnitName Value="OtlCommon"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="195"/>
+        <CursorPos X="3" Y="222"/>
+        <UsageCount Value="10"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\objpash.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="163"/>
+        <CursorPos X="23" Y="192"/>
+        <UsageCount Value="10"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1583"/>
+        <CursorPos X="15" Y="1606"/>
+        <UsageCount Value="10"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\sysutils\sysutilh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="267"/>
+        <CursorPos X="13" Y="290"/>
+        <UsageCount Value="10"/>
+      </Unit27>
+    </Units>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
+  </ProjectSession>
+  <Debugging>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="resRemaining"/>
+      </Item1>
+      <Item2>
+        <Expression Value="PRIORULES"/>
+      </Item2>
+    </Watches>
+  </Debugging>
+</CONFIG>
