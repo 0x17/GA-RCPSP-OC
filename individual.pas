@@ -27,7 +27,8 @@ begin
 end;
 
 constructor TIndividual.Create;
-var i: Integer;
+var
+  i: Integer;
 begin
   SetLength(order, ps.numJobs);
   for i := 0 to ps.numJobs - 1 do
@@ -36,7 +37,7 @@ end;
 
 procedure TIndividual.Mutate;
 begin
-    SwapNeighborhood(ps, order);
+  SwapNeighborhood(ps, order);
 end;
 
 procedure TIndividual.Crossover(const other: TIndividual; var daughter, son: TIndividual);

@@ -62,6 +62,7 @@ begin
   end;
   CloseFile(fp);
   fnames.Free;
+  ps.Free;
 end;
 
 procedure TestOneProject;
@@ -120,7 +121,6 @@ begin
 
   sw.Free;
   algo.Free;
-
 end;
 
 procedure PrintProjects();
