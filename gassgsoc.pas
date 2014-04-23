@@ -19,6 +19,7 @@ private
   procedure SelectBestOrder(out best: JobData);
 
   procedure SortDescendingFitness;
+  procedure QuickSortPopulation(var fvals: array of Double;  iLo, iHi: Integer);
 
   procedure InitPriorityRulesFromFile(out rules: JobDataArray);
 public
@@ -152,42 +153,43 @@ begin
     best[i] := population[0].order[i];
 end;
 
+procedure TGA_SSGS_OC.QuickSortPopulation(var fvals: array of Double;  iLo, iHi: Integer);
+var
+  Lo, Hi: Integer;
+  Mid, T: Double;
+  T2: TIndividual;
+begin
+  Lo := iLo;
+  Hi := iHi;
+  Mid := fvals[(Lo + Hi) div 2];
+  repeat
+    while fvals[Lo] < Mid do Inc(Lo);
+    while fvals[Hi] > Mid do Dec(Hi);
+    if Lo <= Hi then
+    begin
+      T := fvals[Lo];
+      fvals[Lo] := fvals[Hi];
+      fvals[Hi] := T;
+
+      T2 := population[Lo];
+      population[Lo] := population[Hi];
+      population[Hi] := T2;
+
+      Inc(Lo);
+      Dec(Hi);
+    end;
+  until Lo > Hi;
+  if Hi > iLo then QuickSortPopulation(fvals, iLo, Hi);
+  if Lo < iHi then QuickSortPopulation(fvals, Lo, iHi);
+end;
+
 procedure TGA_SSGS_OC.SortDescendingFitness;
-  procedure qsort(var fvals: array of Double;  iLo, iHi: Integer);
-  var
-    Lo, Hi: Integer;
-    Mid, T: Double;
-    T2: TIndividual;
-  begin
-    Lo := iLo;
-    Hi := iHi;
-    Mid := fvals[(Lo + Hi) div 2];
-    repeat
-      while fvals[Lo] < Mid do Inc(Lo);
-      while fvals[Hi] > Mid do Dec(Hi);
-      if Lo <= Hi then
-      begin
-        T := fvals[Lo];
-        fvals[Lo] := fvals[Hi];
-        fvals[Hi] := T;
-
-        T2 := population[Lo];
-        population[Lo] := population[Hi];
-        population[Hi] := T2;
-
-        Inc(Lo);
-        Dec(Hi);
-      end;
-    until Lo > Hi;
-    if Hi > iLo then qsort(fvals, iLo, Hi);
-    if Lo < iHi then qsort(fvals, Lo, iHi);
-  end;
 var
   fvals: TFValArray;
 begin
   //CalcFitnessValuesSerial(population, fvals);
   CalcFitnessValuesParallel(population, fvals);
-  qsort(fvals, 0, POP_SIZE*2-1);
+  QuickSortPopulation(fvals, 0, POP_SIZE*2-1);
 end;
 
 procedure TGA_SSGS_OC.InitPriorityRulesFromFile(out rules: JobDataArray);

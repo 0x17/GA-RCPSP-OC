@@ -12,7 +12,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="5"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
       </Unit0>
       <Unit1>
         <Filename Value="projectdata.pas"/>
@@ -21,7 +21,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="72" Y="84"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
       </Unit1>
       <Unit2>
         <Filename Value="ssgs.pas"/>
@@ -30,7 +30,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="2"/>
         <CursorPos X="47" Y="68"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
       </Unit2>
       <Unit3>
         <Filename Value="topsort.pas"/>
@@ -39,7 +39,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="12"/>
         <CursorPos X="56" Y="56"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
       </Unit3>
       <Unit4>
         <Filename Value="profit.pas"/>
@@ -48,7 +48,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="17" Y="75"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
       </Unit4>
       <Unit5>
         <Filename Value="helpers.pas"/>
@@ -57,7 +57,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="89" Y="27"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="60"/>
       </Unit5>
       <Unit6>
         <Filename Value="printing.pas"/>
@@ -66,7 +66,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="16" Y="17"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="60"/>
       </Unit6>
       <Unit7>
         <Filename Value="ssgsoc.pas"/>
@@ -75,44 +75,52 @@
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="10" Y="9"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="59"/>
       </Unit7>
       <Unit8>
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="130"/>
-        <CursorPos X="11" Y="149"/>
-        <UsageCount Value="54"/>
+        <CursorPos X="7" Y="26"/>
+        <UsageCount Value="55"/>
+        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="operators.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="operators"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="40" Y="37"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="13"/>
+        <CursorPos X="34" Y="18"/>
+        <UsageCount Value="50"/>
+        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="gassgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsoc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="25" Y="5"/>
-        <UsageCount Value="39"/>
+        <TopLine Value="154"/>
+        <CursorPos X="9" Y="191"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
         <Filename Value="individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="30" Y="37"/>
-        <UsageCount Value="39"/>
+        <CursorPos X="15" Y="48"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="stopwatch.pas"/>
@@ -121,16 +129,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="25" Y="18"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="24"/>
       </Unit12>
       <Unit13>
         <Filename Value="parallelfitness.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="parallelfitness"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="60" Y="38"/>
-        <UsageCount Value="23"/>
+        <CursorPos X="6" Y="13"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="constants.pas"/>
@@ -139,7 +149,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="13"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="24"/>
       </Unit14>
       <Unit15>
         <Filename Value="gassgs.pas"/>
@@ -239,7 +249,23 @@
         <UsageCount Value="10"/>
       </Unit27>
     </Units>
-    <JumpHistory Count="0" HistoryIndex="-1"/>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="3" HistoryIndex="2">
+      <Position1>
+        <Filename Value="gassgsoc.pas"/>
+        <Caret Line="39" Column="6" TopLine="25"/>
+      </Position1>
+      <Position2>
+        <Filename Value="gassgsoc.pas"/>
+        <Caret Line="22" Column="81" TopLine="1"/>
+      </Position2>
+      <Position3>
+        <Filename Value="gassgsoc.pas"/>
+        <Caret Line="191" Column="9" TopLine="154"/>
+      </Position3>
+    </JumpHistory>
   </ProjectSession>
   <Debugging>
     <Watches Count="2">
