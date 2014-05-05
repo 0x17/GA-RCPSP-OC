@@ -23,8 +23,6 @@ begin
 end;
 
 procedure InitAL(out order: JobData);
-var
-  i: Integer;
 begin
   RandomTopologicalOrder(ps, order);
 end;

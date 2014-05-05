@@ -5,14 +5,60 @@
 
 interface
 
-uses projectdata, gaactivitylist, gab, classes, sysutils, math, parallelfitness, constants, ssgsmod, profit, helpers, operators, gacommon;
+uses projectdata, gaactivitylist, classes, sysutils, math, parallelfitness, constants, ssgsmod, profit, helpers, operators, gacommon;
 
-function RunGASSGSMod(const nps: ProjData; out sts: JobData; best: TALBPair): Double;
+type TALBPair = record
+  order, b: JobData;
+end;
+
+function RunGASSGSMod(const nps: ProjData; best: TALBPair): Double;
 
 implementation
 
 var ps: ProjData;
-    population: TPop<TALBPair>;
+
+procedure InitB(out b: JobData);
+var j: Integer;
+begin
+  SetLength(b, ps.numJobs);
+  for j := 0 to ps.numJobs - 1 do
+    b[j] := RandomRange(0, 1);
+end;
+
+procedure MutateB(var b: JobData);
+var j: Integer;
+begin
+  for j := 0 to ps.numJobs - 1 do
+      if RandomRange(1, 100) <= 3 then
+         b[j] := 1 - b[j];
+end;
+
+procedure OPC(const mother, father: JobData; var daughter: JobData);
+var
+  j, q: Integer;
+begin
+    q := RandomRange(0, ps.numJobs-1);
+    for j := 0 to ps.numJobs-1 do
+      if j <= q then
+        daughter[j] := mother[j]
+      else
+        daughter[j] := father[j];
+end;
+
+procedure CrossoverB(const b, other: JobData; var daughter, son: JobData);
+begin
+  OPC(b, other, daughter);
+  OPC(other, b, son);
+end;
+
+function FitnessSSGSMod(const individual: TALBPair): Double;
+var
+  sts: JobData;
+  resRemaining: ResourceProfile;
+begin
+  SolveMod(ps, individual.order, individual.b, sts, resRemaining);
+  result := CalcProfit(ps, sts, resRemaining);
+end;
 
 procedure InitializePopulation(var population: TPop<TALBPair>); forward;
 
@@ -28,9 +74,8 @@ begin
   MutateB(individual.b);
 end;
 
-function RunGASSGSMod(const nps: ProjData; out sts: JobData; best: TALBPair): Double;
-var i: Integer;
-    core: TGACore<TALBPair>;
+function RunGASSGSMod(const nps: ProjData; best: TALBPair): Double;
+var core: TGACore<TALBPair>;
     procs: TGAProcs<TALBPair>;
 begin
   ps := nps;
@@ -39,7 +84,7 @@ begin
   procs.fitnessFunc := FitnessSSGSMod;
   procs.mutateProc := MutateALB;
   core := TGACore<TALBPair>.Create(procs);
-  result := core.Run(sts, best);
+  result := core.Run(best);
   FreeAndNil(core);
 end;
 
@@ -50,7 +95,6 @@ var
   j: Integer;
 begin
   SetProjectStructureAL(ps);
-  SetProjectStructureB(ps);
 
   ProjData.InitPriorityRulesFromFile(ps, prioRules);
   for i := 0 to 12 do

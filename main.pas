@@ -6,7 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gab, gassgsoc, stopwatch, gassgs, gassgsmod, gaovercapacity, excel2000, comobj;
+uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj;
 
 const useExcel = False;
 
@@ -45,7 +45,7 @@ var
   fnames: TStringList;
   fname: String;
   ps: ProjData;
-  sts, bestOrder: JobData;
+  bestOrder: JobData;
   sw: TStopwatch;
   profit, timeSec: Array[0..2] of Double;
   fp: TextFile;
@@ -86,17 +86,17 @@ begin
     CalcMinMaxMakespanCosts(ps);
 
     sw.Start;
-    profit[0] := RunGASSGSOC(ps, sts, bestOrder);
+    profit[0] := RunGASSGSOC(ps, bestOrder);
     time := sw.Stop();
     timeSec[0] := time / 1000.0;
 
     sw.Start;
-    profit[1] := RunGASSGS(ps, sts, best);
+    profit[1] := RunGASSGS(ps, best);
     time := sw.Stop();
     timeSec[1] := time / 1000.0;
 
     sw.Start;
-    profit[2] := RunGASSGSMod(ps, sts, best2);
+    profit[2] := RunGASSGSMod(ps, best2);
     time := sw.Stop();
     timeSec[2] := time / 1000.0;
 
@@ -166,14 +166,13 @@ end;
 
 procedure Entrypoint();
 begin
-  //ReportMemoryLeaksOnShutdown := True;
-  //TestOneProject;
-  WriteOptsAndTime;
+  ReportMemoryLeaksOnShutdown := True;
+  TestOneProject;
+  //WriteOptsAndTime;
 end;
 
 procedure TestGeneticAlgorithms(const ps: ProjData);
 var
-  sts: JobData;
   sw: TStopwatch;
   profit: Double;
   bestOrder: JobData;
@@ -183,23 +182,23 @@ begin
   sw := TStopwatch.Create;
 
   sw.Start;
-  profit := RunGASSGSOC(ps, sts, bestOrder);
+  profit := RunGASSGSOC(ps, bestOrder);
   PrintActivityList(bestOrder);
-  PrintSchedule(ps, sts);
+//  PrintSchedule(ps, sts);
   WriteLn(Format('Profit = %f', [profit]));
-  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
+//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Start;
-  profit := RunGASSGS(ps, sts, best);
+  profit := RunGASSGS(ps, best);
   WriteLn(Format('Profit = %f', [profit]));
-  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
+//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Start;
-  profit := RunGASSGSMod(ps, sts, best2);
+  profit := RunGASSGSMod(ps, best2);
   WriteLn(Format('Profit = %f', [profit]));
-  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
+//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Free;

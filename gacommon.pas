@@ -18,7 +18,7 @@ type TGACore<T> = class
   mutateProc: TMutateProc<T>;
 
   constructor Create(procs: TGAProcs<T>);
-  function Run(out sts: JobData; best: T): Double;
+  function Run(best: T): Double;
 
 private
   procedure Cross(var population: TPop<T>; crossFunc: TCrossoverProc<T>);
@@ -34,7 +34,7 @@ begin
   mutateProc := procs.mutateProc;
 end;
 
-function TGACore<T>.Run(out sts: JobData; best: T): Double;
+function TGACore<T>.Run(best: T): Double;
 var
   population: TPop<T>;
   i, j: Integer;

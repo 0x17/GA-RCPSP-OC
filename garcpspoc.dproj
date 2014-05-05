@@ -111,8 +111,6 @@
         <DCCReference Include="main.pas"/>
         <DCCReference Include="constants.pas"/>
         <DCCReference Include="gaactivitylist.pas"/>
-        <DCCReference Include="gab.pas"/>
-        <DCCReference Include="gaovercapacity.pas"/>
         <DCCReference Include="gassgs.pas"/>
         <DCCReference Include="gassgsmod.pas"/>
         <DCCReference Include="gassgsoc.pas"/>
@@ -126,7 +124,6 @@
         <DCCReference Include="ssgsmod.pas"/>
         <DCCReference Include="ssgsoc.pas"/>
         <DCCReference Include="stopwatch.pas"/>
-        <DCCReference Include="tests.pas"/>
         <DCCReference Include="topsort.pas"/>
         <DCCReference Include="gacommon.pas"/>
         <BuildConfiguration Include="Release">
