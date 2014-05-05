@@ -1,10 +1,10 @@
 ﻿unit projectdata;
 
-//{$mode objfpc}{$H+}
+// Projekt/Testinstanz-Klasse und verschiedene Datentypen
 
 interface
 
-uses Classes, SysUtils, helpers;
+uses classes, sysutils, helpers;
 
 type
   ByteMx2D = Array of Array of Byte;
@@ -30,20 +30,40 @@ type
     name: String;
 
     procedure LoadFromFile(filename: String);
-
-  private
-    procedure ParsePrecedenceLine(var fp: TextFile);
-    procedure ParseReqDur(var fp: TextFile);
+    class procedure InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
 
     procedure WriteToFile(const sts: JobData);
     procedure CheckScheduleFeasibility(const sts: JobData);
     procedure CheckOrderFeasibility(const order: JobData);
+
+  private
+    procedure ParsePrecedenceLine(var fp: TextFile);
+    procedure ParseReqDur(var fp: TextFile);
   end;
 
 implementation
 
 const
   lineFeed = #10;
+
+class procedure ProjData.InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
+var
+  i, j: Integer;
+  fp: TextFile;
+begin
+  SetLength(rules, 13, ps.numJobs);
+  AssignFile(fp, ps.name+'.PRULES');
+  Reset(fp);
+  for i := 0 to 12 do
+  begin
+    for j := 0 to ps.numJobs-1 do
+    begin
+      Read(fp, rules[i,j]);
+      dec(rules[i,j]);
+    end;
+  end;
+  CloseFile(fp);
+end;
 
 procedure ProjData.ParsePrecedenceLine(var fp: TextFile);
 var

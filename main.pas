@@ -1,66 +1,139 @@
 unit main;
 
-//{$mode objfpc}{$H+}
-
 interface
 
 procedure Entrypoint();
 
 implementation
 
-uses Classes, SysUtils, projectdata, ssgs, topsort, printing, ssgsoc, profit, helpers, operators, gassgsoc, stopwatch;
+uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gab, gassgsoc, stopwatch, gassgs, gassgsmod, gaovercapacity, excel2000, comobj;
 
-procedure TestSSGS(const ps: ProjData); forward;
-procedure TestSSGSOC(const ps: ProjData); forward;
-procedure PrintProjects(); forward;
-procedure TestSwapNeighborhood(const ps: ProjData); forward;
+const useExcel = False;
+
 procedure TestGeneticAlgorithms(const ps: ProjData); forward;
+
+procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
+var
+  parts: TStringList;
+  part: String;
+  colCtr: Integer;
+begin
+  if not useExcel then exit;
+
+
+  parts := TStringList.Create;
+  parts.Clear;
+  parts.Delimiter := #59;
+  parts.DelimitedText := csvStr;
+
+  colCtr := 1;
+  for part in parts do
+  begin
+    if (colCtr > 1) and not(allStrings) then
+      sheet.Cells[rowNum, colCtr] := StrToFloat(part)
+    else
+      sheet.Cells[rowNum, colCtr] := part;
+
+    inc(colCtr);
+  end;
+
+  FreeAndNil(parts);
+end;
 
 procedure WriteOptsAndTime;
 var
-   fnames: TStringList;
-   fname: String;
-   ps: ProjData;
-   sts: JobData;
-   algo: TGA_SSGS_OC;
-   sw: TStopwatch;
-   profit: Double;
-   fp: TextFile;
-   time: Cardinal;
-   timeSec: Double;
-   ctr: Integer;
-   bestOrder: JobData;
+  fnames: TStringList;
+  fname: String;
+  ps: ProjData;
+  sts, bestOrder: JobData;
+  sw: TStopwatch;
+  profit, timeSec: Array[0..2] of Double;
+  fp: TextFile;
+  time: Cardinal;
+  ctr: Integer;
+  best: TALOCPair;
+  best2: TALBPair;
+  excObj, excWb, excSheet: Variant;
 begin
+  if useExcel then
+  begin
+    if FileExists('test.xlsx') then DeleteFile('test.xlsx');
+    excObj := CreateOleObject('Excel.Application');
+    excObj.SheetsInNewWorkbook := 1;
+    excWb := excObj.Workbooks.Add;
+    excSheet := excWb.Worksheets[1];
+    excSheet.Name := 'Sheet1';
+    FormatSettings.LongTimeFormat := 'yyyy-mm-dd-hh-mm-ss';
+    excWb.SaveAs('test.xlsx');
+    excObj.Visible := True;
+    //excSheet.Cells[1, 1] := 'Test';
+  end;
+
   AssignFile(fp, 'ssgsocOptsAndTime.txt');
   Rewrite(fp);
-  WriteLn(fp, 'filename;profit;solvetime');
+  WriteLn(fp, 'filename;profitGASSGSOC;solvetimeGASSGSOC;profitGASSGS;solvetimeGASSGS;profitGASSGSMod;solvetimeGASSGSMod');
+  WriteCSVToExcel(excSheet, 1, 'filename;profitGASSGSOC;solvetimeGASSGSOC;profitGASSGS;solvetimeGASSGS;profitGASSGSMod;solvetimeGASSGSMod');
+
   fnames := ListProjFilesInDir('32Jobs');
   ps := ProjData.Create;
   ctr := 0;
+  sw := TStopwatch.Create;
+
   for fname in fnames do
   begin
     ps.LoadFromFile(fname);
     TopologicalOrder(ps, ps.topOrder);
     CalcMinMaxMakespanCosts(ps);
 
-    sw := TStopwatch.Create;
     sw.Start;
-
-    algo := TGA_SSGS_OC.Create(ps);
-    profit := algo.Run(sts, bestOrder);
-    algo.Free;
-
+    profit[0] := RunGASSGSOC(ps, sts, bestOrder);
     time := sw.Stop();
-    timeSec := time / 1000.0;
-    sw.Free;
+    timeSec[0] := time / 1000.0;
 
-    WriteLn(fp, fname, ';', Format('%f', [profit]), ';', Format('%f', [timeSec]));
+    sw.Start;
+    profit[1] := RunGASSGS(ps, sts, best);
+    time := sw.Stop();
+    timeSec[1] := time / 1000.0;
+
+    sw.Start;
+    profit[2] := RunGASSGSMod(ps, sts, best2);
+    time := sw.Stop();
+    timeSec[2] := time / 1000.0;
+
+    WriteLn(fp, fname, ';',
+                Format('%f', [profit[0]]), ';',
+                Format('%f', [timeSec[0]]), ';',
+                Format('%f', [profit[1]]), ';',
+                Format('%f', [timeSec[1]]), ';',
+                Format('%f', [profit[2]]), ';',
+                Format('%f', [timeSec[2]]));
     Flush(fp);
-    WriteLn(fname, ';', Format('%f', [profit]), ';', Format('%f', [timeSec]));
+
+    WriteLn(fname, ';',
+            Format('%f', [profit[0]]), ';',
+            Format('%f', [timeSec[0]]), ';',
+            Format('%f', [profit[1]]), ';',
+            Format('%f', [timeSec[1]]), ';',
+            Format('%f', [profit[2]]), ';',
+            Format('%f', [timeSec[2]]));
+
     inc(ctr);
+
+    WriteCSVToExcel(excSheet, ctr+1, Concat(fname, ';',
+            Format('%f', [profit[0]]), ';',
+            Format('%f', [timeSec[0]]), ';',
+            Format('%f', [profit[1]]), ';',
+            Format('%f', [timeSec[1]]), ';',
+            Format('%f', [profit[2]]), ';',
+            Format('%f', [timeSec[2]])), False);
+
     if ctr = 50 then break;
   end;
+
+  //excWb.Close(SaveChanges := True);
+
   CloseFile(fp);
+  sw.Free;
   fnames.Free;
   ps.Free;
 end;
@@ -101,85 +174,35 @@ end;
 procedure TestGeneticAlgorithms(const ps: ProjData);
 var
   sts: JobData;
-  algo: TGA_SSGS_OC;
   sw: TStopwatch;
   profit: Double;
   bestOrder: JobData;
+  best: TALOCPair;
+  best2: TALBPair;
 begin
   sw := TStopwatch.Create;
+
   sw.Start;
-
-  algo := TGA_SSGS_OC.Create(ps);
-  profit := algo.Run(sts, bestOrder);
-
+  profit := RunGASSGSOC(ps, sts, bestOrder);
   PrintActivityList(bestOrder);
   PrintSchedule(ps, sts);
+  WriteLn(Format('Profit = %f', [profit]));
+  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
+  WriteLn('Time = ', sw.Stop());
 
+  sw.Start;
+  profit := RunGASSGS(ps, sts, best);
+  WriteLn(Format('Profit = %f', [profit]));
+  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
+  WriteLn('Time = ', sw.Stop());
+
+  sw.Start;
+  profit := RunGASSGSMod(ps, sts, best2);
   WriteLn(Format('Profit = %f', [profit]));
   WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Free;
-  algo.Free;
-end;
-
-procedure PrintProjects();
-var
-   fnames: TStringList;
-   fname: String;
-begin
-  fnames := ListProjFilesInDir('j30');
-  for fname in fnames do
-      WriteLn(fname);
-  fnames.Free;
-end;
-
-procedure TestSSGS(const ps: ProjData);
-var
-  sts, lambda: JobData;
-  overcapacity, resRemaining: ResourceProfile;
-  sw: TStopwatch;
-//  i: Integer;
-begin
-  TopologicalOrder(ps, lambda);
-
-  SetLength(overcapacity, ps.numRes, ps.numPeriods);
-  ZeroOvercapacity(ps, overcapacity);
-
-  sw := TStopwatch.Create;
-  sw.Start();
-
-//  for i := 0 to 5096-1 do
-  Solve(ps, lambda, overcapacity, sts, resRemaining);
-
-  WriteLn(sw.Stop(), ' msec');
-  sw.Free;
-
-  printSchedule(ps, sts);
-end;
-
-procedure TestSSGSOC(const ps: ProjData);
-var
-  sts, lambda: JobData;
-  profit: Double;
-begin
-  TopologicalOrder(ps, lambda);
-  profit := SolveWithOC(ps, lambda, sts);
-  WriteLn(Format('Profit = %f', [profit]));
-  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
-  printSchedule(ps, sts);
-end;
-
-procedure TestSwapNeighborhood(const ps: ProjData);
-var
-  i: Integer;
-  lambda: JobData;
-begin
-  TopologicalOrder(ps, lambda);
-  SwapNeighborhood(ps, lambda);
-  for i := 0 to ps.numJobs - 1 do
-      Write(lambda[i], ' ');
-  WriteLn;
 end;
 
 end.

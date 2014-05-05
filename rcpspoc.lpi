@@ -32,7 +32,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="15">
+    <Units Count="21">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -89,25 +89,55 @@
         <UnitName Value="gassgsoc"/>
       </Unit10>
       <Unit11>
-        <Filename Value="individual.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="individual"/>
-      </Unit11>
-      <Unit12>
         <Filename Value="stopwatch.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="stopwatch"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="parallelfitness.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="parallelfitness"/>
-      </Unit13>
-      <Unit14>
+      </Unit12>
+      <Unit13>
         <Filename Value="constants.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="constants"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="gaovercapacity.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gaovercapacity"/>
       </Unit14>
+      <Unit15>
+        <Filename Value="gaactivitylist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gaactivitylist"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="gassgs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgs"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="ssgsmod.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ssgsmod"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="gassgsmod.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgsmod"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="gab.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gab"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="tests.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="tests"/>
+      </Unit20>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -121,12 +151,22 @@
       <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+        <UseAnsiStrings Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
     <CodeGeneration>
       <Optimizations>
         <OptimizationLevel Value="3"/>
       </Optimizations>
     </CodeGeneration>
     <Other>
+      <Verbosity>
+        <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+        <ShowHintsForSenderNotUsed Value="True"/>
+      </Verbosity>
       <CompilerMessages>
         <MsgFileName Value=""/>
       </CompilerMessages>

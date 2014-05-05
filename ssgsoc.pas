@@ -1,10 +1,8 @@
 ﻿unit ssgsoc;
 
-//{$mode objfpc}{$H+}
-
 interface
 
-uses Classes, SysUtils, projectdata, ssgs, profit;
+uses classes, sysutils, projectdata, ssgs, profit;
 
 function SolveWithOC(const ps: ProjData; const order: JobData; out sts: JobData): Double;
 

@@ -1,11 +1,8 @@
 unit printing;
 
-//{$mode objfpc}{$H+}
-
 interface
 
-uses
-  Classes, SysUtils, projectdata;
+uses classes, sysutils, projectdata;
 
 procedure PrintSchedule(const ps: ProjData; const sts: JobData);
 procedure PrintProject(var ps: ProjData);

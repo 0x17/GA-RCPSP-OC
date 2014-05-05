@@ -1,10 +1,10 @@
 ﻿unit profit;
 
-//{$mode objfpc}{$H+}
+// Berechnung des Profits für einen konkreten Plan einer Testinstanz.
 
 interface
 
-uses Classes, SysUtils, projectdata, ssgs;
+uses classes, sysutils, projectdata, ssgs;
 
 function CalcProfit(const ps: ProjData; const sts: JobData; const resRemaining: ResourceProfile): Double;
 function TotalOCCostsForSchedule(const ps: ProjData; const sts: JobData): Double;
@@ -53,9 +53,9 @@ var
 begin
   result := 0.0;
   for r := 0 to ps.numRes - 1 do
-      for t := 0 to ps.numPeriods - 1 do
-          if resRemaining[r,t] < 0 then
-             result := result - resRemaining[r,t] * ps.kappa[r];
+    for t := 0 to ps.numPeriods - 1 do
+      if resRemaining[r,t] < 0 then
+        result := result - resRemaining[r,t] * ps.kappa[r];
 end;
 
 function CalcProfit(const ps: ProjData; const sts: JobData; const resRemaining: ResourceProfile): Double;

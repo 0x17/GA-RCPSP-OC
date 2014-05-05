@@ -1,14 +1,12 @@
 ﻿unit operators;
 
-//{$mode objfpc}{$H+}
-
 interface
 
-uses
-  Classes, SysUtils, projectdata, Math;
+uses classes, sysutils, projectdata, math, constants;
 
 procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
-procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData);
+procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData); overload;
+procedure OnePointCrossover(const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer); overload;
 
 implementation
 
@@ -25,11 +23,9 @@ procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
 var
   i: Integer;
 begin
-  for i := 1 to ps.numJobs - 1 do
+  for i := 2 to ps.numJobs - 1 do // TODO: Variable Mutationswkeit.
     if (RandomRange(1, 100) <= 3) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
-    begin
       Swap(lambda, i, i-1);
-    end
 end;
 
 procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData);
@@ -62,7 +58,21 @@ begin
       inc(k);
     end;
   end;
+end;
 
+procedure OnePointCrossover(const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer);
+var
+  r, q, t: Integer;
+begin
+  for r := 0 to numRes-1 do
+  begin
+    q := RandomRange(0, numPeriods-1);
+    for t := 0 to numPeriods-1 do
+      if t <= q then
+        daughter[r,t] := mother[r,t]
+      else
+        daughter[r,t] := father[r,t];
+  end;
 end;
 
 end.

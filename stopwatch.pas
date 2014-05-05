@@ -1,5 +1,8 @@
 unit stopwatch;
 
+// Hilfsklasse zur Zeitmessung in Millisekunden
+// Genauigkeit von Systemuhr begrenzt, meist so im 10-16ms Bereich.
+
 interface
 
 uses Windows;

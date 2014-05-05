@@ -1,10 +1,8 @@
 unit ssgs;
 
-//{$mode objfpc}{$H+}
-
 interface
 
-uses Classes, SysUtils, projectdata;
+uses classes, sysutils, projectdata;
 
 procedure ZeroOvercapacity(const ps: ProjData; var z: ResourceProfile);
 procedure MaxOvercapacity(const ps: ProjData; var z: ResourceProfile);
