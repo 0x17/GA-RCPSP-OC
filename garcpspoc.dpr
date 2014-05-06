@@ -4,6 +4,10 @@ program garcpspoc;
 
 {$R *.res}
 
+// TODO:
+// MIP-Solver (GAMS) Integration über GAMS-API für Pascal oder Rausschrebien von Textdatei (.inc)?
+// Priority rules Aktivitätenliste-Generierung von F# hier rüber portieren. Über generisches SortBy f vals.
+
 uses
   sysutils,
   main in 'main.pas',

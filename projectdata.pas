@@ -46,6 +46,7 @@ implementation
 const
   lineFeed = #10;
 
+// TODO: Port priority rule implementation from F# over to Delphi
 class procedure ProjData.InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
 var
   i, j: Integer;

@@ -8,7 +8,7 @@ implementation
 
 uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj;
 
-const useExcel = False;
+const useExcel = True;
 
 procedure TestGeneticAlgorithms(const ps: ProjData); forward;
 
@@ -19,7 +19,6 @@ var
   colCtr: Integer;
 begin
   if not useExcel then exit;
-
 
   parts := TStringList.Create;
   parts.Clear;
@@ -161,14 +160,14 @@ begin
 
   ps.Free;
 
-  ReadLn;
+//  ReadLn;
 end;
 
 procedure Entrypoint();
 begin
-  ReportMemoryLeaksOnShutdown := True;
-  TestOneProject;
-  //WriteOptsAndTime;
+  //ReportMemoryLeaksOnShutdown := True;
+  //TestOneProject;
+  WriteOptsAndTime;
 end;
 
 procedure TestGeneticAlgorithms(const ps: ProjData);
