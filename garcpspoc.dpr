@@ -27,7 +27,10 @@ uses
   ssgsoc in 'ssgsoc.pas',
   stopwatch in 'stopwatch.pas',
   topsort in 'topsort.pas',
-  gacommon in 'gacommon.pas';
+  gacommon in 'gacommon.pas',
+  gassgsmod2 in 'gassgsmod2.pas',
+  esschedule in 'esschedule.pas',
+  testing in 'testing.pas';
 
 begin
   try

@@ -2,11 +2,17 @@
 
 interface
 
-uses classes, sysutils, projectdata, math, constants;
+uses classes, sysutils, projectdata, constants, helpers;
 
 procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
+
 procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData); overload;
-procedure OnePointCrossover(const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer); overload;
+procedure OnePointCrossover(maxQ: Integer; const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer); overload;
+procedure OnePointCrossover(const mother, father: TALBPair; var daughter: TALBPair); overload;
+
+procedure TwoPointCrossover(const mother, father: JobData; var daughter: JobData) overload;
+procedure TwoPointCrossover(maxQ: Integer; const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer); overload;
+procedure TwoPointCrossover(const mother, father: TALBPair; var daughter: TALBPair); overload;
 
 implementation
 
@@ -23,8 +29,8 @@ procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
 var
   i: Integer;
 begin
-  for i := 2 to ps.numJobs - 1 do // TODO: Variable Mutationswkeit.
-    if (RandomRange(1, 100) <= 3) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
+  for i := 2 to ps.numJobs - 2 do
+    if (RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
       Swap(lambda, i, i-1);
 end;
 
@@ -34,24 +40,24 @@ var
   fromMother: Boolean;
 begin
   len := Length(mother);
-  q := RandomRange(0, len-1);
+  q := RandomRangeIncl(1, len);
 
-  // 0,..,q von Mutter
-  for i := 0 to q do
+  // Ersten q1: 0,..,q-1 von Mutter
+  for i := 0 to q-1 do
     daughter[i] := mother[i];
 
-  // q+1,..,len-1 von Vater, falls nicht von Mutter
-  k := q+1;
+  // q,..,len-1 von Vater, falls nicht von Mutter
+  k := q;
   // Probiere alle von Vater
   for i := 0 to len-1 do
   begin
-    // Schaue ob bereits in 0,..,q
+    // Schaue ob bereits in 0,..,q-1
     fromMother := false;
-    for j := 0 to q do
+    for j := 0 to q-1 do
       if daughter[j] = father[i] then
         fromMother := true;
 
-    // Falls nicht bereits in 0,..,q übernehme an nächste Stelle in Tochter
+    // Falls nicht bereits in 0,..,q-1 übernehme an nächste Stelle in Tochter
     if not(fromMother) then
     begin
       daughter[k] := father[i];
@@ -60,18 +66,194 @@ begin
   end;
 end;
 
-procedure OnePointCrossover(const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer);
+procedure OnePointCrossover(maxQ: Integer; const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer);
 var
   r, q, t: Integer;
 begin
   for r := 0 to numRes-1 do
   begin
-    q := RandomRange(0, numPeriods-1);
+    q := RandomRangeIncl(0, maxQ-1);
     for t := 0 to numPeriods-1 do
       if t <= q then
         daughter[r,t] := mother[r,t]
       else
         daughter[r,t] := father[r,t];
+  end;
+end;
+
+procedure OnePointCrossover(const mother, father: TALBPair; var daughter: TALBPair);
+var
+  i, j, k, q, len: Integer;
+  fromMother: Boolean;
+begin
+  len := Length(mother.order);
+  q := RandomRangeIncl(1, len);
+
+  // Ersten q: 0,..,q-1 von Mutter
+  for i := 0 to q-1 do
+  begin
+    daughter.order[i] := mother.order[i];
+    daughter.b[i] := mother.b[i];
+  end;
+
+  // q,..,len-1 von Vater, falls nicht von Mutter
+  k := q;
+  // Probiere alle von Vater
+  for i := 0 to len-1 do
+  begin
+    // Schaue ob bereits in 0,..,q-1
+    fromMother := false;
+    for j := 0 to q-1 do
+      if daughter.order[j] = father.order[i] then
+        fromMother := true;
+
+    // Falls nicht bereits in 0,..,q-1 übernehme an nächste Stelle in Tochter
+    if not(fromMother) then
+    begin
+      daughter.order[k] := father.order[i];
+      daughter.b[k] := father.b[i];
+      inc(k);
+    end;
+  end;
+end;
+
+procedure TwoPointCrossover(const mother, father: JobData; var daughter: JobData);
+var
+  i, j, k, q1, q2, len, tmp: Integer;
+  already: Boolean;
+begin
+  len := Length(mother);
+
+  q1 := RandomRangeIncl(1, len);
+  q2 := RandomRangeIncl(1, len);
+  if q1 > q2 then begin
+    tmp := q1;
+    q1 := q2;
+    q2 := tmp;
+  end;
+
+  // Ersten q1 von Mutter
+  for i := 0 to q1-1 do
+    daughter[i] := mother[i];
+
+  // q1,..,q2-1 von Vater, falls nicht bereits
+  k := q1;
+  // Probiere alle von Vater
+  for i := 0 to len-1 do
+  begin
+    // Schaue ob bereits in 0,..,q1-1
+    already := false;
+    for j := 0 to q1-1 do
+      if daughter[j] = father[i] then
+        already := true;
+
+    // Falls nicht bereits in 0,..,q übernehme an nächste Stelle in Tochter
+    if not(already) then
+    begin
+      daughter[k] := father[i];
+      inc(k);
+    end;
+
+    if k = q2 then break;
+  end;
+
+  // q2,..,len-1 von Mutter, falls nicht bereits
+  k := q2;
+  // Probiere alle von Mutter
+  for i := 0 to len-1 do
+  begin
+    // Schaue ob bereits in 0,..,q2-1
+    already := false;
+    for j := 0 to q2-1 do
+      if daughter[j] = mother[i] then
+        already := true;
+
+    // Falls nicht bereits in 0,..,q übernehme an nächste Stelle in Tochter
+    if not(already) then
+    begin
+      daughter[k] := mother[i];
+      inc(k);
+    end;
+  end;
+end;
+
+procedure TwoPointCrossover(maxQ: Integer; const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer);
+var
+  r, q1, q2, t: Integer;
+begin
+  for r := 0 to numRes-1 do
+  begin
+    q1 := RandomRangeIncl(0, maxQ-1);
+    q2 := RandomRangeIncl(q1, numPeriods-1);
+    for t := 0 to numPeriods-1 do
+      if (t <= q1) or (t > q2) then
+        daughter[r,t] := mother[r,t]
+      else
+        daughter[r,t] := father[r,t];
+  end;
+end;
+
+procedure TwoPointCrossover(const mother, father: TALBPair; var daughter: TALBPair);
+var
+  i, j, k, q1, q2, len, tmp: Integer;
+  already: Boolean;
+begin
+  len := Length(mother.order);
+  q1 := RandomRangeIncl(1, len);
+  q2 := RandomRangeIncl(1, len);
+  if q1 > q2 then begin
+    tmp := q1;
+    q1 := q2;
+    q2 := tmp;
+  end;
+
+  // Ersten q1: 0,..,q1-1 von Mutter
+  for i := 0 to q1-1 do
+  begin
+    daughter.order[i] := mother.order[i];
+    daughter.b[i] := mother.b[i];
+  end;
+
+  // q1,..,q2-1 von Vater, falls nicht bereits
+  k := q1;
+  // Probiere alle von Vater
+  for i := 0 to len-1 do
+  begin
+    // Schaue ob bereits in 0,..,q1
+    already := false;
+    for j := 0 to q1-1 do
+      if daughter.order[j] = father.order[i] then
+        already := true;
+
+    // Falls nicht bereits in 0,..,q übernehme an nächste Stelle in Tochter
+    if not(already) then
+    begin
+      daughter.order[k] := father.order[i];
+      daughter.b[k] := father.b[i];
+      inc(k);
+    end;
+
+    if k = q2 then break;
+  end;
+
+  // q2,..,len-1 von Mutter, falls nicht bereits
+  k := q2;
+  // Probiere alle von Mutter
+  for i := 0 to len-1 do
+  begin
+    // Schaue ob bereits in 0,..,q2-1
+    already := false;
+    for j := 0 to q2-1 do
+      if daughter.order[j] = mother.order[i] then
+        already := true;
+
+    // Falls nicht bereits in 0,..,q übernehme an nächste Stelle in Tochter
+    if not(already) then
+    begin
+      daughter.order[k] := mother.order[i];
+      daughter.b[k] := mother.b[i];
+      inc(k);
+    end;
   end;
 end;
 

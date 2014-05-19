@@ -4,11 +4,12 @@
 
 interface
 
-uses classes, sysutils, projectdata, ssgs;
+uses classes, sysutils, projectdata, ssgs, esschedule;
 
 function CalcProfit(const ps: ProjData; const sts: JobData; const resRemaining: ResourceProfile): Double;
 function TotalOCCostsForSchedule(const ps: ProjData; const sts: JobData): Double;
 procedure CalcMinMaxMakespanCosts(var ps: ProjData);
+procedure CalcUMax(var ps: ProjData);
 
 implementation
 
@@ -40,11 +41,25 @@ begin
   end;
 end;
 
-function Revenue(const ps: ProjData; makespan: Integer): Double;
+procedure CalcUMax(var ps: ProjData);
+var
+  sts: JobData;
+  resRemaining: ResourceProfile;
+begin
+  SolveESS(ps, ps.topOrder, sts, resRemaining);
+  ps.uMax := TotalOCCosts(ps, resRemaining);
+end;
+
+(*function Revenue(const ps: ProjData; makespan: Integer): Double;
 var c: Double;
 begin
   c := (ps.maxCosts-ps.minCosts) / (ps.maxMs-ps.minMs);
   result := -c * makespan + c * ps.maxMs;
+end;*)
+
+function Revenue(const ps: ProjData; makespan: Integer): Double;
+begin
+  result := ps.uMax * (ps.T-makespan)/ps.T;
 end;
 
 function TotalOCCosts(const ps: ProjData; const resRemaining: ResourceProfile): Double;

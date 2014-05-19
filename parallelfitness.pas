@@ -2,7 +2,6 @@
 
 // Berechnung der Fitness ist Flaschenhals in GA. (insbesondere bei Verwendung von SSGS-OC)
 // Parallelisierte Fitness-Berechnung für Individuen durch grobgranulare Aufteilung und Threads je Slice von Individuen
-// TODO: Fitnessfunktion und Individueentyp parametrisierbar (Delphi generics)
 
 interface
 

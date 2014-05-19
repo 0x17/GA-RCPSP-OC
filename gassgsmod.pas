@@ -5,13 +5,9 @@
 
 interface
 
-uses projectdata, gaactivitylist, classes, sysutils, math, parallelfitness, constants, ssgsmod, profit, helpers, operators, gacommon;
+uses projectdata, gaactivitylist, classes, sysutils, parallelfitness, constants, ssgsmod, profit, helpers, operators, gacommon;
 
-type TALBPair = record
-  order, b: JobData;
-end;
-
-function RunGASSGSMod(const nps: ProjData; best: TALBPair): Double;
+function RunGASSGSMod(const nps: ProjData; out best: TALBPair): Double;
 
 implementation
 
@@ -22,14 +18,14 @@ var j: Integer;
 begin
   SetLength(b, ps.numJobs);
   for j := 0 to ps.numJobs - 1 do
-    b[j] := RandomRange(0, 1);
+    b[j] := 0;//RandomRangeIncl(0, 1);
 end;
 
 procedure MutateB(var b: JobData);
 var j: Integer;
 begin
   for j := 0 to ps.numJobs - 1 do
-      if RandomRange(1, 100) <= 3 then
+      if RandomRangeIncl(1, 100) <= PROB_MUTATE then
          b[j] := 1 - b[j];
 end;
 
@@ -37,9 +33,29 @@ procedure OPC(const mother, father: JobData; var daughter: JobData);
 var
   j, q: Integer;
 begin
-    q := RandomRange(0, ps.numJobs-1);
+    q := RandomRangeIncl(0, ps.numJobs-1);
     for j := 0 to ps.numJobs-1 do
       if j <= q then
+        daughter[j] := mother[j]
+      else
+        daughter[j] := father[j];
+end;
+
+procedure TPC(const mother, father: JobData; var daughter: JobData);
+var
+  j, q1, q2, tmp: Integer;
+begin
+    q1 := RandomRangeIncl(1, ps.numJobs);
+    q2 := RandomRangeIncl(1, ps.numJobs);
+    if q2 < q1 then
+    begin
+      tmp := q1;
+      q1 := q2;
+      q2 := tmp;
+    end;
+
+    for j := 0 to ps.numJobs-1 do
+      if (j <= q1-1) or (j >= q2-1) then
         daughter[j] := mother[j]
       else
         daughter[j] := father[j];
@@ -49,6 +65,8 @@ procedure CrossoverB(const b, other: JobData; var daughter, son: JobData);
 begin
   OPC(b, other, daughter);
   OPC(other, b, son);
+  //TPC(b, other, daughter);
+  //TPC(other, b, son);
 end;
 
 function FitnessSSGSMod(const individual: TALBPair): Double;
@@ -74,7 +92,7 @@ begin
   MutateB(individual.b);
 end;
 
-function RunGASSGSMod(const nps: ProjData; best: TALBPair): Double;
+function RunGASSGSMod(const nps: ProjData; out best: TALBPair): Double;
 var core: TGACore<TALBPair>;
     procs: TGAProcs<TALBPair>;
 begin
@@ -84,7 +102,9 @@ begin
   procs.fitnessFunc := FitnessSSGSMod;
   procs.mutateProc := MutateALB;
   core := TGACore<TALBPair>.Create(procs);
-  result := core.Run(best);
+  SetLength(best.order, ps.numJobs);
+  SetLength(best.b, ps.numJobs);
+  result := core.Run(best, true);
   FreeAndNil(core);
 end;
 

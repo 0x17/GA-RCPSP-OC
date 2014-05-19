@@ -2,8 +2,10 @@ unit constants;
 
 interface
 
-const POP_SIZE = 80;
+const USE_EXCEL = True;
+      POP_SIZE = 80;
       NUM_GENS = 100;
+      PROB_MUTATE = 5;
 
 type TPop<T> = Array[0..POP_SIZE*2-1] of T;
 type TInitProc<T> = procedure(var population: TPop<T>);

@@ -36,6 +36,8 @@ procedure CrossoverAL(const order, other: JobData; var daughter, son: JobData);
 begin
   OnePointCrossover(other, order, daughter);
   OnePointCrossover(order, other, son);
+  //TwoPointCrossover(other, order, daughter);
+  //TwoPointCrossover(order, other, son);
 end;
 
 function FitnessSSGSOC(const order: JobData): Double;

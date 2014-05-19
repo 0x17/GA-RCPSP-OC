@@ -2,7 +2,7 @@ unit gacommon;
 
 interface
 
-uses sysutils, constants, math, projectdata, parallelfitness, helpers, gaactivitylist;
+uses sysutils, constants, projectdata, parallelfitness, helpers, gaactivitylist;
 
 type TGAProcs<T> = record
   initProc: TInitProc<T>;
@@ -18,7 +18,7 @@ type TGACore<T> = class
   mutateProc: TMutateProc<T>;
 
   constructor Create(procs: TGAProcs<T>);
-  function Run(best: T): Double;
+  function Run(var best: T; calcSerial: Boolean = false): Double;
 
 private
   procedure Cross(var population: TPop<T>; crossFunc: TCrossoverProc<T>);
@@ -34,7 +34,7 @@ begin
   mutateProc := procs.mutateProc;
 end;
 
-function TGACore<T>.Run(best: T): Double;
+function TGACore<T>.Run(var best: T; calcSerial: Boolean = false): Double;
 var
   population: TPop<T>;
   i, j: Integer;
@@ -53,7 +53,10 @@ begin
       mutateProc(population[j]);
 
     fcomp := TFitnessComputation<T>.Create(fitnessFunc);
-    fcomp.CalcParallel(population, fvals);
+    if calcSerial then
+      fcomp.CalcSerial(population, fvals)
+    else
+      fcomp.CalcParallel(population, fvals);
     FreeAndNil(fcomp);
 
     TSortHelper<T>.QuickSortKeys(population, fvals, 0, POP_SIZE*2-1);
@@ -62,6 +65,7 @@ begin
   end;
   WriteLn;
 
+  best := population[0];
   result := fitnessFunc(population[0]);
 end;
 
@@ -77,8 +81,8 @@ begin
   for i := 0 to (POP_SIZE div 2) - 1 do
   begin
     // Wähle i1/i2-ten Index aus noch nicht vergebenen
-    i1 := RandomRange(0, POP_SIZE-1-2*i);
-    i2 := RandomRange(0, POP_SIZE-1-2*i);
+    i1 := RandomRangeIncl(0, POP_SIZE-1-2*i);
+    i2 := RandomRangeIncl(0, POP_SIZE-1-2*i);
 
     if i1 = i2 then continue;
 

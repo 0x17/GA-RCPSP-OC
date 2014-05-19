@@ -5,9 +5,9 @@
 
 interface
 
-uses projectdata, gaactivitylist, ssgsoc, classes, sysutils, math, parallelfitness, constants, helpers, operators, gacommon;
+uses projectdata, gaactivitylist, ssgsoc, classes, sysutils, parallelfitness, constants, helpers, operators, gacommon;
 
-function RunGASSGSOC(const nps: ProjData; bestOrder: JobData): Double;
+function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData): Double;
 
 implementation
 
@@ -15,7 +15,7 @@ var ps: ProjData;
 
 procedure InitializePopulation(var population: TPop<JobData>); forward;
 
-function RunGASSGSOC(const nps: ProjData; bestOrder: JobData): Double;
+function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData): Double;
 var core: TGACore<JobData>;
     procs: TGAProcs<JobData>;
 begin
@@ -25,6 +25,7 @@ begin
   procs.fitnessFunc := FitnessSSGSOC;
   procs.mutateProc := MutateAL;
   core := TGACore<JobData>.Create(procs);
+  SetLength(bestOrder, ps.numJobs);
   result := core.Run(bestOrder);
   FreeAndNil(core);
 end;

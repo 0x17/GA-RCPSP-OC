@@ -16,7 +16,7 @@ type
   JobDataArray = Array of Array of Integer;
 
   ProjData = class(TObject)
-    numJobs, numRes, numPeriods: Integer;
+    numJobs, numRes, numPeriods, T: Integer;
     adjMx: ByteMx2D;
     durations: JobData;
     demands: JobResData;
@@ -25,7 +25,7 @@ type
     topOrder: JobData;
 
     minMs, maxMs: Integer;
-    minCosts, maxCosts: Double;
+    minCosts, maxCosts, uMax: Double;
 
     name: String;
 
@@ -40,6 +40,15 @@ type
     procedure ParsePrecedenceLine(var fp: TextFile);
     procedure ParseReqDur(var fp: TextFile);
   end;
+
+type TALBPair = record
+  order, b: JobData;
+end;
+
+type TALOCPair = record
+  order: JobData;
+  oc: ResourceProfile;
+end;
 
 implementation
 
@@ -144,6 +153,10 @@ begin
       zmax[r] := Trunc(0.5 * capacities[r]);
       kappa[r] := 0.5;
   end;
+
+  T := 0;
+  for j := 0 to numJobs-1 do
+    T := T + durations[j];
 
   CloseFile(fp);
 end;

@@ -2,7 +2,9 @@ unit helpers;
 
 interface
 
-uses classes, sysutils;
+uses classes, sysutils, math;
+
+function RandomRangeIncl(lb, ub: Integer): Integer;
 
 procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
 function ListProjFilesInDir(path: String): TStringList;
@@ -12,6 +14,11 @@ type TSortHelper<KeyType> = class
 end;
 
 implementation
+
+function RandomRangeIncl(lb, ub: Integer): Integer;
+begin
+  result := Random(ub-lb+1)+lb;
+end;
 
 procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
 var
@@ -34,7 +41,7 @@ begin
   result := TStringList.Create;
   oldwd := GetCurrentDir;
   SetCurrentDir(path);
-  if FindFirst('*.DAT', faAnyFile, sr) = 0 then
+  if FindFirst('*.sm', faAnyFile, sr) = 0 then
   begin
     repeat
       result.Add(path+'\'+sr.Name);

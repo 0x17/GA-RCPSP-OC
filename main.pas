@@ -6,9 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj;
-
-const useExcel = True;
+uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj, strutils, types, constants, gassgsmod2, testing;
 
 procedure TestGeneticAlgorithms(const ps: ProjData); forward;
 
@@ -18,7 +16,7 @@ var
   part: String;
   colCtr: Integer;
 begin
-  if not useExcel then exit;
+  if not USE_EXCEL then exit;
 
   parts := TStringList.Create;
   parts.Clear;
@@ -39,14 +37,66 @@ begin
   FreeAndNil(parts);
 end;
 
+type TProfitTimePair = record
+  profit, time: Double;
+end;
+
+function FilenameFromPath(path: String): String;
+var
+  parts: TStringDynArray;
+begin
+  parts := SplitString(path, '/\');
+  result := parts[Length(parts)-1];
+end;
+
+function ParseProfitAndTimeForMIP(resultFilename, projFilename: String): TProfitTimePair;
+var
+  line, coreFn: String;
+  fp: TextFile;
+  parts: TStringDynArray;
+begin
+  AssignFile(fp, resultFilename);
+  Reset(fp);
+
+  coreFn := FilenameFromPath(projFilename);
+
+  while not(Eof(fp)) do
+  begin
+    ReadLn(fp, line);
+    if AnsiContainsText(line, coreFn) then
+    begin
+       parts := SplitString(line, ';');
+       FormatSettings.DecimalSeparator := '.';
+       result.profit := StrToFloat(parts[1]);
+
+       if parts[2] = 'Timeout' then
+         result.time := 3600.0
+       else
+         result.time := StrToFloat(parts[2]);
+
+       FormatSettings.DecimalSeparator := ',';
+       Exit;
+    end;
+  end;
+
+  CloseFile(fp);
+end;
+
 procedure WriteOptsAndTime;
+const
+  HEADER_STR = 'filename;'
+             + 'profitGASSGSOC;solvetimeGASSGSOC;'
+             + 'profitGASSGS;solvetimeGASSGS;'
+             + 'profitGASSGSMod;solvetimeGASSGSMod;'
+             + 'profitGASSGSMod2;solvetimeGASSGSMod2;'
+             + 'profitMIP;solvetimeMIP';
 var
   fnames: TStringList;
-  fname: String;
+  line, fname: String;
   ps: ProjData;
   bestOrder: JobData;
   sw: TStopwatch;
-  profit, timeSec: Array[0..2] of Double;
+  ptp: Array[0..4] of TProfitTimePair;
   fp: TextFile;
   time: Cardinal;
   ctr: Integer;
@@ -54,7 +104,7 @@ var
   best2: TALBPair;
   excObj, excWb, excSheet: Variant;
 begin
-  if useExcel then
+  if USE_EXCEL then
   begin
     if FileExists('test.xlsx') then DeleteFile('test.xlsx');
     excObj := CreateOleObject('Excel.Application');
@@ -70,66 +120,83 @@ begin
 
   AssignFile(fp, 'ssgsocOptsAndTime.txt');
   Rewrite(fp);
-  WriteLn(fp, 'filename;profitGASSGSOC;solvetimeGASSGSOC;profitGASSGS;solvetimeGASSGS;profitGASSGSMod;solvetimeGASSGSMod');
-  WriteCSVToExcel(excSheet, 1, 'filename;profitGASSGSOC;solvetimeGASSGSOC;profitGASSGS;solvetimeGASSGS;profitGASSGSMod;solvetimeGASSGSMod');
+  WriteLn(HEADER_STR);
+  WriteLn(fp, HEADER_STR);
+  WriteCSVToExcel(excSheet, 1, HEADER_STR);
 
-  fnames := ListProjFilesInDir('32Jobs');
+  fnames := ListProjFilesInDir('j30');
   ps := ProjData.Create;
   ctr := 0;
   sw := TStopwatch.Create;
 
   for fname in fnames do
   begin
+    if not(FileExists(fname+'.PRULES')) then
+      continue;
+
     ps.LoadFromFile(fname);
     TopologicalOrder(ps, ps.topOrder);
     CalcMinMaxMakespanCosts(ps);
+    CalcUMax(ps);
+
+    ptp[4] := ParseProfitAndTimeForMIP('optimalStats.txt', fname);
+    if (ptp[4].time = 3600.0) or (ptp[4].profit = 0.0) then
+      continue;
 
     sw.Start;
-    profit[0] := RunGASSGSOC(ps, bestOrder);
+    ptp[0].profit := RunGASSGSOC(ps, bestOrder);
     time := sw.Stop();
-    timeSec[0] := time / 1000.0;
+    ptp[0].time := time / 1000.0;
+
+    //PrintActivityList(bestOrder);
+    //WriteLn;
 
     sw.Start;
-    profit[1] := RunGASSGS(ps, best);
+    ptp[1].profit := RunGASSGS(ps, best);
     time := sw.Stop();
-    timeSec[1] := time / 1000.0;
+    ptp[1].time := time / 1000.0;
+
+    //PrintTALOCPair(best);
+    //WriteLn;
 
     sw.Start;
-    profit[2] := RunGASSGSMod(ps, best2);
+    ptp[2].profit := RunGASSGSMod(ps, best2);
     time := sw.Stop();
-    timeSec[2] := time / 1000.0;
+    ptp[2].time := time / 1000.0;
 
-    WriteLn(fp, fname, ';',
-                Format('%f', [profit[0]]), ';',
-                Format('%f', [timeSec[0]]), ';',
-                Format('%f', [profit[1]]), ';',
-                Format('%f', [timeSec[1]]), ';',
-                Format('%f', [profit[2]]), ';',
-                Format('%f', [timeSec[2]]));
+    ///PrintTALBPair(best2);
+    //WriteLn;
+
+    sw.Start;
+    ptp[3].profit := RunGASSGSMod2(ps, best2);
+    time := sw.Stop();
+    ptp[3].time := time / 1000.0;
+
+    //PrintTALBPair(best2);
+    //Readln;
+
+    line := Concat(fname, ';',
+                Format('%f', [ptp[0].profit]), ';',
+                Format('%f', [ptp[0].time]), ';',
+                Format('%f', [ptp[1].profit]), ';',
+                Format('%f', [ptp[1].time]), ';',
+                Format('%f', [ptp[2].profit]), ';',
+                Format('%f', [ptp[2].time]), ';',
+                Format('%f', [ptp[3].profit]), ';',
+                Format('%f', [ptp[3].time]), ';',
+                Format('%f', [ptp[4].profit]), ';',
+                Format('%f', [ptp[4].time]));
+
+    WriteLn(line);
+    WriteLn(fp, line);
     Flush(fp);
 
-    WriteLn(fname, ';',
-            Format('%f', [profit[0]]), ';',
-            Format('%f', [timeSec[0]]), ';',
-            Format('%f', [profit[1]]), ';',
-            Format('%f', [timeSec[1]]), ';',
-            Format('%f', [profit[2]]), ';',
-            Format('%f', [timeSec[2]]));
-
     inc(ctr);
-
-    WriteCSVToExcel(excSheet, ctr+1, Concat(fname, ';',
-            Format('%f', [profit[0]]), ';',
-            Format('%f', [timeSec[0]]), ';',
-            Format('%f', [profit[1]]), ';',
-            Format('%f', [timeSec[1]]), ';',
-            Format('%f', [profit[2]]), ';',
-            Format('%f', [timeSec[2]])), False);
-
-    if ctr = 50 then break;
+    WriteCSVToExcel(excSheet, ctr+1, line, False);
   end;
 
-  //excWb.Close(SaveChanges := True);
+  if USE_EXCEL then
+    excWb.Close(SaveChanges := True);
 
   CloseFile(fp);
   sw.Free;
@@ -139,7 +206,7 @@ end;
 
 procedure TestOneProject;
 const
-  PROJ_FILENAME = '32Jobs\Modellendogen0001.DAT';
+  PROJ_FILENAME = 'j30\j3010_10.sm';
 var
   ps: ProjData;
 begin
@@ -147,6 +214,7 @@ begin
   ps.LoadFromFile(PROJ_FILENAME);
   TopologicalOrder(ps, ps.topOrder);
   CalcMinMaxMakespanCosts(ps);
+  CalcUMax(ps);
 
 //  PrintProject(ps);
 //  TestSSGS(ps);
@@ -168,6 +236,7 @@ begin
   //ReportMemoryLeaksOnShutdown := True;
   //TestOneProject;
   WriteOptsAndTime;
+  //RunTests;
 end;
 
 procedure TestGeneticAlgorithms(const ps: ProjData);
@@ -182,25 +251,22 @@ begin
 
   sw.Start;
   profit := RunGASSGSOC(ps, bestOrder);
-  PrintActivityList(bestOrder);
-//  PrintSchedule(ps, sts);
   WriteLn(Format('Profit = %f', [profit]));
-//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Start;
   profit := RunGASSGS(ps, best);
   WriteLn(Format('Profit = %f', [profit]));
-//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Start;
   profit := RunGASSGSMod(ps, best2);
   WriteLn(Format('Profit = %f', [profit]));
-//  WriteLn(Format('Total oc costs = %f', [TotalOCCostsForSchedule(ps, sts)]));
   WriteLn('Time = ', sw.Stop());
 
   sw.Free;
+
+  ReadLn;
 end;
 
 end.

@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, projectdata, math;
+uses classes, sysutils, projectdata, helpers, math;
 
 procedure TopologicalOrder(const ps: ProjData; out order: JobData);
 procedure RandomTopologicalOrder(const ps: ProjData; out order: JobData);
@@ -99,7 +99,7 @@ begin
         jobFeasible[j] := 0;
   end;
 
-  rval := RandomRange(1, numJobsFeasible);
+  rval := RandomRangeIncl(1, numJobsFeasible);
   k := 0;
   for j := 1 to ps.numJobs - 1 do
   begin
