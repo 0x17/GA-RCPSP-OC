@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, projectdata, operators, ssgsoc, topsort, constants, printing;
+uses classes, projectdata, operators, ssgsoc, topsort, constants, printing, stsvis;
 
 procedure SetProjectStructureAL(const nps: ProjData);
 
@@ -11,6 +11,7 @@ procedure MutateAL(var order: JobData);
 procedure CrossoverAL(const order, other: JobData; var daughter, son: JobData);
 
 function FitnessSSGSOC(const order: JobData): Double;
+function FitnessSSGSOCRS(const order: JobData): Double;
 
 implementation
 
@@ -44,7 +45,14 @@ function FitnessSSGSOC(const order: JobData): Double;
 var
   sts: JobData;
 begin
-  result := SolveWithOC(ps, order, sts);
+  result := SolveWithOC(ps, order, sts, False);
+end;
+
+function FitnessSSGSOCRS(const order: JobData): Double;
+var
+  sts: JobData;
+begin
+  result := SolveWithOC(ps, order, sts, True);
 end;
 
 end.

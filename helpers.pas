@@ -2,7 +2,9 @@ unit helpers;
 
 interface
 
-uses classes, sysutils, math;
+uses classes, sysutils, math, strutils, types;
+
+function FilenameFromPath(path: String): String;
 
 function RandomRangeIncl(lb, ub: Integer): Integer;
 
@@ -14,6 +16,14 @@ type TSortHelper<KeyType> = class
 end;
 
 implementation
+
+function FilenameFromPath(path: String): String;
+var
+  parts: TStringDynArray;
+begin
+  parts := SplitString(path, '/\');
+  result := parts[Length(parts)-1];
+end;
 
 function RandomRangeIncl(lb, ub: Integer): Integer;
 begin

@@ -7,7 +7,7 @@ interface
 
 uses projectdata, gaactivitylist, ssgsoc, classes, sysutils, parallelfitness, constants, helpers, operators, gacommon;
 
-function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData): Double;
+function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData; doRightShift: Boolean): Double;
 
 implementation
 
@@ -15,14 +15,17 @@ var ps: ProjData;
 
 procedure InitializePopulation(var population: TPop<JobData>); forward;
 
-function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData): Double;
+function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData; doRightShift: Boolean): Double;
 var core: TGACore<JobData>;
     procs: TGAProcs<JobData>;
 begin
   ps := nps;
   procs.initProc := InitializePopulation;
   procs.crossProc := CrossoverAL;
-  procs.fitnessFunc := FitnessSSGSOC;
+  if doRightShift then
+    procs.fitnessFunc := FitnessSSGSOCRS
+  else
+    procs.fitnessFunc := FitnessSSGSOC;
   procs.mutateProc := MutateAL;
   core := TGACore<JobData>.Create(procs);
   SetLength(bestOrder, ps.numJobs);

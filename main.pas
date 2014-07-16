@@ -6,7 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj, strutils, types, constants, gassgsmod2, testing;
+uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj, strutils, types, constants, gassgsmod2, testing, ssgsoc;
 
 procedure TestGeneticAlgorithms(const ps: ProjData); forward;
 
@@ -39,14 +39,6 @@ end;
 
 type TProfitTimePair = record
   profit, time: Double;
-end;
-
-function FilenameFromPath(path: String): String;
-var
-  parts: TStringDynArray;
-begin
-  parts := SplitString(path, '/\');
-  result := parts[Length(parts)-1];
 end;
 
 function ParseProfitAndTimeForMIP(resultFilename, projFilename: String): TProfitTimePair;
@@ -144,7 +136,7 @@ begin
       continue;
 
     sw.Start;
-    ptp[0].profit := RunGASSGSOC(ps, bestOrder);
+    ptp[0].profit := RunGASSGSOC(ps, bestOrder, False);
     time := sw.Stop();
     ptp[0].time := time / 1000.0;
 
@@ -250,7 +242,7 @@ begin
   sw := TStopwatch.Create;
 
   sw.Start;
-  profit := RunGASSGSOC(ps, bestOrder);
+  profit := RunGASSGSOC(ps, bestOrder, False);
   WriteLn(Format('Profit = %f', [profit]));
   WriteLn('Time = ', sw.Stop());
 

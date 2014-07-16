@@ -30,7 +30,8 @@ uses
   gacommon in 'gacommon.pas',
   gassgsmod2 in 'gassgsmod2.pas',
   esschedule in 'esschedule.pas',
-  testing in 'testing.pas';
+  testing in 'testing.pas',
+  stsvis in 'stsvis.pas';
 
 begin
   try

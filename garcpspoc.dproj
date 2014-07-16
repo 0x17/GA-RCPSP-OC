@@ -132,6 +132,7 @@
         <DCCReference Include="gassgsmod2.pas"/>
         <DCCReference Include="esschedule.pas"/>
         <DCCReference Include="testing.pas"/>
+        <DCCReference Include="stsvis.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
