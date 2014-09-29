@@ -9,11 +9,9 @@ procedure SolveESS(const ps: ProjData; const order: JobData; out sts: JobData; o
 implementation
 
 procedure SolveCoreESS(const ps: ProjData; const order: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var
-  i, j, k, t, tau, r: Integer;
+var i, j, k, t, tau, r: Integer;
 begin
-  for i := startFrom to ps.numJobs-1 do
-  begin
+  for i := startFrom to ps.numJobs-1 do begin
     j := order[i];
 
     t := 0;

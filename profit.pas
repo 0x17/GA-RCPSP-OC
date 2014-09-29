@@ -4,12 +4,13 @@
 
 interface
 
-uses classes, sysutils, projectdata, ssgs, esschedule;
+uses classes, sysutils, projectdata, ssgs, esschedule, math;
 
 function CalcProfit(const ps: ProjData; const sts: JobData; const resRemaining: ResourceProfile): Double;
 function TotalOCCostsForSchedule(const ps: ProjData; const sts: JobData): Double;
 procedure CalcMinMaxMakespanCosts(var ps: ProjData);
 procedure CalcUMax(var ps: ProjData);
+procedure ComputeRevenueBuffer(var ps: ProjData);
 
 implementation
 
@@ -19,9 +20,14 @@ procedure CalcMinMaxMakespanCosts(var ps: ProjData);
 var
   sts: JobData;
   z, resRemaining: ResourceProfile;
+  tkappa, tkappari: Integer;
+  tkappar: Double;
+  r: Integer;
+  j: Integer;
 begin
   ps.minCosts := 0;
 
+  (*
   // Bestimme maximale Kosten und minimale Makespan über SSGS mit z_rt = zmax_r
   SetLength(z, ps.numRes, ps.numPeriods);
   MaxOvercapacity(ps, z);
@@ -38,7 +44,38 @@ begin
   begin
     inc(ps.maxMs);
     ps.maxCosts := 0;
+  end;*)
+
+  // Bestimme tkappa als maximum der tkappar
+  tkappa := 0;
+  for r := 0 to ps.numRes-1 do
+  begin
+    tkappar := 0;
+    for j := 0 to ps.numJobs-1 do
+      tkappar := tkappar + ps.durations[j]*ps.demands[j,r];
+
+    tkappar := tkappar / (ps.capacities[r]+ps.zmax[r]);
+    tkappari := Ceil(tkappar);
+
+    if tkappa > tkappari then
+      tkappa := tkappari;
   end;
+
+  SolveESS(ps, ps.topOrder, sts, resRemaining);
+
+  // Bestimme maximale Kosten als Kosten des ESS
+  ps.maxCosts := TotalOCCosts(ps, resRemaining);
+
+  // Bestimme minimale Makespan als maximum aus
+  // ESS-makespan und tkappa
+  ps.minMs := Max(sts[ps.numJobs-1], tkappa);
+
+  // Bestimme maximale Makespan über SSGS mit z_rt = 0
+  SetLength(z, ps.numRes, ps.numPeriods);
+  ZeroOvercapacity(ps, z);
+  Solve(ps, ps.topOrder, z, sts, resRemaining);
+  ps.maxMs := sts[ps.numJobs-1];
+
 end;
 
 procedure CalcUMax(var ps: ProjData);
@@ -50,14 +87,19 @@ begin
   ps.uMax := TotalOCCosts(ps, resRemaining);
 end;
 
-(*function Revenue(const ps: ProjData; makespan: Integer): Double;
+function Revenue(const ps: ProjData; makespan: Integer): Double;
+begin
+  result := ps.maxCosts - ps.maxCosts / Power(ps.maxMs - ps.minMs, 2) * Power(makespan - ps.minMs, 2);
+end;
+
+function Revenue2(const ps: ProjData; makespan: Integer): Double;
 var c: Double;
 begin
   c := (ps.maxCosts-ps.minCosts) / (ps.maxMs-ps.minMs);
   result := -c * makespan + c * ps.maxMs;
-end;*)
+end;
 
-function Revenue(const ps: ProjData; makespan: Integer): Double;
+function Revenue3(const ps: ProjData; makespan: Integer): Double;
 begin
   result := ps.uMax * (ps.T-makespan)/ps.T;
 end;
@@ -102,6 +144,17 @@ var
 begin
   BuildResRemainingForSchedule(ps, sts, resRemaining);
   result := TotalOCCosts(ps, resRemaining);
+end;
+
+procedure ComputeRevenueBuffer(var ps: ProjData);
+var t: Integer;
+begin
+  SetLength(ps.revenueBuf, ps.numPeriods);
+  for t := 1 to ps.numPeriods do
+    ps.revenueBuf[t] := Revenue(ps, t);
+      SetLength(ps.revenueBuf2, ps.numPeriods);
+  for t := 1 to ps.numPeriods do
+    ps.revenueBuf[t] := Revenue2(ps, t);
 end;
 
 end.

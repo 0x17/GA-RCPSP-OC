@@ -24,6 +24,9 @@ type
     kappa: ResDataDbl;
     topOrder: JobData;
 
+    ests, efts, lsts, lfts: JobData;
+    revenueBuf, revenueBuf2: Array of Double;
+
     minMs, maxMs: Integer;
     minCosts, maxCosts, uMax: Double;
 
@@ -35,6 +38,8 @@ type
     procedure WriteToFile(const sts: JobData);
     procedure CheckScheduleFeasibility(const sts: JobData);
     procedure CheckOrderFeasibility(const order: JobData);
+
+    procedure ComputeESFTS;
 
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
@@ -99,6 +104,52 @@ begin
   for r := 0 to numRes - 1 do
       Read(fp, demands[jobNr-1, r]);
   SkipChar(fp, lineFeed, 1);
+end;
+
+procedure ProjData.ComputeESFTS;
+var
+  i, j, k, l, lastPredFt, firstSuccSt: Integer;
+begin
+  SetLength(ests, numJobs);
+  SetLength(efts, numJobs);
+  SetLength(lsts, numJobs);
+  SetLength(lfts, numJobs);
+
+  ests[0] := 0;
+  efts[0] := 0;
+
+  for i := 1 to numJobs-1 do
+  begin
+    lastPredFt := 0;
+    j := topOrder[i];
+    for k := 0 to i-1 do
+    begin
+      l := topOrder[k];
+      if adjMx[l, j] = 1 then
+        if efts[l] > lastPredFt then
+          lastPredFt := efts[l];
+    end;
+    ests[j] := lastPredFt;
+    efts[j] := ests[j] + durations[j];
+  end;
+
+  lfts[numJobs-1] := T;
+  lsts[numJobs-1] := lfts[numJobs-1];
+
+  for i := numJobs-2 downto 0 do
+  begin
+    firstSuccSt := T;
+    j := topOrder[i];
+    for k := i+1 to numJobs-1 do
+    begin
+      l := topOrder[k];
+      if adjMx[j, l] = 1 then
+        if lsts[l] < firstSuccSt then
+          firstSuccSt := lsts[l];
+    end;
+    lfts[j] := firstSuccSt;
+    lsts[j] := lfts[j] - durations[j];
+  end;
 end;
 
 procedure ProjData.LoadFromFile(filename: String);

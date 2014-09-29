@@ -1,5 +1,7 @@
 unit stsvis;
 
+// Visualisiere Ablaufplan je Ressource in einer Excel-Tabelle
+
 interface
 
 uses projectdata;

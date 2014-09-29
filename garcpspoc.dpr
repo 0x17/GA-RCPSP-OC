@@ -5,11 +5,11 @@ program garcpspoc;
 {$R *.res}
 
 // TODO:
-// MIP-Solver (GAMS) Integration über GAMS-API für Pascal oder Rausschrebien von Textdatei (.inc)?
 // Priority rules Aktivitätenliste-Generierung von F# hier rüber portieren. Über generisches SortBy f vals.
 
 uses
   sysutils,
+
   main in 'main.pas',
   constants in 'constants.pas',
   gaactivitylist in 'gaactivitylist.pas',
@@ -31,14 +31,32 @@ uses
   gassgsmod2 in 'gassgsmod2.pas',
   esschedule in 'esschedule.pas',
   testing in 'testing.pas',
-  stsvis in 'stsvis.pas';
+  stsvis in 'stsvis.pas',
+  gams in 'gams.pas',
+
+  gamsxdcpdef in 'gamsapi\gamsxdcpdef.pas',
+  gamsxdocpdef in 'gamsapi\gamsxdocpdef.pas',
+  gamsxdopdef in 'gamsapi\gamsxdopdef.pas',
+  gamsxdpdef in 'gamsapi\gamsxdpdef.pas',
+  gdxdcpdef in 'gamsapi\gdxdcpdef.pas',
+  gdxdocpdef in 'gamsapi\gdxdocpdef.pas',
+  gdxdopdef in 'gamsapi\gdxdopdef.pas',
+  gdxdpdef in 'gamsapi\gdxdpdef.pas',
+  gmsgen in 'gamsapi\gmsgen.pas',
+  gmsspecs in 'gamsapi\gmsspecs.pas',
+  gopdopdef in 'gamsapi\gopdopdef.pas',
+  gxdefs in 'gamsapi\gxdefs.pas',
+  optdcon in 'gamsapi\optdcon.pas',
+  optdcpdef in 'gamsapi\optdcpdef.pas',
+  optdocpdef in 'gamsapi\optdocpdef.pas',
+  optdopdef in 'gamsapi\optdopdef.pas',
+  optdpdef in 'gamsapi\optdpdef.pas';
 
 begin
   try
     Entrypoint();
   except
-    on E: Exception do
-    begin
+    on E: Exception do begin
       Writeln(E.ClassName, ': ', E.Message);
       ReadLn;
     end;

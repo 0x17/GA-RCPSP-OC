@@ -133,6 +133,24 @@
         <DCCReference Include="esschedule.pas"/>
         <DCCReference Include="testing.pas"/>
         <DCCReference Include="stsvis.pas"/>
+        <DCCReference Include="gams.pas"/>
+        <DCCReference Include="gamsapi\gamsxdcpdef.pas"/>
+        <DCCReference Include="gamsapi\gamsxdocpdef.pas"/>
+        <DCCReference Include="gamsapi\gamsxdopdef.pas"/>
+        <DCCReference Include="gamsapi\gamsxdpdef.pas"/>
+        <DCCReference Include="gamsapi\gdxdcpdef.pas"/>
+        <DCCReference Include="gamsapi\gdxdocpdef.pas"/>
+        <DCCReference Include="gamsapi\gdxdopdef.pas"/>
+        <DCCReference Include="gamsapi\gdxdpdef.pas"/>
+        <DCCReference Include="gamsapi\gmsgen.pas"/>
+        <DCCReference Include="gamsapi\gmsspecs.pas"/>
+        <DCCReference Include="gamsapi\gopdopdef.pas"/>
+        <DCCReference Include="gamsapi\gxdefs.pas"/>
+        <DCCReference Include="gamsapi\optdcon.pas"/>
+        <DCCReference Include="gamsapi\optdcpdef.pas"/>
+        <DCCReference Include="gamsapi\optdocpdef.pas"/>
+        <DCCReference Include="gamsapi\optdopdef.pas"/>
+        <DCCReference Include="gamsapi\optdpdef.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -2,7 +2,7 @@ unit constants;
 
 interface
 
-const USE_EXCEL = True;
+const USE_EXCEL = False;
       POP_SIZE = 80;
       NUM_GENS = 100;
       PROB_MUTATE = 5;

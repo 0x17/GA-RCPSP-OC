@@ -6,7 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj, strutils, types, constants, gassgsmod2, testing, ssgsoc;
+uses classes, sysutils, projectdata, topsort, printing, profit, helpers, gassgsoc, stopwatch, gassgs, gassgsmod, excel2000, comobj, strutils, types, constants, gassgsmod2, testing, ssgsoc, gams;
 
 procedure TestGeneticAlgorithms(const ps: ProjData); forward;
 
@@ -61,10 +61,10 @@ begin
        FormatSettings.DecimalSeparator := '.';
        result.profit := StrToFloat(parts[1]);
 
-       if parts[2] = 'Timeout' then
+       if parts[3] = 'Timeout' then
          result.time := 3600.0
        else
-         result.time := StrToFloat(parts[2]);
+         result.time := StrToFloat(parts[3]);
 
        FormatSettings.DecimalSeparator := ',';
        Exit;
@@ -74,7 +74,7 @@ begin
   CloseFile(fp);
 end;
 
-procedure WriteOptsAndTime;
+procedure WriteOptsAndTime(fromFn, toFn: String);
 const
   HEADER_STR = 'filename;'
              + 'profitGASSGSOC;solvetimeGASSGSOC;'
@@ -95,6 +95,7 @@ var
   best: TALOCPair;
   best2: TALBPair;
   excObj, excWb, excSheet: Variant;
+  fromIx, toIx, fctr: Integer;
 begin
   if USE_EXCEL then
   begin
@@ -110,7 +111,7 @@ begin
     //excSheet.Cells[1, 1] := 'Test';
   end;
 
-  AssignFile(fp, 'ssgsocOptsAndTime.txt');
+  AssignFile(fp, 'heurOptsAndTime.txt');
   Rewrite(fp);
   WriteLn(HEADER_STR);
   WriteLn(fp, HEADER_STR);
@@ -121,8 +122,18 @@ begin
   ctr := 0;
   sw := TStopwatch.Create;
 
-  for fname in fnames do
+  if fromFn.IsEmpty and toFn.IsEmpty then begin
+    fromIx := 0;
+    toIx := fnames.Count-1;
+  end else begin
+    fromIx := fnames.IndexOf(fromFn);
+    toIx := fnames.IndexOf(toFn);
+  end;
+
+  for fctr := fromIx to toIx do
   begin
+    fname := fnames.Strings[fctr];
+
     if not(FileExists(fname+'.PRULES')) then
       continue;
 
@@ -130,54 +141,58 @@ begin
     TopologicalOrder(ps, ps.topOrder);
     CalcMinMaxMakespanCosts(ps);
     CalcUMax(ps);
+    ps.ComputeESFTS;
 
-    ptp[4] := ParseProfitAndTimeForMIP('optimalStats.txt', fname);
-    if (ptp[4].time = 3600.0) or (ptp[4].profit = 0.0) then
-      continue;
+    if ps.minMs <> ps.maxMs then
+    begin
+      sw.Start;
+      ptp[0].profit := RunGASSGSOC(ps, bestOrder, False);
+      time := sw.Stop();
+      ptp[0].time := time / 1000.0;
 
-    sw.Start;
-    ptp[0].profit := RunGASSGSOC(ps, bestOrder, False);
-    time := sw.Stop();
-    ptp[0].time := time / 1000.0;
+      sw.Start;
+      ptp[1].profit := RunGASSGSMod2(ps, best2);
+      time := sw.Stop();
+      ptp[1].time := time / 1000.0;
+
+      line := Concat(fname, ';',
+                Format('%f', [ptp[0].profit]), ';',
+                Format('%f', [ptp[0].time]), ';',
+                Format('%f', [ptp[1].profit]), ';',
+                Format('%f', [ptp[1].time]));
+    end
+    else
+      line := Concat(fname, ';NA;NA;NA;NA');
+
+    //ptp[4] := ParseProfitAndTimeForMIP('optimalStats.txt', fname);
+    //if (ptp[4].time = 3600.0) or (ptp[4].profit = 0.0) then
+    //  continue;
+
+
 
     //PrintActivityList(bestOrder);
     //WriteLn;
 
-    sw.Start;
+    (*sw.Start;
     ptp[1].profit := RunGASSGS(ps, best);
     time := sw.Stop();
-    ptp[1].time := time / 1000.0;
+    ptp[1].time := time / 1000.0;*)
 
     //PrintTALOCPair(best);
     //WriteLn;
 
-    sw.Start;
+    (*sw.Start;
     ptp[2].profit := RunGASSGSMod(ps, best2);
     time := sw.Stop();
-    ptp[2].time := time / 1000.0;
+    ptp[2].time := time / 1000.0;*)
 
     ///PrintTALBPair(best2);
     //WriteLn;
 
-    sw.Start;
-    ptp[3].profit := RunGASSGSMod2(ps, best2);
-    time := sw.Stop();
-    ptp[3].time := time / 1000.0;
-
     //PrintTALBPair(best2);
     //Readln;
 
-    line := Concat(fname, ';',
-                Format('%f', [ptp[0].profit]), ';',
-                Format('%f', [ptp[0].time]), ';',
-                Format('%f', [ptp[1].profit]), ';',
-                Format('%f', [ptp[1].time]), ';',
-                Format('%f', [ptp[2].profit]), ';',
-                Format('%f', [ptp[2].time]), ';',
-                Format('%f', [ptp[3].profit]), ';',
-                Format('%f', [ptp[3].time]), ';',
-                Format('%f', [ptp[4].profit]), ';',
-                Format('%f', [ptp[4].time]));
+
 
     WriteLn(line);
     WriteLn(fp, line);
@@ -227,8 +242,9 @@ procedure Entrypoint();
 begin
   //ReportMemoryLeaksOnShutdown := True;
   //TestOneProject;
-  WriteOptsAndTime;
+  WriteOptsAndTime('', '');
   //RunTests;
+  //TestGAMS;
 end;
 
 procedure TestGeneticAlgorithms(const ps: ProjData);

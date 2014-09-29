@@ -2,7 +2,7 @@ unit testing;
 
 interface
 
-uses operators, projectdata, printing, helpers, ssgsoc, ssgs, profit, topsort, classes, stsvis, gassgsoc, constants, sysutils;
+uses operators, projectdata, printing, helpers, ssgsoc, ssgs, profit, topsort, classes, gassgsoc, constants, sysutils, stsvis;
 
 procedure RunTests;
 

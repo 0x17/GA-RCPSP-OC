@@ -1,5 +1,9 @@
 ﻿unit ssgsoc;
 
+// Modifiziertes SSGS. Plant auch Zusatzkapazitäten ein.
+// Probiert mögliche Einplanungsperioden von Reihenfolgezulässigkeit bis
+// Ressourcenzulässigkeit unter Beachtung der maximal erlaubten ZK.
+
 interface
 
 uses classes, sysutils, projectdata, ssgs, profit, constants;
