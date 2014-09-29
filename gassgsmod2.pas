@@ -27,7 +27,7 @@ procedure MutateB(var b: JobData);
 var j: Integer;
 begin
   for j := 0 to ps.numJobs - 1 do
-      if RandomRangeIncl(1, 100) <= PROB_MUTATE then
+      if THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE then
          b[j] := 1 - b[j];
 end;
 
@@ -66,7 +66,7 @@ var
   i: Integer;
 begin
   for i := 2 to ps.numJobs - 1 do
-    if (RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[pair.order[i-1], pair.order[i]] = 0) then
+    if (THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[pair.order[i-1], pair.order[i]] = 0) then
       SwapALB(pair, i, i-1);
 end;
 

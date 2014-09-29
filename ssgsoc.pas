@@ -6,23 +6,23 @@
 
 interface
 
-uses classes, sysutils, projectdata, ssgs, profit, constants;
+uses classes, sysutils, projectdata, profit, ssgs, constants, resprofiles;
 
 function SolveWithOC(const ps: ProjData; const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
-function RightShift(const ps: ProjData; var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
 
 implementation
 
 // Verringere die Restkapazität um den Verbrauch von j bei Einplanung in
 // Periode stj.
 procedure SubtractResRemaining(const ps: ProjData; var resRemaining: ResourceProfile; j, stj: Integer);
-var
-  r, tau: Integer;
+var r, tau: Integer;
 begin
   for tau := stj to stj+ps.durations[j]-1 do
     for r := 0 to ps.numRes-1 do
       resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
 end;
+
+function RightShift(const ps: ProjData; var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double; forward;
 
 // Modifiziertes SSGS zur heuristischen Bestimmung eines Ablaufplans für ein
 // gegebenes Projekt und Aktivitätenliste.
@@ -53,8 +53,7 @@ begin
   sts[0] := 0;
   fts[0] := 0;
 
-  for ix := 1 to ps.numJobs - 1 do
-  begin
+  for ix := 1 to ps.numJobs - 1 do begin
     j := order[ix];
 
     // Bestimme Zeitpunkt, wo alle Vorgänger beendet sind
@@ -73,8 +72,7 @@ begin
     bestT := tauPrecFeas;
 
     for t := tauPrecFeas to tauResFeas do
-      if ResourceFeasible(ps, resRemaining, maxOc, j, t) then
-      begin
+      if ResourceFeasible(ps, resRemaining, maxOc, j, t) then begin
         //resRemainingTmp := Copy(resRemaining, 0, SizeOf(Integer)*ps.numRes*ps.numPeriods);
         for k1 := 0 to ps.numRes - 1 do
             for k2 := 0 to ps.numPeriods - 1 do
@@ -120,8 +118,7 @@ var
 begin
   SetLength(resRemTmp, ps.numRes, ps.numPeriods);
   // Für jeden Job...
-  for j := 0 to ps.numJobs-1 do
-  begin
+  for j := 0 to ps.numJobs-1 do begin
     // Job aus Restkapazität raus nehmen
     for r := 0 to ps.numRes-1 do
       for t := 0 to ps.numPeriods-1 do
@@ -143,15 +140,13 @@ begin
     // Prüfen ob einplanung zulässig und welchen DB
     oldSt := sts[j];
     bestT := oldSt;
-    for st := oldSt to esucc - ps.durations[j] do
-    begin
+    for st := oldSt to esucc - ps.durations[j] do begin
       feasible := True;
       for t := st to st+ps.durations[j]-1 do
         for r := 0 to ps.numRes-1 do
           if ps.demands[j,r] > resRemTmp[r,t] + ps.zmax[r] then
             feasible := False;
-      if feasible then
-      begin
+      if feasible then begin
         sts[j] := st;
 
         // resremtmp verbrauch für st=t einsetzen
@@ -172,8 +167,7 @@ begin
             else
               resRemTmp[r,t] := resRemTmp[r,t];
 
-        if p > maxProfit then
-        begin
+        if p > maxProfit then begin
           maxProfit := p;
           bestT := st;
         end;

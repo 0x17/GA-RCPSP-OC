@@ -15,8 +15,7 @@ function FitnessSSGSOCRS(const order: JobData): Double;
 
 implementation
 
-var
-  ps: ProjData;
+var ps: ProjData;
 
 procedure SetProjectStructureAL(const nps: ProjData);
 begin
@@ -25,7 +24,7 @@ end;
 
 procedure InitAL(out order: JobData);
 begin
-  RandomTopologicalOrder(ps, order);
+  TTopSort.RandomSort(ps, order);
 end;
 
 procedure MutateAL(var order: JobData);
@@ -42,15 +41,13 @@ begin
 end;
 
 function FitnessSSGSOC(const order: JobData): Double;
-var
-  sts: JobData;
+var sts: JobData;
 begin
   result := SolveWithOC(ps, order, sts, False);
 end;
 
 function FitnessSSGSOCRS(const order: JobData): Double;
-var
-  sts: JobData;
+var sts: JobData;
 begin
   result := SolveWithOC(ps, order, sts, True);
 end;

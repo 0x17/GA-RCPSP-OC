@@ -25,7 +25,7 @@ procedure MutateB(var b: JobData);
 var j: Integer;
 begin
   for j := 0 to ps.numJobs - 1 do
-      if RandomRangeIncl(1, 100) <= PROB_MUTATE then
+      if THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE then
          b[j] := 1 - b[j];
 end;
 
@@ -33,7 +33,7 @@ procedure OPC(const mother, father: JobData; var daughter: JobData);
 var
   j, q: Integer;
 begin
-    q := RandomRangeIncl(0, ps.numJobs-1);
+    q := THelper.RandomRangeIncl(0, ps.numJobs-1);
     for j := 0 to ps.numJobs-1 do
       if j <= q then
         daughter[j] := mother[j]
@@ -45,8 +45,8 @@ procedure TPC(const mother, father: JobData; var daughter: JobData);
 var
   j, q1, q2, tmp: Integer;
 begin
-    q1 := RandomRangeIncl(1, ps.numJobs);
-    q2 := RandomRangeIncl(1, ps.numJobs);
+    q1 := THelper.RandomRangeIncl(1, ps.numJobs);
+    q2 := THelper.RandomRangeIncl(1, ps.numJobs);
     if q2 < q1 then
     begin
       tmp := q1;

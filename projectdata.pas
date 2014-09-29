@@ -28,7 +28,7 @@ type
     revenueBuf, revenueBuf2: Array of Double;
 
     minMs, maxMs: Integer;
-    minCosts, maxCosts, uMax: Double;
+    minCosts, maxCosts: Double;
 
     name: String;
 
@@ -69,10 +69,8 @@ begin
   SetLength(rules, 13, ps.numJobs);
   AssignFile(fp, ps.name+'.PRULES');
   Reset(fp);
-  for i := 0 to 12 do
-  begin
-    for j := 0 to ps.numJobs-1 do
-    begin
+  for i := 0 to 12 do begin
+    for j := 0 to ps.numJobs-1 do begin
       Read(fp, rules[i,j]);
       dec(rules[i,j]);
     end;
@@ -87,8 +85,7 @@ begin
   Read(fp, jobNr);
   Read(fp, ignore);
   Read(fp, numSuccs);
-  for i := 0 to numSuccs - 1 do
-  begin
+  for i := 0 to numSuccs - 1 do begin
     Read(fp, succNr);
     adjMx[jobNr-1, succNr-1] := 1;
   end;
@@ -103,7 +100,7 @@ begin
   Read(fp, durations[jobNr-1]);
   for r := 0 to numRes - 1 do
       Read(fp, demands[jobNr-1, r]);
-  SkipChar(fp, lineFeed, 1);
+  THelper.SkipChar(fp, lineFeed, 1);
 end;
 
 procedure ProjData.ComputeESFTS;
@@ -118,12 +115,10 @@ begin
   ests[0] := 0;
   efts[0] := 0;
 
-  for i := 1 to numJobs-1 do
-  begin
+  for i := 1 to numJobs-1 do begin
     lastPredFt := 0;
     j := topOrder[i];
-    for k := 0 to i-1 do
-    begin
+    for k := 0 to i-1 do begin
       l := topOrder[k];
       if adjMx[l, j] = 1 then
         if efts[l] > lastPredFt then
@@ -136,12 +131,10 @@ begin
   lfts[numJobs-1] := T;
   lsts[numJobs-1] := lfts[numJobs-1];
 
-  for i := numJobs-2 downto 0 do
-  begin
+  for i := numJobs-2 downto 0 do begin
     firstSuccSt := T;
     j := topOrder[i];
-    for k := i+1 to numJobs-1 do
-    begin
+    for k := i+1 to numJobs-1 do begin
       l := topOrder[k];
       if adjMx[j, l] = 1 then
         if lsts[l] < firstSuccSt then
@@ -162,17 +155,17 @@ begin
   Reset(fp);
 
   // Cardinalities
-  SkipChar(fp, ':', 4);
+  THelper.SkipChar(fp, ':', 4);
   Read(fp, numJobs);
 
-  SkipChar(fp, ':', 1);
+  THelper.SkipChar(fp, ':', 1);
   Read(fp, numPeriods);
 
-  SkipChar(fp, ':', 1);
+  THelper.SkipChar(fp, ':', 1);
   Read(fp, numRes);
 
-  SkipChar(fp, ':', 4);
-  SkipChar(fp, lineFeed, 2);
+  THelper.SkipChar(fp, ':', 4);
+  THelper.SkipChar(fp, lineFeed, 2);
 
   // Precedence
   SetLength(adjMx, numJobs, numJobs);
@@ -184,14 +177,14 @@ begin
     ParsePrecedenceLine(fp);
 
   // Durations and requests
-  SkipChar(fp, lineFeed, 5);
+  THelper.SkipChar(fp, lineFeed, 5);
   SetLength(durations, numJobs);
   SetLength(demands, numJobs, numRes);
   for j := 1 to numJobs do
     ParseReqDur(fp);
 
   // Capacities
-  SkipChar(fp, lineFeed, 3);
+  THelper.SkipChar(fp, lineFeed, 3);
   SetLength(capacities, numRes);
   for r := 0 to numRes - 1 do
       Read(fp, capacities[r]);

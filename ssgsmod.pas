@@ -38,8 +38,7 @@ end;
 // 1. useOc=false: K_r
 // 2. useOc=true: K_r+zmax_r
 function ResourceFeasibleMod(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
-var
-  r, tau, z: Integer;
+var r, tau, z: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
     if ps.demands[j,r] > 0 then
@@ -58,8 +57,7 @@ begin
 end;
 
 procedure SolveCoreMod(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var
-  i, j, k, t, tau, r: Integer;
+var i, j, k, t, tau, r: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do
   begin

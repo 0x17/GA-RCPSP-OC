@@ -1,5 +1,8 @@
 unit esschedule;
 
+// Berechne Earliest Start Schedule (beachte nur Reihenfolgerestriktion, nicht
+// Ressourcenrestriktion!)
+
 interface
 
 uses classes, sysutils, projectdata;

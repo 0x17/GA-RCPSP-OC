@@ -4,13 +4,11 @@ unit stsvis;
 
 interface
 
-uses projectdata;
+uses projectdata, excel2000, comobj, strutils, sysutils;
 
 procedure VisualizeSchedule(const ps: ProjData; const sts: JobData; filename: String);
 
 implementation
-
-uses excel2000, comobj, strutils, types, sysutils, classes;
 
 procedure VisualizeSchedule(const ps: ProjData; const sts: JobData; filename: String);
   var

@@ -24,7 +24,7 @@ begin
   SetLength(oc, ps.numRes, ps.numPeriods);
   for r := 0 to ps.numRes - 1 do
     for t := 0 to ps.numPeriods - 1 do
-      oc[r,t] := RandomRangeIncl(0, ps.zmax[r]);
+      oc[r,t] := THelper.RandomRangeIncl(0, ps.zmax[r]);
 end;
 
 procedure MutateOC(var oc: ResourceProfile);
@@ -32,7 +32,7 @@ var r, t: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
     for t := 0 to ps.numPeriods - 1 do
-      if RandomRangeIncl(1, 100) <= 3 then
+      if THelper.RandomRangeIncl(1, 100) <= 3 then
       begin
         (*if RandomRangeIncl(1,2) = 1 then
           inc(oc[r,t])
@@ -41,7 +41,7 @@ begin
 
         if oc[r,t] < 0 then oc[r,t] := 0;
         if oc[r,t] > ps.zmax[r] then oc[r,t] := ps.zmax[r];*)
-        oc[r,t] := RandomRangeIncl(0, ps.zmax[r]);
+        oc[r,t] := THelper.RandomRangeIncl(0, ps.zmax[r]);
       end;
 end;
 

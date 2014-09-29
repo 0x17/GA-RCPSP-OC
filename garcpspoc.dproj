@@ -131,9 +131,9 @@
         <DCCReference Include="gacommon.pas"/>
         <DCCReference Include="gassgsmod2.pas"/>
         <DCCReference Include="esschedule.pas"/>
-        <DCCReference Include="testing.pas"/>
         <DCCReference Include="stsvis.pas"/>
         <DCCReference Include="gams.pas"/>
+        <DCCReference Include="resprofiles.pas"/>
         <DCCReference Include="gamsapi\gamsxdcpdef.pas"/>
         <DCCReference Include="gamsapi\gamsxdocpdef.pas"/>
         <DCCReference Include="gamsapi\gamsxdopdef.pas"/>

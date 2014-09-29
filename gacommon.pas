@@ -81,8 +81,8 @@ begin
   for i := 0 to (POP_SIZE div 2) - 1 do
   begin
     // Wähle i1/i2-ten Index aus noch nicht vergebenen
-    i1 := RandomRangeIncl(0, POP_SIZE-1-2*i);
-    i2 := RandomRangeIncl(0, POP_SIZE-1-2*i);
+    i1 := THelper.RandomRangeIncl(0, POP_SIZE-1-2*i);
+    i2 := THelper.RandomRangeIncl(0, POP_SIZE-1-2*i);
 
     if i1 = i2 then continue;
 

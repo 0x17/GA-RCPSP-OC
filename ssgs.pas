@@ -2,45 +2,21 @@ unit ssgs;
 
 interface
 
-uses classes, sysutils, projectdata;
-
-procedure ZeroOvercapacity(const ps: ProjData; var z: ResourceProfile);
-procedure MaxOvercapacity(const ps: ProjData; var z: ResourceProfile);
+uses classes, sysutils, projectdata, resprofiles;
 
 function ResourceFeasible(const ps: ProjData; const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
-
 procedure SolveCore(const ps: ProjData; const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
 procedure Solve(const ps: ProjData; const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
 
 implementation
 
-procedure ZeroOvercapacity(const ps: ProjData; var z: ResourceProfile);
-var
-  r, t: Integer;
-begin
-  for r := 0 to ps.numRes - 1 do
-      for t := 0 to ps.numPeriods - 1 do
-          z[r,t] := 0;
-end;
-
-procedure MaxOvercapacity(const ps: ProjData; var z: ResourceProfile);
-var
-  r, t: Integer;
-begin
-  for r := 0 to ps.numRes - 1 do
-      for t := 0 to ps.numPeriods - 1 do
-          z[r,t] := ps.zmax[r];
-end;
-
 function ResourceFeasible(const ps: ProjData; const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
-var
-  r, tau: Integer;
+var r, tau: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
     if ps.demands[j,r] > 0 then
       for tau := stj to stj + ps.durations[j] - 1 do
-          if resRemaining[r,tau] + z[r,tau] < ps.demands[j,r] then
-          begin
+          if resRemaining[r,tau] + z[r,tau] < ps.demands[j,r] then begin
             result := false;
             exit;
           end;
@@ -48,11 +24,9 @@ begin
 end;
 
 procedure SolveCore(const ps: ProjData; const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var
-  i, j, k, t, tau, r: Integer;
+var i, j, k, t, tau, r: Integer;
 begin
-  for i := startFrom to ps.numJobs-1 do
-  begin
+  for i := startFrom to ps.numJobs-1 do begin
     j := order[i];
 
     t := 0;

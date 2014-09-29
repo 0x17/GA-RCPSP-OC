@@ -9,7 +9,6 @@ program garcpspoc;
 
 uses
   sysutils,
-
   main in 'main.pas',
   constants in 'constants.pas',
   gaactivitylist in 'gaactivitylist.pas',
@@ -30,10 +29,9 @@ uses
   gacommon in 'gacommon.pas',
   gassgsmod2 in 'gassgsmod2.pas',
   esschedule in 'esschedule.pas',
-  testing in 'testing.pas',
   stsvis in 'stsvis.pas',
   gams in 'gams.pas',
-
+  resprofiles in 'resprofiles.pas',
   gamsxdcpdef in 'gamsapi\gamsxdcpdef.pas',
   gamsxdocpdef in 'gamsapi\gamsxdocpdef.pas',
   gamsxdopdef in 'gamsapi\gamsxdopdef.pas',

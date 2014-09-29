@@ -30,7 +30,7 @@ var
   i: Integer;
 begin
   for i := 2 to ps.numJobs - 2 do
-    if (RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
+    if (THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
       Swap(lambda, i, i-1);
 end;
 
@@ -40,7 +40,7 @@ var
   fromMother: Boolean;
 begin
   len := Length(mother);
-  q := RandomRangeIncl(1, len);
+  q := THelper.RandomRangeIncl(1, len);
 
   // Ersten q1: 0,..,q-1 von Mutter
   for i := 0 to q-1 do
@@ -72,7 +72,7 @@ var
 begin
   for r := 0 to numRes-1 do
   begin
-    q := RandomRangeIncl(0, maxQ-1);
+    q := THelper.RandomRangeIncl(0, maxQ-1);
     for t := 0 to numPeriods-1 do
       if t <= q then
         daughter[r,t] := mother[r,t]
@@ -87,7 +87,7 @@ var
   fromMother: Boolean;
 begin
   len := Length(mother.order);
-  q := RandomRangeIncl(1, len);
+  q := THelper.RandomRangeIncl(1, len);
 
   // Ersten q: 0,..,q-1 von Mutter
   for i := 0 to q-1 do
@@ -124,8 +124,8 @@ var
 begin
   len := Length(mother);
 
-  q1 := RandomRangeIncl(1, len);
-  q2 := RandomRangeIncl(1, len);
+  q1 := THelper.RandomRangeIncl(1, len);
+  q2 := THelper.RandomRangeIncl(1, len);
   if q1 > q2 then begin
     tmp := q1;
     q1 := q2;
@@ -183,8 +183,8 @@ var
 begin
   for r := 0 to numRes-1 do
   begin
-    q1 := RandomRangeIncl(0, maxQ-1);
-    q2 := RandomRangeIncl(q1, numPeriods-1);
+    q1 := THelper.RandomRangeIncl(0, maxQ-1);
+    q2 := THelper.RandomRangeIncl(q1, numPeriods-1);
     for t := 0 to numPeriods-1 do
       if (t <= q1) or (t > q2) then
         daughter[r,t] := mother[r,t]
@@ -199,8 +199,8 @@ var
   already: Boolean;
 begin
   len := Length(mother.order);
-  q1 := RandomRangeIncl(1, len);
-  q2 := RandomRangeIncl(1, len);
+  q1 := THelper.RandomRangeIncl(1, len);
+  q2 := THelper.RandomRangeIncl(1, len);
   if q1 > q2 then begin
     tmp := q1;
     q1 := q2;

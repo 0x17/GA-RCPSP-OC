@@ -4,12 +4,12 @@ interface
 
 uses classes, sysutils, math, strutils, types;
 
-function FilenameFromPath(path: String): String;
-
-function RandomRangeIncl(lb, ub: Integer): Integer;
-
-procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
-function ListProjFilesInDir(path: String): TStringList;
+type THelper = class
+  class function FilenameFromPath(path: String): String;
+  class function RandomRangeIncl(lb, ub: Integer): Integer;
+  class procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
+  class function ListProjFilesInDir(path: String): TStringList;
+end;
 
 type TSortHelper<KeyType> = class
   class procedure QuickSortKeys(var keys: array of KeyType; var fvals: array of Double;  iLo, iHi: Integer);
@@ -17,7 +17,7 @@ end;
 
 implementation
 
-function FilenameFromPath(path: String): String;
+class function THelper.FilenameFromPath(path: String): String;
 var
   parts: TStringDynArray;
 begin
@@ -25,12 +25,12 @@ begin
   result := parts[Length(parts)-1];
 end;
 
-function RandomRangeIncl(lb, ub: Integer): Integer;
+class function THelper.RandomRangeIncl(lb, ub: Integer): Integer;
 begin
   result := Random(ub-lb+1)+lb;
 end;
 
-procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
+class procedure THelper.SkipChar(var fp: TextFile; c: Char; n: Integer);
 var
   curChar: Char;
   skipCounter: Integer;
@@ -43,7 +43,7 @@ begin
   until skipCounter = n;
 end;
 
-function ListProjFilesInDir(path: String): TStringList;
+class function THelper.ListProjFilesInDir(path: String): TStringList;
 var
   sr: TSearchRec;
   oldwd: String;
@@ -60,17 +60,7 @@ begin
   SetCurrentDir(oldwd);
 end;
 
-procedure PrintProjects();
-var
-   fnames: TStringList;
-   fname: String;
-begin
-  fnames := ListProjFilesInDir('j30');
-  for fname in fnames do
-      WriteLn(fname);
-  fnames.Free;
-end;
-
+//==============================================================================
 class procedure TSortHelper<KeyType>.QuickSortKeys(var keys: array of KeyType; var fvals: array of Double;  iLo, iHi: Integer);
 var
   Lo, Hi: Integer;
