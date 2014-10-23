@@ -5,13 +5,17 @@ unit esschedule;
 
 interface
 
-uses classes, sysutils, projectdata;
+uses classes, sysutils, projectdata, globals;
 
-procedure SolveESS(const ps: ProjData; const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+type TESSchedule = class
+  class procedure Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+private
+  class procedure SolveCore(const order: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+end;
 
 implementation
 
-procedure SolveCoreESS(const ps: ProjData; const order: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+class procedure TESSchedule.SolveCore(const order: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
 var i, j, k, t, tau, r: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do begin
@@ -31,7 +35,7 @@ begin
   end;
 end;
 
-procedure SolveESS(const ps: ProjData; const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+class procedure TESSchedule.Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 var
   r, t: Integer;
   fts: JobData;
@@ -46,7 +50,7 @@ begin
   sts[0] := 0;
   fts[0] := 0;
 
-  SolveCoreESS(ps, order, 1, sts, fts, resRemaining);
+  SolveCore(order, 1, sts, fts, resRemaining);
 end;
 
 end.

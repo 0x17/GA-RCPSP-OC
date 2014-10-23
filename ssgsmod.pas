@@ -4,18 +4,20 @@ interface
 
 uses classes, sysutils, projectdata;
 
-procedure SolveMod(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+type TSSGSMod = class
+  class procedure Solve(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+  class procedure SolveCore(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+  class function ResourceFeasible(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
+end;
 
 implementation
-
-procedure SolveCoreMod(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile); forward;
 
 // Modifiziertes SSGS: AG j ist bei Einplanung in Periode stj zulässig gdw.
 // genügend Restkapazität über die Bearbeitungsdauer zur Verfügung steht bei
 // Gesamtkapazität von
 // 1. Falls b_j=0: K_r
 // 2. Falls b_j=1: K_r+zmax_r
-procedure SolveMod(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+class procedure TSSGSMod.Solve(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 var
   r, t: Integer;
   fts: JobData;
@@ -30,14 +32,14 @@ begin
   sts[0] := 0;
   fts[0] := 0;
 
-  SolveCoreMod(ps, order, b, 1, sts, fts, resRemaining);
+  SolveCore(ps, order, b, 1, sts, fts, resRemaining);
 end;
 
 // Wahr, gdw. AG j bei Einplanung in Periode stj über gesamte Laufzeit genügend
 // Restkapazität zur Verfügung steht bei Gesamtkapazität von
 // 1. useOc=false: K_r
 // 2. useOc=true: K_r+zmax_r
-function ResourceFeasibleMod(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
+class function TSSGSMod.ResourceFeasible(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau, z: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -56,7 +58,7 @@ begin
   result := true
 end;
 
-procedure SolveCoreMod(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+class procedure TSSGSMod.SolveCore(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
 var i, j, k, t, tau, r: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do
@@ -68,7 +70,7 @@ begin
       if (ps.adjMx[k,j] = 1) and (fts[k] > t) then
         t := fts[k];
 
-    while not ResourceFeasibleMod(b[j], ps, resRemaining, j, t) do
+    while not ResourceFeasible(b[j], ps, resRemaining, j, t) do
       inc(t);
 
     sts[j] := t;

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -19,8 +19,96 @@
     <VersionInfo>
       <StringTable ProductVersion=""/>
     </VersionInfo>
-    <BuildModes Count="1">
+    <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>
+      <Item2 Name="Debug">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="rcpspoc"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
+            <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <IncludeAssertionCode Value="True"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <Checks>
+              <IOChecks Value="True"/>
+              <RangeChecks Value="True"/>
+              <OverflowChecks Value="True"/>
+              <StackChecks Value="True"/>
+            </Checks>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <DebugInfoType Value="dsDwarf2Set"/>
+              <UseHeaptrc Value="True"/>
+              <UseExternalDbgSyms Value="True"/>
+            </Debugging>
+          </Linking>
+          <Other>
+            <Verbosity>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+              <ShowHintsForSenderNotUsed Value="True"/>
+            </Verbosity>
+            <CompilerMessages>
+              <MsgFileName Value=""/>
+            </CompilerMessages>
+            <CompilerPath Value="$(CompPath)"/>
+          </Other>
+        </CompilerOptions>
+      </Item2>
+      <Item3 Name="Release">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="rcpspoc"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
+            <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <Parsing>
+            <SyntaxOptions>
+              <SyntaxMode Value="Delphi"/>
+              <UseAnsiStrings Value="False"/>
+            </SyntaxOptions>
+          </Parsing>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+          </Linking>
+          <Other>
+            <Verbosity>
+              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+              <ShowHintsForSenderNotUsed Value="True"/>
+            </Verbosity>
+            <CompilerMessages>
+              <MsgFileName Value=""/>
+            </CompilerMessages>
+            <CompilerPath Value="$(CompPath)"/>
+          </Other>
+        </CompilerOptions>
+      </Item3>
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
@@ -32,7 +120,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="21">
+    <Units Count="18">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -84,60 +172,45 @@
         <UnitName Value="operators"/>
       </Unit9>
       <Unit10>
-        <Filename Value="gassgsoc.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgsoc"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="stopwatch.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="stopwatch"/>
-      </Unit11>
-      <Unit12>
-        <Filename Value="parallelfitness.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="parallelfitness"/>
-      </Unit12>
-      <Unit13>
-        <Filename Value="constants.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="constants"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="gaovercapacity.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gaovercapacity"/>
-      </Unit14>
-      <Unit15>
-        <Filename Value="gaactivitylist.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gaactivitylist"/>
-      </Unit15>
-      <Unit16>
-        <Filename Value="gassgs.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgs"/>
-      </Unit16>
-      <Unit17>
         <Filename Value="ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsmod"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="resprofiles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="resprofiles"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="individual.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="individual"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="esschedule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="esschedule"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="globals.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="globals"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="schedulevisualizer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="schedulevisualizer"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="gassgsoc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgsoc"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="gassgsbeta.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgsbeta"/>
       </Unit17>
-      <Unit18>
-        <Filename Value="gassgsmod.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgsmod"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="gab.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="gab"/>
-      </Unit19>
-      <Unit20>
-        <Filename Value="tests.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="tests"/>
-      </Unit20>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

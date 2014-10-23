@@ -1,56 +1,71 @@
-﻿unit gassgsoc;
-
-// Genetischer Algorithmus zur Bestimmung eines optimalen Plans mit Benutzung von Zusatzkapazitäten
-// Verwendet als Repräsentation (lambda)
+unit gassgsoc;
 
 interface
 
-uses projectdata, gaactivitylist, ssgsoc, classes, sysutils, parallelfitness, constants, helpers, operators, gacommon;
+uses classes, sysutils, individual, projectdata, operators, globals, ssgsoc, topsort;
 
-function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData; doRightShift: Boolean): Double;
+function RunGASSGSOC(out best: JobData): Double;
+
+type TActivityListIndividual = class(IIndividual)
+  order: JobData;
+  procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
+  procedure Mutate; override;
+  function Fitness: Double; override;
+end;
+
+procedure InitializeActivityListPopulation(var population: IndivArray);
 
 implementation
 
-var ps: ProjData;
-
-procedure InitializePopulation(var population: TPop<JobData>); forward;
-
-function RunGASSGSOC(const nps: ProjData; out bestOrder: JobData; doRightShift: Boolean): Double;
-var core: TGACore<JobData>;
-    procs: TGAProcs<JobData>;
+procedure TActivityListIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 begin
-  ps := nps;
-  procs.initProc := InitializePopulation;
-  procs.crossProc := CrossoverAL;
-  if doRightShift then
-    procs.fitnessFunc := FitnessSSGSOCRS
-  else
-    procs.fitnessFunc := FitnessSSGSOC;
-  procs.mutateProc := MutateAL;
-  core := TGACore<JobData>.Create(procs);
-  SetLength(bestOrder, ps.numJobs);
-  result := core.Run(bestOrder);
-  FreeAndNil(core);
+  OnePointCrossover(order, TActivityListIndividual(other).order, TActivityListIndividual(daughter).order);
+  OnePointCrossover(order, TActivityListIndividual(other).order, TActivityListIndividual(son).order);
 end;
 
-procedure InitializePopulation(var population: TPop<JobData>);
-var
-  i: Integer;
-  prioRules: JobDataArray;
-  j: Integer;
+procedure TActivityListIndividual.Mutate;
 begin
-  SetProjectStructureAL(ps);
+  SwapNeighborhood(order);
+end;
 
+function TActivityListIndividual.Fitness: Double;
+var sts: JobData;
+begin
+  result := TSSGSOC.Solve(order, sts, False);
+end;
+
+procedure InitializeActivityListPopulation(var population: IndivArray);
+var
+  i, j: Integer;
+  prioRules: JobDataArray;
+begin
   ProjData.InitPriorityRulesFromFile(ps, prioRules);
   for i := 0 to 12 do
   begin
-    SetLength(population[i], ps.numJobs);
+    SetLength(TActivityListIndividual(population[i]).order, ps.numJobs);
     for j := 0 to ps.numJobs-1 do
-      population[i][j] := prioRules[i, j];
+      TActivityListIndividual(population[i]).order[j] := prioRules[i, j];
   end;
 
   for i := 13 to POP_SIZE * 2 - 1 do
-    InitAL(population[i]);
+    TTopSort.RandomSort(TActivityListIndividual(population[i]).order);
+end;
+
+function RunGASSGSOC(out best: JobData): Double;
+var
+  population: IndivArray;
+  bestIndiv: IIndividual;
+  i: Integer;
+begin
+  SetLength(population, POP_SIZE);
+  for i := 0 to POP_SIZE * 2 - 1 do
+    population[i] := TActivityListIndividual.Create;
+
+  InitializeActivityListPopulation(population);
+  result := RunGA(population, bestIndiv);
+
+  best := TActivityListIndividual(bestIndiv).order;
 end;
 
 end.
+

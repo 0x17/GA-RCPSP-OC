@@ -2,13 +2,12 @@ unit printing;
 
 interface
 
-uses classes, sysutils, projectdata;
+uses classes, sysutils, projectdata, operators;
 
 procedure PrintSchedule(const ps: ProjData; const sts: JobData);
 procedure PrintProject(var ps: ProjData);
 procedure PrintActivityList(const order: JobData);
 procedure PrintTALBPair(const pair: TALBPair);
-procedure PrintTALOCPair(const pair: TALOCPair);
 
 implementation
 
@@ -30,12 +29,6 @@ begin
     WriteLn;
   end;
   WriteLn;
-end;
-
-procedure PrintTALOCPair(const pair: TALOCPair);
-begin
-  PrintActivityList(pair.order);
-  PrintResourceProfile(pair.oc);
 end;
 
 procedure PrintTALBPair(const pair: TALBPair);

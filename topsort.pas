@@ -2,17 +2,21 @@
 
 interface
 
-uses helpers, projectdata;
+uses helpers, projectdata, globals;
 
 type TTopSort = class
-  class procedure Sort(const ps: ProjData; out order: JobData);
-  class procedure RandomSort(const ps: ProjData; out order: JobData);
+  class procedure Sort(out order: JobData);
+  class procedure RandomSort(out order: JobData);
+private
+  class function AllPredsBefore(var order: JobData; index, j: Integer): Boolean;
+  class function FindJobWithAllPredsBefore(var order: JobData; index: Integer): Integer;
+  class function FindRandomJobWithAllPredsBefore(var order: JobData; index: Integer): Integer;
 end;
 
 implementation
 
 // Wahr, gdw. alle Vorgänger von j in order von 0..index-1 liegen.
-function AllPredsBefore(const ps: ProjData; var order: JobData; index, j: Integer): Boolean;
+class function TTopSort.AllPredsBefore(var order: JobData; index, j: Integer): Boolean;
 var
   k, l: Integer;
   predInOrder: Boolean;
@@ -37,7 +41,7 @@ end;
 
 // Suche nächstmöglichen Job, für den alle Vorgänger bereits in Aktivitätenliste
 // order vor index liegen.
-function FindJobWithAllPredsBefore(const ps: ProjData; var order: JobData; index: Integer): Integer;
+class function TTopSort.FindJobWithAllPredsBefore(var order: JobData; index: Integer): Integer;
 var
   j, k: Integer;
   alreadyInOrder: Boolean;
@@ -52,7 +56,7 @@ begin
     // Nur falls noch nicht in Aktivitätenliste -> reinnehmbar
     if not alreadyInOrder then
       // Alle Vorgänger schon davor in Aktivitätenliste
-      if AllPredsBefore(ps, order, index, j) then begin
+      if AllPredsBefore(order, index, j) then begin
         result := j;
         exit;
       end;
@@ -61,19 +65,19 @@ begin
 end;
 
 // Schreibe topologische Sortierung der Arbeitsgänge in Ausgabeparameter order.
-class procedure TTopSort.Sort(const ps: ProjData; out order: JobData);
+class procedure TTopSort.Sort(out order: JobData);
 var index: Integer;
 begin
   SetLength(order, ps.numJobs);
   order[0] := 0;
   for index := 1 to ps.numJobs - 1 do
-    order[index] := FindJobWithAllPredsBefore(ps, order, index);
+    order[index] := FindJobWithAllPredsBefore(order, index);
 end;
 
 // Wähle zufällig einen Job aus der Menge der Jobs, welche bereits alle
 // Vorgänger links vom index in der Aktivitätenliste haben.
 // Für Bestimmung von Initialpopulation von Aktivitätenlisten.
-function FindRandomJobWithAllPredsBefore(const ps: ProjData; var order: JobData; index: Integer): Integer;
+class function TTopSort.FindRandomJobWithAllPredsBefore(var order: JobData; index: Integer): Integer;
 var
   j, k, numJobsFeasible, rval: Integer;
   alreadyInOrder: Boolean;
@@ -94,7 +98,7 @@ begin
     // Nur falls noch nicht in Aktivitätenliste -> reinnehmbar
     if not alreadyInOrder then
       // Alle Vorgänger schon davor in Aktivitätenliste
-      if AllPredsBefore(ps, order, index, j) then begin
+      if AllPredsBefore(order, index, j) then begin
         jobFeasible[j] := 1;
         inc(numJobsFeasible);
       end
@@ -119,13 +123,13 @@ end;
 
 // Schreibe randomisierte topologische Sortierung der Arbeitsgänge in
 // Ausgabeparameter order.
-class procedure TTopSort.RandomSort(const ps: ProjData; out order: JobData);
+class procedure TTopSort.RandomSort(out order: JobData);
 var i: Integer;
 begin
   SetLength(order, ps.numJobs);
   order[0] := 0;
   for i := 1 to ps.numJobs - 1 do
-    order[i] := FindRandomJobWithAllPredsBefore(ps, order, i);
+    order[i] := FindRandomJobWithAllPredsBefore(order, i);
 end;
 
 end.

@@ -2,27 +2,37 @@ unit helpers;
 
 interface
 
-uses classes, sysutils, math, strutils, types;
+{$ifdef Win32}
+  {$ifdef FPC}
+    uses classes, sysutils, strutils, windows;
+  {$else}
+    uses classes, sysutils, math, strutils, windows;
+  {$endif}
+
+{$else}
+uses classes, sysutils, strutils;
+{$endif}
 
 type THelper = class
   class function FilenameFromPath(path: String): String;
   class function RandomRangeIncl(lb, ub: Integer): Integer;
   class procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
   class function ListProjFilesInDir(path: String): TStringList;
+  class procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
 end;
 
-type TSortHelper<KeyType> = class
-  class procedure QuickSortKeys(var keys: array of KeyType; var fvals: array of Double;  iLo, iHi: Integer);
+type TStopwatch = class(TObject)
+  procedure Start();
+  function Stop(): Cardinal;
+private
+  before: Cardinal;
 end;
 
 implementation
 
 class function THelper.FilenameFromPath(path: String): String;
-var
-  parts: TStringDynArray;
 begin
-  parts := SplitString(path, '/\');
-  result := parts[Length(parts)-1];
+  result := RightStr(path, Length(path) - LastDelimiter('/\', path));
 end;
 
 class function THelper.RandomRangeIncl(lb, ub: Integer): Integer;
@@ -60,35 +70,46 @@ begin
   SetCurrentDir(oldwd);
 end;
 
-//==============================================================================
-class procedure TSortHelper<KeyType>.QuickSortKeys(var keys: array of KeyType; var fvals: array of Double;  iLo, iHi: Integer);
+class procedure THelper.WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
 var
-  Lo, Hi: Integer;
-  Mid, T: Double;
-  T2: KeyType;
+  parts: TStringList;
+  part: String;
+  colCtr: Integer;
 begin
-  Lo := iLo;
-  Hi := iHi;
-  Mid := fvals[(Lo + Hi) div 2];
-  repeat
-    while fvals[Lo] < Mid do Inc(Lo);
-    while fvals[Hi] > Mid do Dec(Hi);
-    if Lo <= Hi then
-    begin
-      T := fvals[Lo];
-      fvals[Lo] := fvals[Hi];
-      fvals[Hi] := T;
+  parts := TStringList.Create;
+  parts.Clear;
+  parts.Delimiter := #59;
+  parts.DelimitedText := csvStr;
 
-      T2 := keys[Lo];
-      keys[Lo] := keys[Hi];
-      keys[Hi] := T2;
+  colCtr := 1;
+  for part in parts do
+  begin
+    if (colCtr > 1) and not(allStrings) then
+      sheet.Cells[rowNum, colCtr] := StrToFloat(part)
+    else
+      sheet.Cells[rowNum, colCtr] := part;
 
-      Inc(Lo);
-      Dec(Hi);
-    end;
-  until Lo > Hi;
-  if Hi > iLo then QuickSortKeys(keys, fvals, iLo, Hi);
-  if Lo < iHi then QuickSortKeys(keys, fvals, Lo, iHi);
+    inc(colCtr);
+  end;
+
+  FreeAndNil(parts);
+end;
+//==============================================================================
+procedure TStopwatch.Start();
+begin
+  {$ifndef Win32}
+  {$else}
+  before := GetTickCount;
+  {$endif}
+end;
+
+function TStopwatch.Stop(): Cardinal;
+begin
+  {$ifndef Win32}
+  result := 0;
+  {$else}
+  result := GetTickCount - before;
+  {$endif}
 end;
 
 end.

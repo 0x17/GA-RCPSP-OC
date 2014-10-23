@@ -6,15 +6,19 @@
 
 interface
 
-uses classes, sysutils, projectdata, profit, ssgs, constants, resprofiles;
+uses classes, sysutils, projectdata, profit, ssgs, globals, resprofiles;
 
-function SolveWithOC(const ps: ProjData; const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+type TSSGSOC = class
+  class function Solve(const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+  class function RightShift(var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
+  class procedure SubtractResRemaining(var resRemaining: ResourceProfile; j, stj: Integer);
+end;
 
 implementation
 
 // Verringere die Restkapazität um den Verbrauch von j bei Einplanung in
 // Periode stj.
-procedure SubtractResRemaining(const ps: ProjData; var resRemaining: ResourceProfile; j, stj: Integer);
+class procedure TSSGSOC.SubtractResRemaining(var resRemaining: ResourceProfile; j, stj: Integer);
 var r, tau: Integer;
 begin
   for tau := stj to stj+ps.durations[j]-1 do
@@ -22,12 +26,10 @@ begin
       resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
 end;
 
-function RightShift(const ps: ProjData; var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double; forward;
-
 // Modifiziertes SSGS zur heuristischen Bestimmung eines Ablaufplans für ein
 // gegebenes Projekt und Aktivitätenliste.
 // Führe danach optional eine Rechtsverschiebung durch.
-function SolveWithOC(const ps: ProjData; const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+class function TSSGSOC.Solve(const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
 var
   r, k, ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
   p, bestProfit: Double;
@@ -43,9 +45,9 @@ begin
 
   // Setze Zusatzkapazitätsprofile
   SetLength(zeroOc, ps.numRes, ps.numPeriods);
-  ZeroOvercapacity(ps, zeroOc);
+  TResProfiles.ZeroOC(zeroOc);
   SetLength(maxOc, ps.numRes, ps.numPeriods);
-  MaxOvercapacity(ps, maxOc);
+  TResProfiles.MaxOC(maxOc);
 
   // Initialisiere sts, fts
   SetLength(sts, ps.numJobs);
@@ -64,7 +66,7 @@ begin
 
     // Bestimme Zeitpunkt, wo Einplanung ressourcenzulässig ohne Zusatzkapazität ist
     for tauResFeas := tauPrecFeas to ps.numPeriods - 1 do
-      if ResourceFeasible(ps, resRemaining, zeroOc, j, tauResFeas) then
+      if TSSGS.ResourceFeasible(resRemaining, zeroOc, j, tauResFeas) then
         break;
 
     // Probiere alle t in tauPrecFeas..tauResFeas und wähle bestes
@@ -72,7 +74,7 @@ begin
     bestT := tauPrecFeas;
 
     for t := tauPrecFeas to tauResFeas do
-      if ResourceFeasible(ps, resRemaining, maxOc, j, t) then begin
+      if TSSGS.ResourceFeasible(resRemaining, maxOc, j, t) then begin
         //resRemainingTmp := Copy(resRemaining, 0, SizeOf(Integer)*ps.numRes*ps.numPeriods);
         for k1 := 0 to ps.numRes - 1 do
             for k2 := 0 to ps.numPeriods - 1 do
@@ -80,11 +82,11 @@ begin
 
         sts[j] := t;
         fts[j] := t + ps.durations[j];
-        SubtractResRemaining(ps, resRemainingTmp, j, t);
+        SubtractResRemaining(resRemainingTmp, j, t);
 
-        SolveCore(ps, order, ix+1, zeroOc, sts, fts, resRemainingTmp);
+        TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
 
-        p := CalcProfit(ps, sts, resRemainingTmp);
+        p := CalcProfit(sts, resRemainingTmp);
         if p > bestProfit then
         begin
           bestProfit := p;
@@ -96,11 +98,11 @@ begin
     sts[j] := bestT;
     fts[j] := sts[j] + ps.durations[j];
     // Ziehe entsprechend Bedarf j in laufenden Perioden Restkapazität ab
-    SubtractResRemaining(ps, resRemaining, j, bestT);
+    SubtractResRemaining(resRemaining, j, bestT);
   end;
 
   if doRightShift then
-    result := RightShift(ps, sts, resRemaining, bestProfit)
+    result := RightShift(sts, resRemaining, bestProfit)
   else
     result := bestProfit
 
@@ -109,7 +111,7 @@ end;
 // Versuche die ZK-Kosten durch Rechtsverschiebung von Jobs zu minimieren.
 // Rechtsverschiebung genau dann, wenn zulässig (vor frühestem Nachfolger,
 // genug Kapazität) und ZK-minimierend.
-function RightShift(const ps: ProjData; var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
+class function TSSGSOC.RightShift(var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
 var
   j, esucc, t, i, st, oldSt, r, bestT: Integer;
   p: Double;
@@ -157,7 +159,7 @@ begin
             else
               resRemTmp[r,t] := resRemTmp[r,t];
 
-        p := CalcProfit(ps, sts, resRemTmp);
+        p := CalcProfit(sts, resRemTmp);
 
         // zurücksetzen
         for r := 0 to ps.numRes-1 do

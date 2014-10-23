@@ -112,45 +112,22 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="main.pas"/>
-        <DCCReference Include="constants.pas"/>
-        <DCCReference Include="gaactivitylist.pas"/>
-        <DCCReference Include="gassgs.pas"/>
-        <DCCReference Include="gassgsmod.pas"/>
-        <DCCReference Include="gassgsoc.pas"/>
+        <DCCReference Include="globals.pas"/>
         <DCCReference Include="helpers.pas"/>
         <DCCReference Include="operators.pas"/>
-        <DCCReference Include="parallelfitness.pas"/>
         <DCCReference Include="printing.pas"/>
         <DCCReference Include="profit.pas"/>
         <DCCReference Include="projectdata.pas"/>
         <DCCReference Include="ssgs.pas"/>
         <DCCReference Include="ssgsmod.pas"/>
         <DCCReference Include="ssgsoc.pas"/>
-        <DCCReference Include="stopwatch.pas"/>
+        <DCCReference Include="gassgsoc.pas"/>
+        <DCCReference Include="gassgsbeta.pas"/>
         <DCCReference Include="topsort.pas"/>
-        <DCCReference Include="gacommon.pas"/>
-        <DCCReference Include="gassgsmod2.pas"/>
         <DCCReference Include="esschedule.pas"/>
-        <DCCReference Include="stsvis.pas"/>
-        <DCCReference Include="gams.pas"/>
+        <DCCReference Include="schedulevisualizer.pas"/>
         <DCCReference Include="resprofiles.pas"/>
-        <DCCReference Include="gamsapi\gamsxdcpdef.pas"/>
-        <DCCReference Include="gamsapi\gamsxdocpdef.pas"/>
-        <DCCReference Include="gamsapi\gamsxdopdef.pas"/>
-        <DCCReference Include="gamsapi\gamsxdpdef.pas"/>
-        <DCCReference Include="gamsapi\gdxdcpdef.pas"/>
-        <DCCReference Include="gamsapi\gdxdocpdef.pas"/>
-        <DCCReference Include="gamsapi\gdxdopdef.pas"/>
-        <DCCReference Include="gamsapi\gdxdpdef.pas"/>
-        <DCCReference Include="gamsapi\gmsgen.pas"/>
-        <DCCReference Include="gamsapi\gmsspecs.pas"/>
-        <DCCReference Include="gamsapi\gopdopdef.pas"/>
-        <DCCReference Include="gamsapi\gxdefs.pas"/>
-        <DCCReference Include="gamsapi\optdcon.pas"/>
-        <DCCReference Include="gamsapi\optdcpdef.pas"/>
-        <DCCReference Include="gamsapi\optdocpdef.pas"/>
-        <DCCReference Include="gamsapi\optdopdef.pas"/>
-        <DCCReference Include="gamsapi\optdpdef.pas"/>
+        <DCCReference Include="individual.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

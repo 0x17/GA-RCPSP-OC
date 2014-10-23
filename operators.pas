@@ -2,9 +2,13 @@
 
 interface
 
-uses classes, sysutils, projectdata, constants, helpers;
+uses classes, sysutils, projectdata, globals, helpers;
 
-procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
+type TALBPair = record
+  order, b: JobData;
+end;
+
+procedure SwapNeighborhood(var lambda: JobData);
 
 procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData); overload;
 procedure OnePointCrossover(maxQ: Integer; const mother, father: ResourceProfile; var daughter: ResourceProfile; numRes, numPeriods: Integer); overload;
@@ -25,7 +29,7 @@ begin
   lambda[i2] := tmp;
 end;
 
-procedure SwapNeighborhood(const ps: ProjData; var lambda: JobData);
+procedure SwapNeighborhood(var lambda: JobData);
 var
   i: Integer;
 begin

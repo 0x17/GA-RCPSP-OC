@@ -5,7 +5,6 @@ program rcpspoc;
 uses main;
 
 begin
-  Application.Title:='GA-RCPSP-OC';
   Entrypoint();
 end.
 

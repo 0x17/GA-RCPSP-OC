@@ -15,7 +15,7 @@ type
   ResourceProfile = Array of Array of Integer;
   JobDataArray = Array of Array of Integer;
 
-  ProjData = class(TObject)
+  ProjData = class
     numJobs, numRes, numPeriods, T: Integer;
     adjMx: ByteMx2D;
     durations: JobData;
@@ -46,19 +46,9 @@ type
     procedure ParseReqDur(var fp: TextFile);
   end;
 
-type TALBPair = record
-  order, b: JobData;
-end;
-
-type TALOCPair = record
-  order: JobData;
-  oc: ResourceProfile;
-end;
-
 implementation
 
-const
-  lineFeed = #10;
+const lineFeed = #10;
 
 // TODO: Port priority rule implementation from F# over to Delphi
 class procedure ProjData.InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
@@ -79,8 +69,7 @@ begin
 end;
 
 procedure ProjData.ParsePrecedenceLine(var fp: TextFile);
-var
-  i, jobNr, ignore, numSuccs, succNr: Integer;
+var i, jobNr, ignore, numSuccs, succNr: Integer;
 begin
   Read(fp, jobNr);
   Read(fp, ignore);
@@ -92,8 +81,7 @@ begin
 end;
 
 procedure ProjData.ParseReqDur(var fp: TextFile);
-var
-  r, ignore, jobNr: Integer;
+var r, ignore, jobNr: Integer;
 begin
   Read(fp, jobNr);
   Read(fp, ignore);
@@ -104,8 +92,7 @@ begin
 end;
 
 procedure ProjData.ComputeESFTS;
-var
-  i, j, k, l, lastPredFt, firstSuccSt: Integer;
+var i, j, k, l, lastPredFt, firstSuccSt: Integer;
 begin
   SetLength(ests, numJobs);
   SetLength(efts, numJobs);
@@ -206,8 +193,7 @@ begin
 end;
 
 procedure ProjData.WriteToFile(const sts: JobData);
-const
-  lineFeed = #10;
+const lineFeed = #10;
 var
   fp: TextFile;
   i: Integer;
@@ -220,8 +206,7 @@ begin
 end;
 
 procedure ProjData.CheckScheduleFeasibility(const sts: JobData);
-var
-  i, j: Integer;
+var i, j: Integer;
 begin
   for i := 0 to numJobs-1 do
     for j := 0 to numJobs-1 do
@@ -230,8 +215,7 @@ begin
 end;
 
 procedure ProjData.CheckOrderFeasibility(const order: JobData);
-var
-  i, j, k, ix1, ix2: Integer;
+var i, j, k, ix1, ix2: Integer;
 begin
   ix1 := 0;
   ix2 := 0;

@@ -2,15 +2,17 @@ unit ssgs;
 
 interface
 
-uses classes, sysutils, projectdata, resprofiles;
+uses classes, sysutils, projectdata, globals;
 
-function ResourceFeasible(const ps: ProjData; const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
-procedure SolveCore(const ps: ProjData; const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
-procedure Solve(const ps: ProjData; const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
+type TSSGS = class
+  class function ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
+  class procedure SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
+  class procedure Solve(const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
+end;
 
 implementation
 
-function ResourceFeasible(const ps: ProjData; const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
+class function TSSGS.ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -23,7 +25,7 @@ begin
   result := true
 end;
 
-procedure SolveCore(const ps: ProjData; const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
+class procedure TSSGS.SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
 var i, j, k, t, tau, r: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do begin
@@ -34,7 +36,7 @@ begin
       if (ps.adjMx[k,j] = 1) and (fts[k] > t) then
         t := fts[k];
 
-    while not ResourceFeasible(ps, resRemaining, z, j, t) do
+    while not ResourceFeasible(resRemaining, z, j, t) do
       inc(t);
 
     sts[j] := t;
@@ -46,7 +48,7 @@ begin
   end;
 end;
 
-procedure Solve(const ps: ProjData; const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
+class procedure TSSGS.Solve(const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
 var
   r, t: Integer;
   fts: JobData;
@@ -61,8 +63,9 @@ begin
   sts[0] := 0;
   fts[0] := 0;
 
-  SolveCore(ps, order, 1, z, sts, fts, resRemaining);
+  SolveCore(order, 1, z, sts, fts, resRemaining);
 end;
+
 
 end.
 
