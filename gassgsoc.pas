@@ -57,14 +57,15 @@ var
   bestIndiv: IIndividual;
   i: Integer;
 begin
-  SetLength(population, POP_SIZE);
+  SetLength(population, POP_SIZE*2);
   for i := 0 to POP_SIZE * 2 - 1 do
     population[i] := TActivityListIndividual.Create;
 
   InitializeActivityListPopulation(population);
-  result := RunGA(population, bestIndiv);
+  result := RunGA(population, bestIndiv, True);
 
-  best := TActivityListIndividual(bestIndiv).order;
+  best := (bestIndiv as TActivityListIndividual).order;
+  FreePopulation(population);
 end;
 
 end.

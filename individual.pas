@@ -35,7 +35,8 @@ protected
   procedure Execute; override;
 end;
 
-function RunGA(var population: IndivArray; out best: IIndividual): Double;
+function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
+procedure FreePopulation(var population: IndivArray);
 
 implementation
 
@@ -120,12 +121,10 @@ begin
   SetLength(population, 0);
 end;
 
-function RunGA(var population: IndivArray; out best: IIndividual): Double;
+function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
 var
   i, j: Integer;
   fvals: TFValArray;
-const
-  PARALLEL_COMP = True;
 begin
   RandSeed := 23;
 
@@ -136,7 +135,7 @@ begin
     for j := POP_SIZE to POP_SIZE * 2 - 1 do
       population[j].Mutate;
 
-    if PARALLEL_COMP then
+    if parallelComp then
       TFitnessComputation.CalcParallel(population, fvals)
     else
       TFitnessComputation.CalcSerial(population, fvals);
@@ -149,8 +148,6 @@ begin
 
   best := population[0];
   result := population[0].Fitness;
-
-  FreePopulation(population);
 end;
 
 //==============================================================================

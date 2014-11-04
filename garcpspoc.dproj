@@ -5,7 +5,7 @@
         <FrameworkType>None</FrameworkType>
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -88,6 +88,15 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
+        <DCC_IMMUTABLE_STRINGS>true</DCC_IMMUTABLE_STRINGS>
+        <DCC_EXPLICIT_STRING_CAST_LOSS>true</DCC_EXPLICIT_STRING_CAST_LOSS>
+        <DCC_UNSAFE_CODE>true</DCC_UNSAFE_CODE>
+        <DCC_UNSAFE_CAST>true</DCC_UNSAFE_CAST>
+        <DCC_EXPLICIT_STRING_CAST>true</DCC_EXPLICIT_STRING_CAST>
+        <DCC_UNSAFE_VOID_POINTER>true</DCC_UNSAFE_VOID_POINTER>
+        <DCC_UNSAFE_TYPE>true</DCC_UNSAFE_TYPE>
+        <DCC_RangeChecking>true</DCC_RangeChecking>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Manifest_File>None</Manifest_File>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -128,6 +137,7 @@
         <DCCReference Include="schedulevisualizer.pas"/>
         <DCCReference Include="resprofiles.pas"/>
         <DCCReference Include="individual.pas"/>
+        <DCCReference Include="gassgsz.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

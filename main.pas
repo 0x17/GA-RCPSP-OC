@@ -6,10 +6,10 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, operators
+uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, operators, variants
 {$ifdef Win32}
-  {$ifdef FPC},comobj{$else},comobj, excel2000, types{$endif}
-{$else}
+  , comobj
+  {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
 
 procedure WriteOptsAndTime;
@@ -19,17 +19,19 @@ end;
 const
   HEADER_STR = 'filename;'
              + 'profitGASSGSOC;solvetimeGASSGSOC;'
-             + 'profitGASSGSMod;solvetimeGASSGSMod';
+             + 'profitGASSGSBeta;solvetimeGASSGSBeta'
+             + 'profitGASSGSZ;solvetimeGASSGSZ';
 var
   fnames: TStringList;
   line, fname: String;
   bestOrder: JobData;
   sw: TStopwatch;
-  ptp: Array[0..1] of TProfitTimePair;
+  ptp: Array[0..2] of TProfitTimePair;
   fp: TextFile;
   time: Cardinal;
-  ctr: Integer;
+  ctr, fileCount: Integer;
   best2: TALBPair;
+  best3: TALZPair;
   excObj, excWb, excSheet: Variant;
 begin
   {$ifdef Win32}
@@ -60,10 +62,12 @@ begin
   ctr := 0;
   sw := TStopwatch.Create;
 
+  fileCount := fnames.Count;
+
   for fname in fnames do
   begin
     if not(FileExists(fname+'.PRULES')) then
-      continue;
+      raise Exception.Create('Priority rules not found for ' + fname);
 
     ps.LoadFromFile(fname);
     TTopSort.Sort(ps.topOrder);
@@ -81,20 +85,24 @@ begin
       time := sw.Stop();
       ptp[1].time := time / 1000.0;
 
-      line := Format('%s;%f;%f;%f;%f', [fname, ptp[0].profit, ptp[0].time, ptp[1].profit, ptp[1].time]);
+      sw.Start;
+      ptp[2].profit := RunGASSGSZ(best3);
+      time := sw.Stop();
+      ptp[2].time := time / 1000.0;
+
+      line := Format('%s;%f;%f;%f;%f;%f;%f', [fname, ptp[0].profit, ptp[0].time, ptp[1].profit, ptp[1].time, ptp[2].profit, ptp[2].time]);
     end
     else
-      line := Concat(fname, ';NA;NA;NA;NA');
+      line := Concat(fname, ';NA;NA;NA;NA;NA;NA');
 
     WriteLn(line);
     WriteLn(fp, line);
+    WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
     Flush(fp);
 
     inc(ctr);
     if USE_EXCEL then
       THelper.WriteCSVToExcel(excSheet, ctr+1, line, False);
-
-    break;
   end;
 
   if USE_EXCEL then
@@ -109,11 +117,10 @@ end;
 procedure Entrypoint();
 begin
   {$ifndef FPC}
-  ReportMemoryLeaksOnShutdown := True;
+  ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
   WriteOptsAndTime;
-  //TestGAMS;
 end;
 
 end.

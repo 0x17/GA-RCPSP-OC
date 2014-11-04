@@ -2,16 +2,13 @@ unit helpers;
 
 interface
 
-{$ifdef Win32}
-  {$ifdef FPC}
-    uses classes, sysutils, strutils, windows;
-  {$else}
-    uses classes, sysutils, math, strutils, windows;
-  {$endif}
+uses classes, sysutils, strutils
 
+{$ifdef Win32}
+  {$ifdef FPC},windows{$else},math,windows{$endif}
 {$else}
-uses classes, sysutils, strutils;
-{$endif}
+  ,dateutils
+{$endif};
 
 type THelper = class
   class function FilenameFromPath(path: String): String;
@@ -25,14 +22,16 @@ type TStopwatch = class(TObject)
   procedure Start();
   function Stop(): Cardinal;
 private
-  before: Cardinal;
+  before: {$ifndef Win32}TDateTime{$else}Cardinal{$endif};
 end;
 
 implementation
 
+const PATH_SEP = {$ifdef Win32}'\'{$else}'/'{$endif};
+
 class function THelper.FilenameFromPath(path: String): String;
 begin
-  result := RightStr(path, Length(path) - LastDelimiter('/\', path));
+  result := RightStr(path, Length(path) - LastDelimiter(PATH_SEP, path));
 end;
 
 class function THelper.RandomRangeIncl(lb, ub: Integer): Integer;
@@ -64,7 +63,7 @@ begin
   if FindFirst('*.sm', faAnyFile, sr) = 0 then
   begin
     repeat
-      result.Add(path+'\'+sr.Name);
+      result.Add(path+PATH_SEP+sr.Name);
     until FindNext(sr) <> 0;
   end;
   SetCurrentDir(oldwd);
@@ -98,6 +97,7 @@ end;
 procedure TStopwatch.Start();
 begin
   {$ifndef Win32}
+  before := Now;
   {$else}
   before := GetTickCount;
   {$endif}
@@ -106,7 +106,7 @@ end;
 function TStopwatch.Stop(): Cardinal;
 begin
   {$ifndef Win32}
-  result := 0;
+  result := MilliSecondsBetween(Now, before);
   {$else}
   result := GetTickCount - before;
   {$endif}

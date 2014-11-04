@@ -25,7 +25,8 @@ uses
   esschedule in 'esschedule.pas',
   schedulevisualizer in 'schedulevisualizer.pas',
   resprofiles in 'resprofiles.pas',
-  individual in 'individual.pas';
+  individual in 'individual.pas',
+  gassgsz in 'gassgsz.pas';
 
 begin
   try

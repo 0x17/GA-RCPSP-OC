@@ -2,7 +2,7 @@ program rcpspoc;
 
 {$ifdef FPC}{$mode delphi}{$H+}{$endif}
 
-uses main;
+uses {$ifndef Win32}cthreads,{$endif} main;
 
 begin
   Entrypoint();
