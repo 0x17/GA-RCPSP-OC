@@ -6,7 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, operators, variants
+uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgstau, operators, variants
 {$ifdef Win32}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
@@ -19,19 +19,21 @@ end;
 const
   HEADER_STR = 'filename;'
              + 'profitGASSGSOC;solvetimeGASSGSOC;'
-             + 'profitGASSGSBeta;solvetimeGASSGSBeta'
-             + 'profitGASSGSZ;solvetimeGASSGSZ';
+             + 'profitGASSGSBeta;solvetimeGASSGSBeta;'
+             + 'profitGASSGSZ;solvetimeGASSGSZ;'
+             + 'profitGASSGStau;solvetimeGASSGStau';
 var
   fnames: TStringList;
   line, fname: String;
   bestOrder: JobData;
   sw: TStopwatch;
-  ptp: Array[0..2] of TProfitTimePair;
+  ptp: Array[0..3] of TProfitTimePair;
   fp: TextFile;
   time: Cardinal;
   ctr, fileCount: Integer;
   best2: TALBPair;
   best3: TALZPair;
+  best4: TALTauPair;
   excObj, excWb, excSheet: Variant;
 begin
   {$ifdef Win32}
@@ -77,20 +79,30 @@ begin
     if ps.minMs <> ps.maxMs then begin
       sw.Start;
       ptp[0].profit := RunGASSGSOC(bestOrder);
-      time := sw.Stop();
+      time := sw.Stop;
       ptp[0].time := time / 1000.0;
 
       sw.Start;
       ptp[1].profit := RunGASSGSBeta(best2);
-      time := sw.Stop();
+      time := sw.Stop;
       ptp[1].time := time / 1000.0;
 
       sw.Start;
       ptp[2].profit := RunGASSGSZ(best3);
-      time := sw.Stop();
+      time := sw.Stop;
       ptp[2].time := time / 1000.0;
 
-      line := Format('%s;%f;%f;%f;%f;%f;%f', [fname, ptp[0].profit, ptp[0].time, ptp[1].profit, ptp[1].time, ptp[2].profit, ptp[2].time]);
+      sw.Start;
+      ptp[3].profit := RunGASSGSTau(best4);
+      time := sw.Stop;
+      ptp[3].time := time / 1000.0;
+
+      line := Format('%s;%f;%f;%f;%f;%f;%f;%f;%f',
+                    [fname,
+                    ptp[0].profit, ptp[0].time,
+                    ptp[1].profit, ptp[1].time,
+                    ptp[2].profit, ptp[2].time,
+                    ptp[3].profit, ptp[3].time]);
     end
     else
       line := Concat(fname, ';NA;NA;NA;NA;NA;NA');

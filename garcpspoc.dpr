@@ -26,7 +26,8 @@ uses
   schedulevisualizer in 'schedulevisualizer.pas',
   resprofiles in 'resprofiles.pas',
   individual in 'individual.pas',
-  gassgsz in 'gassgsz.pas';
+  gassgsz in 'gassgsz.pas',
+  gassgstau in 'gassgstau.pas';
 
 begin
   try

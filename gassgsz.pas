@@ -2,7 +2,7 @@ unit gassgsz;
 
 interface
 
-uses classes, sysutils, individual, projectdata, operators, globals, ssgs, topsort, helpers, profit;
+uses classes, sysutils, individual, projectdata, operators, globals, ssgs, topsort, helpers, profit, gassgsoc;
 
 type TALZPair = record
   order: JobData;
@@ -11,8 +11,7 @@ end;
 
 function RunGASSGSZ(out best: TALZPair): Double;
 
-type TActivityListZIndividual = class(IIndividual)
-  order: JobData;
+type TActivityListZIndividual = class(TActivityListIndividual)
   z: ResData;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;

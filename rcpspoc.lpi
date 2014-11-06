@@ -121,7 +121,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="18">
+    <Units Count="20">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -212,6 +212,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsbeta"/>
       </Unit17>
+      <Unit18>
+        <Filename Value="gassgstau.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgstau"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="gassgsz.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gassgsz"/>
+      </Unit19>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

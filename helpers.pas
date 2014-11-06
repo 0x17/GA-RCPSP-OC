@@ -93,6 +93,7 @@ begin
 
   FreeAndNil(parts);
 end;
+
 //==============================================================================
 procedure TStopwatch.Start();
 begin

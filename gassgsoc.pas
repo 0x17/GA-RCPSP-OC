@@ -20,7 +20,7 @@ implementation
 procedure TActivityListIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 begin
   OnePointCrossover(order, TActivityListIndividual(other).order, TActivityListIndividual(daughter).order);
-  OnePointCrossover(order, TActivityListIndividual(other).order, TActivityListIndividual(son).order);
+  OnePointCrossover(TActivityListIndividual(other).order, order , TActivityListIndividual(son).order);
 end;
 
 procedure TActivityListIndividual.Mutate;
