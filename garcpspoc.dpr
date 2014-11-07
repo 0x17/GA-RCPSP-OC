@@ -27,7 +27,8 @@ uses
   resprofiles in 'resprofiles.pas',
   individual in 'individual.pas',
   gassgsz in 'gassgsz.pas',
-  gassgstau in 'gassgstau.pas';
+  gassgstau in 'gassgstau.pas',
+  priorityrules in 'priorityrules.pas';
 
 begin
   try
