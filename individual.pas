@@ -7,13 +7,17 @@ uses globals, helpers, classes, sysutils;
 const NUM_THREADS = 8;
       NUM_INDIV_PER_THREAD = POP_SIZE*2 div NUM_THREADS;
 
-type IIndividual = class
-  procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;
-  procedure Mutate; virtual; abstract;
-  function Fitness: Double; virtual; abstract;
+type
+  IIndividual = class; // forward decl.
+  IndivArray = Array of IIndividual;
+
+  IIndividual = class
+    procedure InitializePopulation(var pop: IndivArray); virtual; abstract;
+    procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;
+    procedure Mutate; virtual; abstract;
+    function Fitness: Double; virtual; abstract;
 end;
 
-type IndivArray = Array of IIndividual;
 type TFValArray = Array[0..POP_SIZE*2-1] of Double;
 type TFValPartArray = Array[0..NUM_INDIV_PER_THREAD-1] of Double;
 

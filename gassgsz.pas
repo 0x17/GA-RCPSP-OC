@@ -2,23 +2,22 @@ unit gassgsz;
 
 interface
 
-uses classes, sysutils, individual, projectdata, operators, globals, ssgs, topsort, helpers, profit, gassgsoc;
+uses classes, sysutils, individual, projectdata, operators, globals, ssgs, helpers, profit, gassgsoc;
 
 type TALZPair = record
   order: JobData;
   z: ResData;
 end;
 
-function RunGASSGSZ(out best: TALZPair): Double;
+function RunGASSGSZ: Double;
 
 type TActivityListZIndividual = class(TActivityListIndividual)
   z: ResData;
+  procedure InitializePopulation(var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
 end;
-
-procedure InitializeActivityListZPopulation(var population: IndivArray);
 
 implementation
 
@@ -84,22 +83,10 @@ begin
   result := CalcProfit(sts, resRemaining);
 end;
 
-procedure InitializeActivityListZPopulation(var population: IndivArray);
-var
-  i, j: Integer;
-  prioRules: JobDataArray;
-  r: Integer;
+procedure TActivityListZIndividual.InitializePopulation(var population: IndivArray);
+var i, r: Integer;
 begin
-  ProjData.InitPriorityRulesFromFile(ps, prioRules);
-  for i := 0 to 12 do
-  begin
-    SetLength(TActivityListZIndividual(population[i]).order, ps.numJobs);
-    for j := 0 to ps.numJobs-1 do
-      TActivityListZIndividual(population[i]).order[j] := prioRules[i, j];
-  end;
-
-  for i := 13 to POP_SIZE * 2 - 1 do
-    TTopSort.RandomSort(TActivityListZIndividual(population[i]).order);
+  inherited InitializePopulation(population);
 
   for i := 0 to POP_SIZE * 2 - 1 do
   begin
@@ -109,7 +96,7 @@ begin
   end;
 end;
 
-function RunGASSGSZ(out best: TALZPair): Double;
+function RunGASSGSZ: Double;
 var
   population: IndivArray;
   bestIndiv: IIndividual;
@@ -119,11 +106,8 @@ begin
   for i := 0 to POP_SIZE * 2 - 1 do
     population[i] := TActivityListZIndividual.Create;
 
-  InitializeActivityListZPopulation(population);
+  population[0].InitializePopulation(population);
   result := RunGA(population, bestIndiv, False);
-
-  best.order := (bestIndiv as TActivityListZIndividual).order;
-  best.z := (bestIndiv as TActivityListZIndividual).z;
   FreePopulation(population);
 end;
 

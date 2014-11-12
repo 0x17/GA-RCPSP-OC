@@ -13,7 +13,6 @@ uses
   globals in 'globals.pas',
   helpers in 'helpers.pas',
   operators in 'operators.pas',
-  printing in 'printing.pas',
   profit in 'profit.pas',
   projectdata in 'projectdata.pas',
   ssgs in 'ssgs.pas',
@@ -28,7 +27,8 @@ uses
   individual in 'individual.pas',
   gassgsz in 'gassgsz.pas',
   gassgstau in 'gassgstau.pas',
-  priorityrules in 'priorityrules.pas';
+  priorityrules in 'priorityrules.pas',
+  gassgszt in 'gassgszt.pas';
 
 begin
   try

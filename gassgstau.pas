@@ -2,22 +2,21 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, operators, globals, ssgsoc, topsort, gassgsoc, helpers;
+uses classes, sysutils, individual, projectdata, operators, globals, ssgsoc, gassgsoc, helpers;
 
 type TALTauPair = record
   order, tau: JobData;
 end;
 
-function RunGASSGSTau(out best: TALTauPair): Double;
+function RunGASSGSTau: Double;
 
 type TActivityListTauIndividual = class(TActivityListIndividual)
   tau: JobData;
+  procedure InitializePopulation(var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
 end;
-
-procedure InitializeActivityListTauPopulation(var population: IndivArray);
 
 implementation
 
@@ -47,23 +46,12 @@ begin
   result := TSSGSOC.SolveWithTau(order, tau, sts);
 end;
 
-procedure InitializeActivityListTauPopulation(var population: IndivArray);
-var
-  i, j: Integer;
-  prioRules: JobDataArray;
+procedure TActivityListTauIndividual.InitializePopulation(var population: IndivArray);
+var i, j: Integer;
 begin
-  ProjData.InitPriorityRulesFromFile(ps, prioRules);
-  for i := 0 to 12 do
-  begin
-    SetLength(TActivityListTauIndividual(population[i]).order, ps.numJobs);
-    for j := 0 to ps.numJobs-1 do
-      TActivityListTauIndividual(population[i]).order[j] := prioRules[i, j];
-  end;
+  inherited InitializePopulation(population);
 
-  for i := 13 to POP_SIZE * 2 - 1 do
-    TTopSort.RandomSort(TActivityListTauIndividual(population[i]).order);
-	
-	for i := 0 to POP_SIZE * 2 - 1 do
+  for i := 0 to POP_SIZE * 2 - 1 do
 	begin
 		SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
 		for j := 0 to ps.numJobs - 1 do
@@ -71,7 +59,7 @@ begin
 	end;
 end;
 
-function RunGASSGSTau(out best: TALTauPair): Double;
+function RunGASSGSTau: Double;
 var
   population: IndivArray;
   bestIndiv: IIndividual;
@@ -81,12 +69,8 @@ begin
   for i := 0 to POP_SIZE * 2 - 1 do
     population[i] := TActivityListTauIndividual.Create;
 
-  InitializeActivityListTauPopulation(population);
+  population[0].InitializePopulation(population);
   result := RunGA(population, bestIndiv, (*True*) False);
-
-  best.order := (bestIndiv as TActivityListTauIndividual).order;
-  best.tau := (bestIndiv as TActivityListTauIndividual).tau;
-
   FreePopulation(population);
 end;
 

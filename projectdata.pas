@@ -13,7 +13,7 @@ type
   ResDataDbl = Array of Double;
   JobResData = Array of Array of Integer;
   ResourceProfile = Array of Array of Integer;
-  JobDataArray = Array of Array of Integer;
+  JobDataArray = Array of JobData;
 
   ProjData = class
     numJobs, numRes, numPeriods, T: Integer;

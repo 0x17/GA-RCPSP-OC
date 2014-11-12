@@ -35,7 +35,7 @@ begin
     tkappar := tkappar / (ps.capacities[r]+ps.zmax[r]);
     tkappari := Ceil(tkappar);
 
-    if tkappa > tkappari then
+    if tkappari > tkappa then
       tkappa := tkappari;
   end;
 
@@ -53,7 +53,6 @@ begin
   TResProfiles.ZeroOC(z);
   TSSGS.Solve(ps.topOrder, z, sts, resRemaining);
   ps.maxMs := sts[ps.numJobs-1];
-
 end;
 
 function Revenue(makespan: Integer): Double;

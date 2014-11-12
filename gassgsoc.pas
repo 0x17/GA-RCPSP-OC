@@ -4,16 +4,15 @@ interface
 
 uses classes, sysutils, individual, projectdata, operators, globals, ssgsoc, topsort;
 
-function RunGASSGSOC(out best: JobData): Double;
+function RunGASSGSOC: Double;
 
 type TActivityListIndividual = class(IIndividual)
   order: JobData;
+  procedure InitializePopulation(var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
 end;
-
-procedure InitializeActivityListPopulation(var population: IndivArray);
 
 implementation
 
@@ -34,7 +33,7 @@ begin
   result := TSSGSOC.Solve(order, sts, False);
 end;
 
-procedure InitializeActivityListPopulation(var population: IndivArray);
+procedure TActivityListIndividual.InitializePopulation(var population: IndivArray);
 var
   i, j: Integer;
   prioRules: JobDataArray;
@@ -51,7 +50,7 @@ begin
     TTopSort.RandomSort(TActivityListIndividual(population[i]).order);
 end;
 
-function RunGASSGSOC(out best: JobData): Double;
+function RunGASSGSOC: Double;
 var
   population: IndivArray;
   bestIndiv: IIndividual;
@@ -61,10 +60,8 @@ begin
   for i := 0 to POP_SIZE * 2 - 1 do
     population[i] := TActivityListIndividual.Create;
 
-  InitializeActivityListPopulation(population);
+  population[0].InitializePopulation(population);
   result := RunGA(population, bestIndiv, True);
-
-  best := (bestIndiv as TActivityListIndividual).order;
   FreePopulation(population);
 end;
 

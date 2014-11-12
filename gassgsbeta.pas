@@ -2,13 +2,13 @@
 
 interface
 
-uses gassgsoc, individual, operators, projectdata, globals, helpers, ssgsmod, profit;
+uses gassgsoc, individual, projectdata, globals, helpers, ssgsmod, profit;
 
-function RunGASSGSBeta(out best: TALBPair): Double;
+function RunGASSGSBeta: Double;
 
 type TActivityListBetaIndividual = class(TActivityListIndividual)
   b: JobData;
-
+  procedure InitializePopulation(var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
@@ -99,10 +99,10 @@ begin
   result := CalcProfit(sts, resRemaining);
 end;
 
-procedure InitializeActivityListBetaPopulation(var population: IndivArray);
+procedure TActivityListBetaIndividual.InitializePopulation(var population: IndivArray);
 var i, j: Integer;
 begin
-  InitializeActivityListPopulation(population);
+  inherited InitializePopulation(population);
 
   for i := 0 to POP_SIZE * 2 - 1 do
   begin
@@ -112,7 +112,7 @@ begin
   end;
 end;
 
-function RunGASSGSBeta(out best: TALBPair): Double;
+function RunGASSGSBeta: Double;
 var
   population: IndivArray;
   bestIndiv: IIndividual;
@@ -122,11 +122,8 @@ begin
   for i := 0 to POP_SIZE * 2 - 1 do
     population[i] := TActivityListBetaIndividual.Create;
 
-  InitializeActivityListBetaPopulation(population);
+  population[0].InitializePopulation(population);
   result := RunGA(population, bestIndiv, False);
-
-  best.order := TActivityListBetaIndividual(bestIndiv).order;
-  best.b := TActivityListBetaIndividual(bestIndiv).b;
   FreePopulation(population);
 end;
 

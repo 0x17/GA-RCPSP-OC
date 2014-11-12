@@ -6,36 +6,49 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgstau, operators, variants
+uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
 {$ifdef Win32}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
 
+
+
 procedure WriteOptsAndTime;
-type TProfitTimePair = record
-  profit, time: Double;
-end;
+type TComputeOpt = function: Double;
+     THeur = record
+       name: String;
+       fn: TComputeOpt;
+     end;
 const
   HEADER_STR = 'filename;'
              + 'profitGASSGSOC;solvetimeGASSGSOC;'
              + 'profitGASSGSBeta;solvetimeGASSGSBeta;'
              + 'profitGASSGSZ;solvetimeGASSGSZ;'
              + 'profitGASSGStau;solvetimeGASSGStau';
+  NHEURS = 5;
 var
   fnames: TStringList;
   line, fname: String;
-  bestOrder: JobData;
   sw: TStopwatch;
-  ptp: Array[0..3] of TProfitTimePair;
   fp: TextFile;
   time: Cardinal;
-  ctr, fileCount: Integer;
-  best2: TALBPair;
-  best3: TALZPair;
-  best4: TALTauPair;
+  ctr, fileCount, i: Integer;
   excObj, excWb, excSheet: Variant;
+  solvetime, profit: Double;
+  heurs: Array[0..NHEURS-1] of THeur;
 begin
+  heurs[0].name := 'GA-SSGS-Zrt';
+  heurs[0].fn := @RunGASSGSZT;
+  heurs[1].name := 'GA-SSGS-Zr';
+  heurs[1].fn := @RunGASSGSZ;
+  heurs[2].name := 'GA-SSGS-Beta';
+  heurs[2].fn := @RunGASSGSBeta;
+  heurs[3].name := 'GA-SSGS-Tau';
+  heurs[3].fn := @RunGASSGSTau;
+  heurs[4].name := 'GA-SSGS-OC';
+  heurs[4].fn := @RunGASSGSOC;
+
   {$ifdef Win32}
   if USE_EXCEL then
   begin
@@ -77,32 +90,16 @@ begin
     ps.ComputeESFTS;
 
     if ps.minMs <> ps.maxMs then begin
-      sw.Start;
-      ptp[0].profit := RunGASSGSOC(bestOrder);
-      time := sw.Stop;
-      ptp[0].time := time / 1000.0;
-
-      sw.Start;
-      ptp[1].profit := RunGASSGSBeta(best2);
-      time := sw.Stop;
-      ptp[1].time := time / 1000.0;
-
-      sw.Start;
-      ptp[2].profit := RunGASSGSZ(best3);
-      time := sw.Stop;
-      ptp[2].time := time / 1000.0;
-
-      sw.Start;
-      ptp[3].profit := RunGASSGSTau(best4);
-      time := sw.Stop;
-      ptp[3].time := time / 1000.0;
-
-      line := Format('%s;%f;%f;%f;%f;%f;%f;%f;%f',
-                    [fname,
-                    ptp[0].profit, ptp[0].time,
-                    ptp[1].profit, ptp[1].time,
-                    ptp[2].profit, ptp[2].time,
-                    ptp[3].profit, ptp[3].time]);
+      line := fname;
+      for i := 0 to NHEURS - 1 do
+      begin
+        WriteLn(heurs[i].name);
+        sw.Start;
+        profit := heurs[i].fn;
+        time := sw.Stop;
+        solvetime := time / 1000.0;
+        line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
+      end;
     end
     else
       line := Concat(fname, ';NA;NA;NA;NA;NA;NA');
@@ -126,13 +123,16 @@ begin
   ps.Free;
 end;
 
-procedure Entrypoint();
+
+
+procedure Entrypoint;
 begin
   {$ifndef FPC}
   ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
   WriteOptsAndTime;
+  //TestPRules;
 end;
 
 end.
