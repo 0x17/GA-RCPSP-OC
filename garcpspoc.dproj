@@ -6,7 +6,7 @@
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Release</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
     </PropertyGroup>
@@ -78,6 +78,8 @@
         <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <Manifest_File>None</Manifest_File>
+        <Debugger_CWD>C:\Users\a.schnabel\Dropbox\Arbeit\Scheduling\GA-RCPSP-OC</Debugger_CWD>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UsePackage>frxDB19;FireDACASADriver;FireDACSqliteDriver;bindcompfmx;DBXSqliteDriver;vcldbx;FireDACPgDriver;FireDACODBCDriver;fmx;rtl;dbrtl;DbxClientDriver;IndySystem;FireDACCommon;bindcomp;TeeDB;frx19;vclib;inetdbbde;DBXInterBaseDriver;Tee;DataSnapCommon;vclFireDAC;xmlrtl;svnui;ibxpress;DbxCommonDriver;vclimg;IndyProtocols;dbxcds;DBXMySQLDriver;FireDACCommonDriver;MetropolisUILiveTile;soaprtl;bindengine;vclactnband;vcldb;bindcompdbx;vcldsnap;bindcompvcl;FMXTee;TeeUI;vclie;fmxFireDAC;FireDACADSDriver;vcltouch;CustomIPTransport;vclribbon;VclSmp;FireDAC;dsnap;IndyIPServer;Intraweb;fmxase;vcl;IndyCore;VCLRESTComponents;IndyIPCommon;CloudService;CodeSiteExpressPkg;dsnapcon;FireDACIBDriver;FmxTeeUI;inet;fmxobj;FireDACMySQLDriver;vclx;inetdbxpress;svn;fmxdae;frxe19;RESTComponents;bdertl;FireDACMSAccDriver;adortl;dbexpress;IndyIPClient;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
@@ -85,6 +87,8 @@
         <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Manifest_File>None</Manifest_File>
+        <Debugger_CWD>C:\Users\a.schnabel\Dropbox\Arbeit\Scheduling\GA-RCPSP-OC</Debugger_CWD>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
@@ -92,6 +96,9 @@
         <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <Manifest_File>None</Manifest_File>
+        <VerInfo_Locale>1031</VerInfo_Locale>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_Optimize>false</DCC_Optimize>
@@ -111,7 +118,6 @@
         <DCC_UNSAFE_TYPE>true</DCC_UNSAFE_TYPE>
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <Manifest_File>None</Manifest_File>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
@@ -126,7 +132,6 @@
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <Debugger_CWD>C:\Users\a.schnabel\Dropbox\Arbeit\Scheduling\GA-RCPSP-OC</Debugger_CWD>
         <DCC_IOChecking>false</DCC_IOChecking>
-        <Manifest_File>None</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
         <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
@@ -134,6 +139,11 @@
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+        <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
         <Debugger_CWD>C:\Users\a.schnabel\Dropbox\Arbeit\Scheduling\GA-RCPSP-OC</Debugger_CWD>
     </PropertyGroup>
     <ItemGroup>

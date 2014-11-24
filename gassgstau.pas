@@ -70,7 +70,7 @@ begin
     population[i] := TActivityListTauIndividual.Create;
 
   population[0].InitializePopulation(population);
-  result := RunGA(population, bestIndiv, (*True*) False);
+  result := RunGA(population, bestIndiv, False);
   FreePopulation(population);
 end;
 

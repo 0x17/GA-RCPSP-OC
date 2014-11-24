@@ -32,13 +32,9 @@ type
 
     name: String;
 
-    procedure LoadFromFile(filename: String);
     class procedure InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
 
-    procedure WriteToFile(const sts: JobData);
-    procedure CheckScheduleFeasibility(const sts: JobData);
-    procedure CheckOrderFeasibility(const order: JobData);
-
+    procedure LoadFromFile(filename: String);
     procedure ComputeESFTS;
 
   private
@@ -190,46 +186,6 @@ begin
     T := T + durations[j];
 
   CloseFile(fp);
-end;
-
-procedure ProjData.WriteToFile(const sts: JobData);
-const lineFeed = #10;
-var
-  fp: TextFile;
-  i: Integer;
-begin
-  AssignFile(fp, 'testsched.txt');
-  ReWrite(fp);
-  for i := 1 to numJobs do
-    Write(fp, i, '->', sts[i-1], lineFeed);
-  CloseFile(fp);
-end;
-
-procedure ProjData.CheckScheduleFeasibility(const sts: JobData);
-var i, j: Integer;
-begin
-  for i := 0 to numJobs-1 do
-    for j := 0 to numJobs-1 do
-      if (adjMx[i,j] = 1) and (sts[i]+durations[i]>sts[j]) then
-        WriteLn(i, '->', j, ' infeasible!');
-end;
-
-procedure ProjData.CheckOrderFeasibility(const order: JobData);
-var i, j, k, ix1, ix2: Integer;
-begin
-  ix1 := 0;
-  ix2 := 0;
-  for i := 0 to numJobs-1 do
-    for j := 0 to numJobs-1 do
-    begin
-      for k := 0 to numJobs-1 do
-      begin
-        if order[k] = i then ix1 := k;
-        if order[k] = j then ix2 := k;
-      end;
-      if (adjMx[i,j] = 1) and (ix1 > ix2) then
-        WriteLn(i, '->', j, ' infeasible!');
-    end;
 end;
 
 end.

@@ -38,6 +38,8 @@ var
   i, j: Integer;
   prioRules: JobDataArray;
 begin
+  inherited InitializePopulation(population);
+
   ProjData.InitPriorityRulesFromFile(ps, prioRules);
   for i := 0 to 12 do
   begin

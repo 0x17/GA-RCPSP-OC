@@ -21,7 +21,7 @@ end;
 
 implementation
 
-procedure CrossoverOC(const mother, father: ResData; var daughter: ResData);
+procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);
 var r, q: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -35,11 +35,17 @@ begin
 end;
 
 procedure TActivityListZIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
+var otherC, daughterC, sonC: TActivityListZIndividual;
 begin
-  OnePointCrossover(order, TActivityListZIndividual(other).order, TActivityListZIndividual(daughter).order);
-  OnePointCrossover(TActivityListZIndividual(other).order, order, TActivityListZIndividual(son).order);
-  CrossoverOC(z, TActivityListZIndividual(other).z, TActivityListZIndividual(daughter).z);
-  CrossoverOC(TActivityListZIndividual(other).z, z, TActivityListZIndividual(son).z);
+  otherC := TActivityListZIndividual(other);
+  daughterC := TActivityListZIndividual(daughter);
+  sonC := TActivityListZIndividual(son);
+
+  OnePointCrossover(order, otherC.order, daughterC.order);
+  OnePointCrossover(otherC.order, order, sonC.order);
+
+  RandomCrossoverOC(z, otherC.z, daughterC.z);
+  RandomCrossoverOC(otherC.z, z, sonC.z);
 end;
 
 procedure MutateOC(var z: ResData);

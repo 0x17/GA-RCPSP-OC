@@ -12,7 +12,7 @@ type
   IndivArray = Array of IIndividual;
 
   IIndividual = class
-    procedure InitializePopulation(var pop: IndivArray); virtual; abstract;
+    procedure InitializePopulation(var pop: IndivArray); virtual;
     procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;
     procedure Mutate; virtual; abstract;
     function Fitness: Double; virtual; abstract;
@@ -43,6 +43,11 @@ function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: 
 procedure FreePopulation(var population: IndivArray);
 
 implementation
+
+procedure IIndividual.InitializePopulation(var pop: IndivArray);
+begin
+  RandSeed := 23;
+end;
 
 class procedure TSortHelper.QuickSortKeys(var keys: IndivArray; var fvals: array of Double;  iLo, iHi: Integer);
 var
@@ -130,8 +135,6 @@ var
   i, j: Integer;
   fvals: TFValArray;
 begin
-  RandSeed := 23;
-
   for i := 1 to NUM_GENS do
   begin
     Cross(population);
@@ -146,9 +149,9 @@ begin
 
     TSortHelper.QuickSortKeys(population, fvals, 0, POP_SIZE*2-1);
 
-    Write('Generation ', i, #13);
+    //Write('Generation ', i, #13);
   end;
-  WriteLn;
+  //WriteLn;
 
   best := population[0];
   result := population[0].Fitness;
