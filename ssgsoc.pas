@@ -2,15 +2,18 @@
 
 // Modifiziertes SSGS. Plant auch Zusatzkapazitäten ein.
 // Probiert mögliche Einplanungsperioden von Reihenfolgezulässigkeit bis
-// Ressourcenzulässigkeit unter Beachtung der maximal erlaubten ZK.
+// Ressourcenzulässigkeit unter Beachtung der maximal erlaubten ZK. Oder
+// wähle per tau.
 
 interface
 
 uses classes, sysutils, projectdata, profit, ssgs, globals, resprofiles, math;
 
 type TSSGSOC = class
-	class function SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
+  class function SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
   class function Solve(const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+private
+  class function SolveCommon(const order, tau: JobData; out sts: JobData; doRightShift: Boolean): Double;
   class function RightShift(var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
   class procedure SubtractResRemaining(var resRemaining: ResourceProfile; j, stj: Integer);
 end;
@@ -27,66 +30,11 @@ begin
       resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
 end;
 
-class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
-var
-  r, k, ix, j, tauPrecFeas, tauResFeas, t, bestT: Integer;
-  zeroOc, maxOc, resRemaining, resRemainingTmp: ResourceProfile;
-  fts: JobData;
-begin
-  SetLength(resRemainingTmp, ps.numRes, ps.numPeriods);
-  // Setze verbleibende Ressourcen r,t auf Kapazität
-  SetLength(resRemaining, ps.numRes, ps.numPeriods);
-  for r := 0 to ps.numRes-1 do
-    for t := 0 to ps.numPeriods-1 do
-      resRemaining[r,t] := ps.capacities[r];
-
-  // Setze Zusatzkapazitätsprofile
-  SetLength(zeroOc, ps.numRes, ps.numPeriods);
-  TResProfiles.ZeroOC(zeroOc);
-  SetLength(maxOc, ps.numRes, ps.numPeriods);
-  TResProfiles.MaxOC(maxOc);
-
-  // Initialisiere sts, fts
-  SetLength(sts, ps.numJobs);
-  SetLength(fts, ps.numJobs);
-  sts[0] := 0;
-  fts[0] := 0;
-
-  for ix := 1 to ps.numJobs - 1 do begin
-    j := order[ix];
-
-    // Bestimme Zeitpunkt, wo alle Vorgänger beendet sind
-    tauPrecFeas := 0;
-    for k := 0 to ps.numJobs-1 do
-      if (ps.adjMx[k,j] = 1) and (fts[k] > tauPrecFeas) then
-        tauPrecFeas := fts[k];
-
-    // Bestimme Zeitpunkt, wo Einplanung ressourcenzulässig ohne Zusatzkapazität ist
-    for tauResFeas := tauPrecFeas to ps.numPeriods - 1 do
-      if TSSGS.ResourceFeasible(resRemaining, zeroOc, j, tauResFeas) then
-        break;
-
-    bestT := tauPrecFeas + Floor((tauResFeas - tauPrecFeas) / 100 * tau[j]);
-    while not(TSSGS.ResourceFeasible(resRemaining, maxOc, j, bestT)) do inc(bestT);
-
-    // Plane j zu bestem t ein
-    sts[j] := bestT;
-    fts[j] := sts[j] + ps.durations[j];
-    // Ziehe entsprechend Bedarf j in laufenden Perioden Restkapazität ab
-    SubtractResRemaining(resRemaining, j, bestT);
-  end;
-
-  result := CalcProfit(sts, resRemaining);
-end;
-
-// Modifiziertes SSGS zur heuristischen Bestimmung eines Ablaufplans für ein
-// gegebenes Projekt und Aktivitätenliste.
-// Führe danach optional eine Rechtsverschiebung durch.
-class function TSSGSOC.Solve(const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData; doRightShift: Boolean): Double;
 var
   r, k, ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
-  p, bestProfit: Double;
   zeroOc, maxOc, resRemaining, resRemainingTmp: ResourceProfile;
+  p, bestProfit: Double;
   fts: JobData;
 begin
   SetLength(resRemainingTmp, ps.numRes, ps.numPeriods);
@@ -97,9 +45,7 @@ begin
       resRemaining[r,t] := ps.capacities[r];
 
   // Setze Zusatzkapazitätsprofile
-  SetLength(zeroOc, ps.numRes, ps.numPeriods);
   TResProfiles.ZeroOC(zeroOc);
-  SetLength(maxOc, ps.numRes, ps.numPeriods);
   TResProfiles.MaxOC(maxOc);
 
   // Initialisiere sts, fts
@@ -122,29 +68,38 @@ begin
       if TSSGS.ResourceFeasible(resRemaining, zeroOc, j, tauResFeas) then
         break;
 
-    // Probiere alle t in tauPrecFeas..tauResFeas und wähle bestes
-    bestProfit := -4.56E100;
-    bestT := tauPrecFeas;
+    if tau[0] = -1 then
+      begin
+        // Probiere alle t in tauPrecFeas..tauResFeas und wähle bestes
+        bestProfit := -4.56E100;
+        bestT := tauPrecFeas;
 
-    for t := tauPrecFeas to tauResFeas do
-      if TSSGS.ResourceFeasible(resRemaining, maxOc, j, t) then begin
-        //resRemainingTmp := Copy(resRemaining, 0, SizeOf(Integer)*ps.numRes*ps.numPeriods);
-        for k1 := 0 to ps.numRes - 1 do
-            for k2 := 0 to ps.numPeriods - 1 do
-                resRemainingTmp[k1,k2] := resRemaining[k1,k2];
+        for t := tauPrecFeas to tauResFeas do
+          if TSSGS.ResourceFeasible(resRemaining, maxOc, j, t) then begin
+            //resRemainingTmp := Copy(resRemaining, 0, SizeOf(Integer)*ps.numRes*ps.numPeriods);
+            for k1 := 0 to ps.numRes - 1 do
+                for k2 := 0 to ps.numPeriods - 1 do
+                    resRemainingTmp[k1,k2] := resRemaining[k1,k2];
 
-        sts[j] := t;
-        fts[j] := t + ps.durations[j];
-        SubtractResRemaining(resRemainingTmp, j, t);
+            sts[j] := t;
+            fts[j] := t + ps.durations[j];
+            SubtractResRemaining(resRemainingTmp, j, t);
 
-        TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
+            TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
 
-        p := CalcProfit(sts, resRemainingTmp);
-        if p > bestProfit then
-        begin
-          bestProfit := p;
-          bestT := t;
-        end;
+            p := CalcProfit(sts, resRemainingTmp);
+            if p > bestProfit then
+            begin
+              bestProfit := p;
+              bestT := t;
+            end;
+          end;
+      end
+    else
+      begin
+        // Wähle t zwischen tauPrecFeas..tauResFeas mithilfe von tau-Vektor
+        bestT := tauPrecFeas + Floor((tauResFeas - tauPrecFeas) / 100 * tau[j]);
+        while not(TSSGS.ResourceFeasible(resRemaining, maxOc, j, bestT)) do inc(bestT);
       end;
 
     // Plane j zu bestem t ein
@@ -154,11 +109,32 @@ begin
     SubtractResRemaining(resRemaining, j, bestT);
   end;
 
-  if doRightShift then
-    result := RightShift(sts, resRemaining, bestProfit)
+  if tau[0] = -1 then
+    begin
+      if doRightShift then
+         result := RightShift(sts, resRemaining, bestProfit)
+      else
+        result := bestProfit;
+    end
   else
-    result := bestProfit
+    begin
+      result := CalcProfit(sts, resRemaining);
+      if doRightShift then
+         result := RightShift(sts, resRemaining, result);
+    end;
+end;
 
+class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
+begin
+  result := SolveCommon(order, tau, sts, False);
+end;
+
+class function TSSGSOC.Solve(const order: JobData; out sts: JobData; doRightShift: Boolean): Double;
+var tau: JobData;
+begin
+  SetLength(tau, ps.numJobs);
+  tau[0] := -1;
+  result := SolveCommon(order, tau, sts, doRightShift);
 end;
 
 // Versuche die ZK-Kosten durch Rechtsverschiebung von Jobs zu minimieren.

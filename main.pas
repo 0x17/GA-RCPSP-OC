@@ -89,7 +89,7 @@ begin
   if USE_EXCEL then
     THelper.WriteCSVToExcel(excSheet, 1, headerStr);
 
-  fnames := THelper.ListProjFilesInDir('j30filtered');
+  fnames := THelper.ListProjFilesInDir('../Projekte/j30');
   ctr := 0;
   sw := TStopwatch.Create;
 
@@ -102,23 +102,27 @@ begin
 
     InitProject(fname);
 
-    if ps.minMs <> ps.maxMs then begin
+    if ps.minMs <> ps.maxMs then
+    begin
       line := fname;
       for i := 0 to NHEURS - 1 do
       begin
         WriteLn(heurs[i].name);
+
         sw.Start;
         profit := heurs[i].fn;
         time := sw.Stop;
         solvetime := time / 1000.0;
+
         line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
+
         WriteLn('Profit=' + FloatToStr(profit));
         WriteLn('Solvetime=' + FloatToStr(solvetime));
         WriteLn;
       end;
     end
     else
-      line := Concat(fname, ';NA;NA;NA;NA;NA;NA');
+      line := 'NA;NA;NA;NA;NA;NA;NA;NA;NA;NA;NA';
 
     WriteLn(fp, line);
     WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
@@ -133,6 +137,7 @@ begin
     excWb.Close(SaveChanges := True);
 
   CloseFile(fp);
+
   FreeAndNil(sw);
   FreeAndNil(fnames);
   FreeAndNil(ps);

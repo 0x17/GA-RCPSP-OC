@@ -49,7 +49,6 @@ begin
   ps.minMs := Max(sts[ps.numJobs-1], tkappa);
 
   // Bestimme maximale Makespan über SSGS mit z_rt = 0
-  SetLength(z, ps.numRes, ps.numPeriods);
   TResProfiles.ZeroOC(z);
   TSSGS.Solve(ps.topOrder, z, sts, resRemaining);
   ps.maxMs := sts[ps.numJobs-1];
