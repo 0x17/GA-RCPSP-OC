@@ -2,12 +2,7 @@ unit gassgsz;
 
 interface
 
-uses classes, sysutils, individual, projectdata, operators, globals, ssgs, helpers, profit, gassgsoc;
-
-type TALZPair = record
-  order: JobData;
-  z: ResData;
-end;
+uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc;
 
 function RunGASSGSZ: Double;
 

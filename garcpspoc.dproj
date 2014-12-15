@@ -153,7 +153,6 @@
         <DCCReference Include="main.pas"/>
         <DCCReference Include="globals.pas"/>
         <DCCReference Include="helpers.pas"/>
-        <DCCReference Include="operators.pas"/>
         <DCCReference Include="profit.pas"/>
         <DCCReference Include="projectdata.pas"/>
         <DCCReference Include="ssgs.pas"/>

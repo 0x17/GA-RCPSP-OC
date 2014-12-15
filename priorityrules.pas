@@ -4,29 +4,22 @@ interface
 
 uses projectdata, globals, sysutils, topsort, profit;
 
-procedure TestPRules;
+type TPriorityRules = class
+  const NUM_PRULES = 13;
 
-procedure PrecomputePriorityRules(filename: String);
-procedure ComputePriorityRules(out prules: JobDataArray);
+  class procedure PrecomputePriorityRules(filename: String);
+  class procedure ComputePriorityRules(out prules: JobDataArray);
+
+  class procedure Test;
+
+private
+  class procedure Reverse(const inOrder: JobData; out outOrder: JobData);
+  class procedure SortActivityListByPriorities(var order: JobData; var pvals: array of Integer);
+end;
 
 implementation
 
-procedure TestPRules;
-begin
-  ps := ProjData.Create;
-  ps.LoadFromFile('j301_1.sm');
-  TTopSort.Sort(ps.topOrder);
-  CalcMinMaxMakespanCosts;
-  ps.ComputeESFTS;
-
-  PrecomputePriorityRules('myprules.txt');
-
-  ps.Free;
-end;
-
-const NUM_PRULES = 13;
-
-procedure PrecomputePriorityRules(filename: String);
+class procedure TPriorityRules.PrecomputePriorityRules(filename: String);
 var
   fp: TextFile;
   prules: JobDataArray;
@@ -35,28 +28,18 @@ begin
   ComputePriorityRules(prules);
   AssignFile(fp, filename);
   Rewrite(fp);
-  
+
   for i := 0 to NUM_PRULES - 1 do
   begin
     for j := 0 to ps.numJobs - 1 do
       Write(fp, IntToStr(j) + ' ');
     WriteLn;
   end;
-  
+
   CloseFile(fp);
 end;
 
-procedure SortActivityListByPriorities(var order: JobData; var pvals: array of Integer); forward;
-
-procedure Reverse(const inOrder: JobData; out outOrder: JobData);
-var i: Integer;
-begin
-  SetLength(outOrder, ps.numJobs);
-  for i := 0 to ps.numJobs-1 do
-    outOrder[i] := inOrder[ps.numJobs-1-i];
-end;
-
-procedure ComputePriorityRules(out prules: JobDataArray);
+class procedure TPriorityRules.ComputePriorityRules(out prules: JobDataArray);
 var
   i, j, r: Integer;
   numSuccs, isSucc, gprw, cumResReq, slts: JobData;
@@ -157,7 +140,28 @@ begin
 
 end;
 
-procedure SortActivityListByPriorities(var order: JobData; var pvals: array of Integer);
+class procedure TPriorityRules.Test;
+begin
+  ps := ProjData.Create;
+  ps.LoadFromFile('j301_1.sm');
+  TTopSort.Sort(ps.topOrder);
+  CalcMinMaxMakespanCosts;
+  ps.ComputeESFTS;
+
+  PrecomputePriorityRules('myprules.txt');
+
+  ps.Free;
+end;
+
+class procedure TPriorityRules.Reverse(const inOrder: JobData; out outOrder: JobData);
+var i: Integer;
+begin
+  SetLength(outOrder, ps.numJobs);
+  for i := 0 to ps.numJobs-1 do
+    outOrder[i] := inOrder[ps.numJobs-1-i];
+end;
+
+class procedure TPriorityRules.SortActivityListByPriorities(var order: JobData; var pvals: array of Integer);
   procedure Helper(iLo, iHi: Integer);
   var
     Lo, Hi: Integer;

@@ -2,12 +2,7 @@ unit gassgszt;
 
 interface
 
-uses classes, sysutils, individual, projectdata, operators, globals, ssgs, helpers, profit, gassgsoc;
-
-type TALOCPair = record
-  order: JobData;
-  oc: ResourceProfile;
-end;
+uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc;
 
 function RunGASSGSZT: Double;
 
@@ -102,15 +97,6 @@ begin
   otherC := TActivityListOCIndividual(other);
   daughterC := TActivityListOCIndividual(daughter);
   sonC := TActivityListOCIndividual(son);
-
-  //OnePointCrossover(order, otherC.order, daughterC.order);
-  //OnePointCrossover(otherC.order, order, sonC.order);
-
-  //RandomCrossoverOC(oc, TActivityListOCIndividual(other).oc, TActivityListOCIndividual(daughter).oc);
-  //RandomCrossoverOC(TActivityListOCIndividual(other).oc, oc, TActivityListOCIndividual(son).oc);
-
-  //OnePointCrossoverOC(oc, otherC.oc, daughterC.oc);
-  //OnePointCrossoverOC(otherC.oc, oc, sonC.oc);
 
   OnePointCrossoverSmart(self, otherC, daughterC);
   OnePointCrossoverSmart(otherC, self, sonC);

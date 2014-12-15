@@ -120,7 +120,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="21">
+    <Units Count="20">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -162,70 +162,65 @@
         <UnitName Value="main"/>
       </Unit7>
       <Unit8>
-        <Filename Value="operators.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="operators"/>
-      </Unit8>
-      <Unit9>
         <Filename Value="ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsmod"/>
-      </Unit9>
-      <Unit10>
+      </Unit8>
+      <Unit9>
         <Filename Value="resprofiles.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="resprofiles"/>
-      </Unit10>
-      <Unit11>
+      </Unit9>
+      <Unit10>
         <Filename Value="individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
-      </Unit11>
-      <Unit12>
+      </Unit10>
+      <Unit11>
         <Filename Value="esschedule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="esschedule"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="globals.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="globals"/>
-      </Unit13>
-      <Unit14>
+      </Unit12>
+      <Unit13>
         <Filename Value="schedulevisualizer.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="schedulevisualizer"/>
-      </Unit14>
-      <Unit15>
+      </Unit13>
+      <Unit14>
         <Filename Value="gassgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsoc"/>
-      </Unit15>
-      <Unit16>
+      </Unit14>
+      <Unit15>
         <Filename Value="gassgsbeta.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsbeta"/>
-      </Unit16>
-      <Unit17>
+      </Unit15>
+      <Unit16>
         <Filename Value="gassgstau.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgstau"/>
-      </Unit17>
-      <Unit18>
+      </Unit16>
+      <Unit17>
         <Filename Value="gassgsz.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsz"/>
-      </Unit18>
-      <Unit19>
+      </Unit17>
+      <Unit18>
         <Filename Value="priorityrules.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="priorityrules"/>
-      </Unit19>
-      <Unit20>
+      </Unit18>
+      <Unit19>
         <Filename Value="gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
-      </Unit20>
+      </Unit19>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

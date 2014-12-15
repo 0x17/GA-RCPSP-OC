@@ -12,7 +12,6 @@ uses
   main in 'main.pas',
   globals in 'globals.pas',
   helpers in 'helpers.pas',
-  operators in 'operators.pas',
   profit in 'profit.pas',
   projectdata in 'projectdata.pas',
   ssgs in 'ssgs.pas',

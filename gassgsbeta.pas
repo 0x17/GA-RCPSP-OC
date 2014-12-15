@@ -13,7 +13,7 @@ type TActivityListBetaIndividual = class(TActivityListIndividual)
   procedure Mutate; override;
   function Fitness: Double; override;
 private
-  procedure Swap(i1, i2: Integer);
+  procedure Swap(i1, i2: Integer); inline;
   procedure OnePointCrossover(const mother, father: TActivityListBetaIndividual; var dghter: IIndividual);
 end;
 
