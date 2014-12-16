@@ -15,39 +15,16 @@ type TActivityListTauIndividual = class(TActivityListIndividual)
 private
   procedure SwapNeighborhood(var lambda, tau: JobData);
   procedure Swap(var lambda, tau: JobData; i1, i2: Integer); inline;
-  function OnePointCrossover(const motherOrder, motherTau, fatherOrder, fatherTau: JobData; var daughterOrder, daughterTau: JobData): Integer;
-  procedure InheritRemainingWithTau(q: Integer; const parentOrder, parentTau: JobData; var childOrder, childTau: JobData); inline;
+protected
+  procedure InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer); override;
 end;
 
 implementation
 
-procedure TActivityListTauIndividual.InheritRemainingWithTau(q: Integer; const parentOrder, parentTau: JobData; var childOrder, childTau: JobData);
-var i, j, k, len: Integer;
+procedure TActivityListTauIndividual.InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer);
 begin
-  len := Length(parentOrder);
-  k := q;
-  // Probiere alle von Vater
-  for i := 0 to len-1 do
-  begin
-    // Nehme nur, falls nicht bereits in 0,..,q-1 von anderem Elternteil
-    for j := 0 to q-1 do
-      if childOrder[j] = parentOrder[i] then
-        continue;
-
-    childOrder[k] := parentOrder[i];
-    childTau[k] := parentTau[i];
-    inc(k);
-  end;
-end;
-
-function TActivityListTauIndividual.OnePointCrossover(const motherOrder, motherTau, fatherOrder, fatherTau: JobData; var daughterOrder, daughterTau: JobData): Integer;
-begin
-  result := THelper.RandomRangeIncl(1, Length(motherOrder));
-  // Ersten q1: 0,..,q-1 von Mutter
-  InheritFirst(result, motherOrder, daughterOrder);
-  InheritFirst(result, motherTau, daughterTau);
-  // q,..,len-1 von Vater, falls nicht von Mutter
-  InheritRemainingWithTau(result, fatherOrder, fatherTau, daughterOrder, daughterTau);
+  order[childIndex] := parent.order[parentIndex];
+  tau[childIndex] := TActivityListTauIndividual(parent).tau[parentIndex];
 end;
 
 procedure TActivityListTauIndividual.Swap(var lambda, tau: JobData; i1, i2: Integer);
@@ -74,14 +51,14 @@ begin
 end;
 
 procedure TActivityListTauIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
-var otherT, daughterT, sonT: TActivityListTauIndividual;
+var otherT, daughterT, sonT: TActivityListIndividual;
 begin
-  otherT := TActivityListTauIndividual(other);
-  daughterT := TActivityListTauIndividual(daughter);
-  sonT := TActivityListTauIndividual(son);
+  otherT := TActivityListIndividual(other);
+  daughterT := TActivityListIndividual(daughter);
+  sonT := TActivityListIndividual(son);
 
-  OnePointCrossover(order, tau, otherT.order, otherT.tau, daughterT.order, daughterT.tau);
-  OnePointCrossover(otherT.order, otherT.tau, order, tau, sonT.order, sonT.tau);
+  daughterT.OnePointCrossover(self, otherT);
+  sonT.OnePointCrossover(otherT, self);
 end;
 
 procedure TActivityListTauIndividual.Mutate;

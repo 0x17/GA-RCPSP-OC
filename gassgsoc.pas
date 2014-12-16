@@ -12,48 +12,62 @@ type TActivityListIndividual = class(IIndividual)
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
+
+  function OnePointCrossover(const mother, father: TActivityListIndividual): Integer;
+
 protected
   procedure Swap(var lambda: JobData; i1, i2: Integer); inline;
   procedure SwapNeighborhood(var lambda: JobData);
-  function OnePointCrossover(const mother, father: JobData; var daughter: JobData): Integer;
-  procedure InheritFirst(q: Integer; const parent: JobData; var child: JobData); inline;
-  procedure InheritRemaining(q: Integer; const parent: JobData; var child: JobData); inline;
+
+  procedure InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer); virtual;
+  procedure InheritFirst(q: Integer; const parent: TActivityListIndividual); inline;
+  procedure InheritRemaining(q: Integer; const parent: TActivityListIndividual); inline;
 end;
 
 implementation
 
-procedure TActivityListIndividual.InheritFirst(q: Integer; const parent: JobData; var child: JobData);
+procedure TActivityListIndividual.InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer);
+begin
+  order[childIndex] := parent.order[parentIndex];
+end;
+
+procedure TActivityListIndividual.InheritFirst(q: Integer; const parent: TActivityListIndividual);
 var i: Integer;
 begin
   for i := 0 to q-1 do
-    child[i] := parent[i];
+    InheritGene(parent, i, i);
 end;
 
-procedure TActivityListIndividual.InheritRemaining(q: Integer; const parent: JobData; var child: JobData);
-var i, j, k, len: Integer;
+procedure TActivityListIndividual.InheritRemaining(q: Integer; const parent: TActivityListIndividual);
+var
+   i, j, k, len: Integer;
+   fromOther: Boolean;
 begin
-  len := Length(parent);
+  len := Length(parent.order);
   k := q;
   // Probiere alle von Elternteil
   for i := 0 to len-1 do
   begin
     // Nehme nur, falls nicht bereits in 0,..,q-1 von anderem Elternteil
+    fromOther := False;
     for j := 0 to q-1 do
-      if child[j] = parent[i] then
-        continue;
+      if order[j] = parent.order[i] then
+        fromOther := True;
 
-    child[k] := parent[i];
-    inc(k);
+    if not(fromOther) then begin
+      InheritGene(parent, i, k);
+      inc(k);
+    end;
   end;
 end;
 
-function TActivityListIndividual.OnePointCrossover(const mother, father: JobData; var daughter: JobData): Integer;
+function TActivityListIndividual.OnePointCrossover(const mother, father: TActivityListIndividual): Integer;
 begin
-  result := THelper.RandomRangeIncl(1, Length(mother));
+  result := THelper.RandomRangeIncl(1, Length(mother.order));
   // Ersten q: 0,..,q-1 von Mutter
-  InheritFirst(result, mother, daughter);
+  InheritFirst(result, mother);
   // q,..,len-1 von Vater, falls nicht von Mutter
-  InheritRemaining(result, father, daughter);
+  InheritRemaining(result, father);
 end;
 
 procedure TActivityListIndividual.Swap(var lambda: JobData; i1, i2: Integer);
@@ -76,8 +90,8 @@ end;
 
 procedure TActivityListIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 begin
-  OnePointCrossover(order, TActivityListIndividual(other).order, TActivityListIndividual(daughter).order);
-  OnePointCrossover(TActivityListIndividual(other).order, order , TActivityListIndividual(son).order);
+  TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
+  TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
 end;
 
 procedure TActivityListIndividual.Mutate;

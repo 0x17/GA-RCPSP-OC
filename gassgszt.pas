@@ -53,7 +53,7 @@ procedure TActivityListOCIndividual.OnePointCrossoverSmart(const mother, father:
 var j, q, maxFt, r, t: Integer;
 begin
   // Crossover von Aktivitätenliste
-  q := OnePointCrossover(mother.order, father.order, daughter.order);
+  q := TActivityListIndividual(daughter).OnePointCrossover(TActivityListIndividual(mother), TActivityListIndividual(father));
 
   // Crossover von Zrt
   maxFt := 0;

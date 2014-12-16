@@ -36,8 +36,8 @@ begin
   daughterC := TActivityListZIndividual(daughter);
   sonC := TActivityListZIndividual(son);
 
-  OnePointCrossover(order, otherC.order, daughterC.order);
-  OnePointCrossover(otherC.order, order, sonC.order);
+  TActivityListIndividual(daughterC).OnePointCrossover(self, TActivityListIndividual(otherC));
+  TActivityListIndividual(sonC).OnePointCrossover(TActivityListIndividual(otherC), self);
 
   RandomCrossoverOC(z, otherC.z, daughterC.z);
   RandomCrossoverOC(otherC.z, z, sonC.z);
