@@ -13,11 +13,15 @@ type TActivityListOCIndividual = class(TActivityListIndividual)
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
+private
+  procedure RandomCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
+  procedure OnePointCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
+  procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
 end;
 
 implementation
 
-procedure RandomCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
+procedure TActivityListOCIndividual.RandomCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
 var r, t, q: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -31,7 +35,7 @@ begin
     end;
 end;
 
-procedure OnePointCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
+procedure TActivityListOCIndividual.OnePointCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
 var q, r, t: Integer;
 begin
   q := THelper.RandomRangeIncl(0, ps.numPeriods-1);
@@ -45,37 +49,11 @@ begin
       end;
 end;
 
-procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
-var
-  i, j, k, q, len, maxFt, r, t: Integer;
-  fromMother: Boolean;
+procedure TActivityListOCIndividual.OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
+var j, q, maxFt, r, t: Integer;
 begin
   // Crossover von Aktivitätenliste
-  len := Length(mother.order);
-  q := THelper.RandomRangeIncl(1, len);
-
-  // Ersten q1: 0,..,q-1 von Mutter
-  for i := 0 to q-1 do
-    daughter.order[i] := mother.order[i];
-
-  // q,..,len-1 von Vater, falls nicht von Mutter
-  k := q;
-  // Probiere alle von Vater
-  for i := 0 to len-1 do
-  begin
-    // Schaue ob bereits in 0,..,q-1
-    fromMother := false;
-    for j := 0 to q-1 do
-      if daughter.order[j] = father.order[i] then
-        fromMother := true;
-
-    // Falls nicht bereits in 0,..,q-1 übernehme an nächste Stelle in Tochter
-    if not(fromMother) then
-    begin
-      daughter.order[k] := father.order[i];
-      inc(k);
-    end;
-  end;
+  q := OnePointCrossover(mother.order, father.order, daughter.order);
 
   // Crossover von Zrt
   maxFt := 0;

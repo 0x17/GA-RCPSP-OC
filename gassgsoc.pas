@@ -15,41 +15,45 @@ type TActivityListIndividual = class(IIndividual)
 protected
   procedure Swap(var lambda: JobData; i1, i2: Integer); inline;
   procedure SwapNeighborhood(var lambda: JobData);
-  procedure OnePointCrossover(const mother, father: JobData; var daughter: JobData);
+  function OnePointCrossover(const mother, father: JobData; var daughter: JobData): Integer;
+  procedure InheritFirst(q: Integer; const parent: JobData; var child: JobData); inline;
+  procedure InheritRemaining(q: Integer; const parent: JobData; var child: JobData); inline;
 end;
 
 implementation
 
-procedure TActivityListIndividual.OnePointCrossover(const mother, father: JobData; var daughter: JobData);
-var
-  i, j, k, q, len: Integer;
-  fromMother: Boolean;
+procedure TActivityListIndividual.InheritFirst(q: Integer; const parent: JobData; var child: JobData);
+var i: Integer;
 begin
-  len := Length(mother);
-  q := THelper.RandomRangeIncl(1, len);
-
-  // Ersten q1: 0,..,q-1 von Mutter
   for i := 0 to q-1 do
-    daughter[i] := mother[i];
+    child[i] := parent[i];
+end;
 
-  // q,..,len-1 von Vater, falls nicht von Mutter
+procedure TActivityListIndividual.InheritRemaining(q: Integer; const parent: JobData; var child: JobData);
+var i, j, k, len: Integer;
+begin
+  len := Length(parent);
   k := q;
-  // Probiere alle von Vater
+  // Probiere alle von Elternteil
   for i := 0 to len-1 do
   begin
-    // Schaue ob bereits in 0,..,q-1
-    fromMother := false;
+    // Nehme nur, falls nicht bereits in 0,..,q-1 von anderem Elternteil
     for j := 0 to q-1 do
-      if daughter[j] = father[i] then
-        fromMother := true;
+      if child[j] = parent[i] then
+        continue;
 
-    // Falls nicht bereits in 0,..,q-1 übernehme an nächste Stelle in Tochter
-    if not(fromMother) then
-    begin
-      daughter[k] := father[i];
-      inc(k);
-    end;
+    child[k] := parent[i];
+    inc(k);
   end;
+end;
+
+function TActivityListIndividual.OnePointCrossover(const mother, father: JobData; var daughter: JobData): Integer;
+begin
+  result := THelper.RandomRangeIncl(1, Length(mother));
+  // Ersten q: 0,..,q-1 von Mutter
+  InheritFirst(result, mother, daughter);
+  // q,..,len-1 von Vater, falls nicht von Mutter
+  InheritRemaining(result, father, daughter);
 end;
 
 procedure TActivityListIndividual.Swap(var lambda: JobData; i1, i2: Integer);

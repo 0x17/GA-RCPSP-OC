@@ -14,48 +14,43 @@ type TActivityListBetaIndividual = class(TActivityListIndividual)
   function Fitness: Double; override;
 private
   procedure Swap(i1, i2: Integer); inline;
-  procedure OnePointCrossover(const mother, father: TActivityListBetaIndividual; var dghter: IIndividual);
+  function OnePointCrossover(const mother, father: TActivityListBetaIndividual; var dghter: IIndividual): Integer;
+  procedure InheritRemainingWithBeta(q: Integer; const parent: TActivityListBetaIndividual; var child: TActivityListBetaIndividual);
 end;
 
 implementation
 
-procedure TActivityListBetaIndividual.OnePointCrossover(const mother, father: TActivityListBetaIndividual; var dghter: IIndividual);
+procedure TActivityListBetaIndividual.InheritRemainingWithBeta(q: Integer; const parent: TActivityListBetaIndividual; var child: TActivityListBetaIndividual);
+var i, j, k, len: Integer;
+begin
+  len := Length(parent.order);
+  k := q;
+  // Probiere alle von Elternteil
+  for i := 0 to len-1 do
+  begin
+    // Nehme nur, falls nicht in 0..q-1 aus anderem Elternteil
+    for j := 0 to q-1 do
+      if child.order[j] = parent.order[i] then
+        continue;
+
+    child.order[k] := parent.order[i];
+    child.b[k] := parent.b[i];
+    inc(k);
+  end;
+end;
+
+function TActivityListBetaIndividual.OnePointCrossover(const mother, father: TActivityListBetaIndividual; var dghter: IIndividual): Integer;
 var
-  i, j, k, q, len: Integer;
-  fromMother: Boolean;
+  i, j, k, len: Integer;
   daughter: TActivityListBetaIndividual;
 begin
   daughter := TActivityListBetaIndividual(dghter);
-
-  len := Length(mother.order);
-  q := THelper.RandomRangeIncl(1, len);
-
+  result := THelper.RandomRangeIncl(1, len);
   // Ersten q: 0,..,q-1 von Mutter
-  for i := 0 to q-1 do
-  begin
-    daughter.order[i] := mother.order[i];
-    daughter.b[i] := mother.b[i];
-  end;
-
-  // q,..,len-1 von Vater, falls nicht von Mutter
-  k := q;
-  // Probiere alle von Vater
-  for i := 0 to len-1 do
-  begin
-    // Schaue ob bereits in 0,..,q-1
-    fromMother := false;
-    for j := 0 to q-1 do
-      if daughter.order[j] = father.order[i] then
-        fromMother := true;
-
-    // Falls nicht bereits in 0,..,q-1 übernehme an nächste Stelle in Tochter
-    if not(fromMother) then
-    begin
-      daughter.order[k] := father.order[i];
-      daughter.b[k] := father.b[i];
-      inc(k);
-    end;
-  end;
+  InheritFirst(result, mother.order, daughter.order);
+  InheritFirst(result, mother.b, daughter.b);
+  // Rest von Vater
+  InheritRemainingWithBeta(result, father, daughter);
 end;
 
 procedure TActivityListBetaIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
