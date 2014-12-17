@@ -15,53 +15,33 @@ type TSSGSOC = class
 private
   class function SolveCommon(const order, tau: JobData; out sts: JobData; doRightShift: Boolean): Double;
   class function RightShift(var sts: JobData; var resRemaining: ResourceProfile; maxProfit: Double): Double;
-  class procedure SubtractResRemaining(var resRemaining: ResourceProfile; j, stj: Integer);
 end;
 
 implementation
 
-// Verringere die Restkapazität um den Verbrauch von j bei Einplanung in
-// Periode stj.
-class procedure TSSGSOC.SubtractResRemaining(var resRemaining: ResourceProfile; j, stj: Integer);
-var r, tau: Integer;
-begin
-  for tau := stj to stj+ps.durations[j]-1 do
-    for r := 0 to ps.numRes-1 do
-      resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
-end;
-
 class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData; doRightShift: Boolean): Double;
 var
-  r, k, ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
+  ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
   zeroOc, maxOc, resRemaining, resRemainingTmp: ResourceProfile;
   p, bestProfit: Double;
   fts: JobData;
 begin
   SetLength(resRemainingTmp, ps.numRes, ps.numPeriods);
   // Setze verbleibende Ressourcen r,t auf Kapazität
-  SetLength(resRemaining, ps.numRes, ps.numPeriods);
-  for r := 0 to ps.numRes-1 do
-    for t := 0 to ps.numPeriods-1 do
-      resRemaining[r,t] := ps.capacities[r];
+  TSSGS.InitializeResidualCapacity(resRemaining);
 
   // Setze Zusatzkapazitätsprofile
   TResProfiles.ZeroOC(zeroOc);
   TResProfiles.MaxOC(maxOc);
 
   // Initialisiere sts, fts
-  SetLength(sts, ps.numJobs);
-  SetLength(fts, ps.numJobs);
-  sts[0] := 0;
-  fts[0] := 0;
+  TSSGS.InitializeJobTimes(sts, fts);
 
   for ix := 1 to ps.numJobs - 1 do begin
     j := order[ix];
 
     // Bestimme Zeitpunkt, wo alle Vorgänger beendet sind
-    tauPrecFeas := 0;
-    for k := 0 to ps.numJobs-1 do
-      if (ps.adjMx[k,j] = 1) and (fts[k] > tauPrecFeas) then
-        tauPrecFeas := fts[k];
+    tauPrecFeas := TSSGS.AllPredsFinished(fts, j);
 
     // Bestimme Zeitpunkt, wo Einplanung ressourcenzulässig ohne Zusatzkapazität ist
     for tauResFeas := tauPrecFeas to ps.numPeriods - 1 do
@@ -81,10 +61,7 @@ begin
                 for k2 := 0 to ps.numPeriods - 1 do
                     resRemainingTmp[k1,k2] := resRemaining[k1,k2];
 
-            sts[j] := t;
-            fts[j] := t + ps.durations[j];
-            SubtractResRemaining(resRemainingTmp, j, t);
-
+            TSSGS.ScheduleJob(j, t, sts, fts, resRemainingTmp);
             TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
 
             p := CalcProfit(sts, resRemainingTmp);
@@ -102,11 +79,7 @@ begin
         while not(TSSGS.ResourceFeasible(resRemaining, maxOc, j, bestT)) do inc(bestT);
       end;
 
-    // Plane j zu bestem t ein
-    sts[j] := bestT;
-    fts[j] := sts[j] + ps.durations[j];
-    // Ziehe entsprechend Bedarf j in laufenden Perioden Restkapazität ab
-    SubtractResRemaining(resRemaining, j, bestT);
+    TSSGS.ScheduleJob(j, bestT, sts, fts, resRemaining);
   end;
 
   if tau[0] = -1 then

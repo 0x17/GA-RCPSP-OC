@@ -2,12 +2,12 @@ unit ssgsmod;
 
 interface
 
-uses classes, sysutils, projectdata;
+uses classes, sysutils, projectdata, globals, ssgs;
 
 type TSSGSMod = class
-  class procedure Solve(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
-  class procedure SolveCore(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
-  class function ResourceFeasible(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
+  class procedure Solve(const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+  class procedure SolveCore(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+  class function ResourceFeasible(const useOc: Integer; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
 end;
 
 implementation
@@ -17,29 +17,19 @@ implementation
 // Gesamtkapazität von
 // 1. Falls b_j=0: K_r
 // 2. Falls b_j=1: K_r+zmax_r
-class procedure TSSGSMod.Solve(const ps: ProjData; const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
-var
-  r, t: Integer;
-  fts: JobData;
+class procedure TSSGSMod.Solve(const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
+var fts: JobData;
 begin
-  SetLength(resRemaining, ps.numRes, ps.numPeriods);
-  for r := 0 to ps.numRes-1 do
-    for t := 0 to ps.numPeriods-1 do
-      resRemaining[r,t] := ps.capacities[r];
-
-  SetLength(sts, ps.numJobs);
-  SetLength(fts, ps.numJobs);
-  sts[0] := 0;
-  fts[0] := 0;
-
-  SolveCore(ps, order, b, 1, sts, fts, resRemaining);
+  TSSGS.InitializeResidualCapacity(resRemaining);
+  TSSGS.InitializeJobTimes(sts, fts);
+  SolveCore(order, b, 1, sts, fts, resRemaining);
 end;
 
 // Wahr, gdw. AG j bei Einplanung in Periode stj über gesamte Laufzeit genügend
 // Restkapazität zur Verfügung steht bei Gesamtkapazität von
 // 1. useOc=false: K_r
 // 2. useOc=true: K_r+zmax_r
-class function TSSGSMod.ResourceFeasible(const useOc: Integer; const ps: ProjData; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
+class function TSSGSMod.ResourceFeasible(const useOc: Integer; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau, z: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -58,27 +48,18 @@ begin
   result := true
 end;
 
-class procedure TSSGSMod.SolveCore(const ps: ProjData; const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var i, j, k, t, tau, r: Integer;
+class procedure TSSGSMod.SolveCore(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+var i, j, t: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do
   begin
     j := order[i];
 
-    t := 0;
-    for k := 0 to ps.numJobs-1 do
-      if (ps.adjMx[k,j] = 1) and (fts[k] > t) then
-        t := fts[k];
-
-    while not ResourceFeasible(b[j], ps, resRemaining, j, t) do
+    t := TSSGS.AllPredsFinished(fts, j);
+    while not ResourceFeasible(b[j], resRemaining, j, t) do
       inc(t);
 
-    sts[j] := t;
-    fts[j] := t + ps.durations[j];
-
-    for tau := t to fts[j]-1 do
-      for r := 0 to ps.numRes-1 do
-        resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
+    TSSGS.ScheduleJob(j, t, sts, fts, resRemaining);
   end;
 end;
 

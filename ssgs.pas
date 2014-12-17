@@ -8,9 +8,51 @@ type TSSGS = class
   class function ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
   class procedure SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
   class procedure Solve(const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
+
+  class function AllPredsFinished(const fts: JobData; j: Integer): Integer;
+  class procedure ScheduleJob(j, stj: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+  class procedure InitializeResidualCapacity(out resRemaining: ResourceProfile);
+  class procedure InitializeJobTimes(out sts, fts: JobData);
 end;
 
 implementation
+
+class function TSSGS.AllPredsFinished(const fts: JobData; j: Integer): Integer;
+var i: Integer;
+begin
+    result := 0;
+    for i := 0 to ps.numJobs-1 do
+      if (ps.adjMx[i,j] = 1) and (fts[i] > result) then
+        result := fts[i];
+end;
+
+class procedure TSSGS.ScheduleJob(j, stj: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+var tau, r: Integer;
+begin
+  sts[j] := stj;
+  fts[j] := stj + ps.durations[j];
+
+  for tau := stj to fts[j]-1 do
+    for r := 0 to ps.numRes-1 do
+      resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
+end;
+
+class procedure TSSGS.InitializeResidualCapacity(out resRemaining: ResourceProfile);
+var r, t: Integer;
+begin
+  SetLength(resRemaining, ps.numRes, ps.numPeriods);
+  for r := 0 to ps.numRes-1 do
+    for t := 0 to ps.numPeriods-1 do
+      resRemaining[r,t] := ps.capacities[r];
+end;
+
+class procedure TSSGS.InitializeJobTimes(out sts, fts: JobData);
+begin
+  SetLength(sts, ps.numJobs);
+  SetLength(fts, ps.numJobs);
+  sts[0] := 0;
+  fts[0] := 0;
+end;
 
 class function TSSGS.ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau: Integer;
@@ -26,43 +68,24 @@ begin
 end;
 
 class procedure TSSGS.SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var i, j, k, t, tau, r: Integer;
+var i, j, t: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do begin
     j := order[i];
 
-    t := 0;
-    for k := 0 to ps.numJobs-1 do
-      if (ps.adjMx[k,j] = 1) and (fts[k] > t) then
-        t := fts[k];
-
+    t := AllPredsFinished(fts, j);
     while not ResourceFeasible(resRemaining, z, j, t) do
       inc(t);
 
-    sts[j] := t;
-    fts[j] := t + ps.durations[j];
-
-    for tau := t to fts[j]-1 do
-      for r := 0 to ps.numRes-1 do
-        resRemaining[r,tau] := resRemaining[r,tau] - ps.demands[j,r];
+    ScheduleJob(j, t, sts, fts, resRemaining);
   end;
 end;
 
 class procedure TSSGS.Solve(const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
-var
-  r, t: Integer;
-  fts: JobData;
+var fts: JobData;
 begin
-  SetLength(resRemaining, ps.numRes, ps.numPeriods);
-  for r := 0 to ps.numRes-1 do
-    for t := 0 to ps.numPeriods-1 do
-      resRemaining[r,t] := ps.capacities[r];
-
-  SetLength(sts, ps.numJobs);
-  SetLength(fts, ps.numJobs);
-  sts[0] := 0;
-  fts[0] := 0;
-
+  InitializeResidualCapacity(resRemaining);
+  InitializeJobTimes(sts, fts);
   SolveCore(order, 1, z, sts, fts, resRemaining);
 end;
 

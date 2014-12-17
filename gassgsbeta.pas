@@ -63,7 +63,7 @@ var
   sts: JobData;
   resRemaining: ResourceProfile;
 begin
-  TSSGSMod.Solve(ps, order, b, sts, resRemaining);
+  TSSGSMod.Solve(order, b, sts, resRemaining);
   result := CalcProfit(sts, resRemaining);
 end;
 
