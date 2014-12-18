@@ -14,40 +14,10 @@ type TActivityListOCIndividual = class(TActivityListIndividual)
   procedure Mutate; override;
   function Fitness: Double; override;
 private
-  procedure RandomCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
-  procedure OnePointCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
   procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
 end;
 
 implementation
-
-procedure TActivityListOCIndividual.RandomCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
-var r, t, q: Integer;
-begin
-  for r := 0 to ps.numRes - 1 do
-    for t := 0 to ps.numPeriods - 1 do
-    begin
-      q := Random(2);
-      if q = 0 then
-        daughter[r,t] := mother[r,t]
-      else
-        daughter[r,t] := father[r,t];
-    end;
-end;
-
-procedure TActivityListOCIndividual.OnePointCrossoverOC(const mother, father: ResourceProfile; var daughter: ResourceProfile);
-var q, r, t: Integer;
-begin
-  q := THelper.RandomRangeIncl(0, ps.numPeriods-1);
-  for r := 0 to ps.numRes - 1 do
-      for t := 0 to ps.numPeriods - 1 do
-      begin
-        if t < q then
-           daughter[r,t] := mother[r,t]
-        else
-           daughter[r,t] := father[r,t];
-      end;
-end;
 
 procedure TActivityListOCIndividual.OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
 var j, q, maxFt, r, t: Integer;

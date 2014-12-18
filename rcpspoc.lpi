@@ -120,7 +120,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="20">
+    <Units Count="19">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -212,15 +212,10 @@
         <UnitName Value="gassgsz"/>
       </Unit17>
       <Unit18>
-        <Filename Value="priorityrules.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="priorityrules"/>
-      </Unit18>
-      <Unit19>
         <Filename Value="gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
-      </Unit19>
+      </Unit18>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

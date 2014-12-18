@@ -57,37 +57,67 @@ var
   excObj, excWb, excSheet: Variant;
   solvetime, profit: Double;
   heurs: THeurs;
+
+  procedure BuildHeaderStr;
+  var i: Integer;
+  begin
+    headerStr := 'filename';
+    for i := 0 to NHEURS-1 do
+      headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
+  end;
+
+  procedure ExcelPreamble;
+  begin
+    {$ifdef Win32}
+    if USE_EXCEL then
+    begin
+      if FileExists('test.xlsx') then DeleteFile('test.xlsx');
+      excObj := CreateOleObject('Excel.Application');
+      excObj.SheetsInNewWorkbook := 1;
+      excWb := excObj.Workbooks.Add;
+      excSheet := excWb.Worksheets[1];
+      excSheet.Name := 'Sheet1';
+      FormatSettings.LongTimeFormat := 'yyyy-mm-dd-hh-mm-ss';
+      excWb.SaveAs('test.xlsx');
+      excObj.Visible := True;
+      //excSheet.Cells[1, 1] := 'Test';
+    end;
+    {$endif}
+  end;
+
+  procedure WriteStr(var fp: TextFile; s: String; row: Integer); inline;
+  begin
+    WriteLn(s);
+    WriteLn(fp, s);
+    Flush(fp);
+    if USE_EXCEL then
+      THelper.WriteCSVToExcel(excSheet, row, headerStr);
+  end;
+
+  procedure SolveHeur(const h: THeur);
+  begin
+    WriteLn(h.name);
+
+    sw.Start;
+    profit := h.fn;
+    time := sw.Stop;
+    solvetime := time / 1000.0;
+
+    line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
+    WriteLn('Profit=' + FloatToStr(profit) + '\nSolvetime=' + FloatToStr(solvetime) + '\n');
+  end;
+
 begin
   NUM_GENS := 100;
   FillHeuristics(heurs);
 
-  headerStr := 'filename';
-  for i := 0 to NHEURS-1 do
-    headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
-
-  {$ifdef Win32}
-  if USE_EXCEL then
-  begin
-    if FileExists('test.xlsx') then DeleteFile('test.xlsx');
-    excObj := CreateOleObject('Excel.Application');
-    excObj.SheetsInNewWorkbook := 1;
-    excWb := excObj.Workbooks.Add;
-    excSheet := excWb.Worksheets[1];
-    excSheet.Name := 'Sheet1';
-    FormatSettings.LongTimeFormat := 'yyyy-mm-dd-hh-mm-ss';
-    excWb.SaveAs('test.xlsx');
-    excObj.Visible := True;
-    //excSheet.Cells[1, 1] := 'Test';
-  end;
-  {$endif}
+  BuildHeaderStr;
+  ExcelPreamble;
 
   AssignFile(fp, 'heurOptsAndTime.txt');
   Rewrite(fp);
 
-  WriteLn(headerStr);
-  WriteLn(fp, headerStr);
-  if USE_EXCEL then
-    THelper.WriteCSVToExcel(excSheet, 1, headerStr);
+  WriteStr(fp, headerStr, 1);
 
   fnames := THelper.ListProjFilesInDir('../Projekte/j30');
   ctr := 0;
@@ -95,42 +125,22 @@ begin
 
   fileCount := fnames.Count;
 
-  for fname in fnames do
-  begin
+  for fname in fnames do begin
     if not(FileExists(fname+'.PRULES')) then
       raise Exception.Create('Priority rules not found for ' + fname);
 
     InitProject(fname);
 
-    if ps.minMs <> ps.maxMs then
-    begin
+    if ps.minMs <> ps.maxMs then begin
       line := fname;
       for i := 0 to NHEURS - 1 do
-      begin
-        WriteLn(heurs[i].name);
-
-        sw.Start;
-        profit := heurs[i].fn;
-        time := sw.Stop;
-        solvetime := time / 1000.0;
-
-        line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
-
-        WriteLn('Profit=' + FloatToStr(profit));
-        WriteLn('Solvetime=' + FloatToStr(solvetime));
-        WriteLn;
-      end;
-    end
-    else
+        SolveHeur(heurs[i]);
+    end else
       line := 'NA;NA;NA;NA;NA;NA;NA;NA;NA;NA;NA';
 
-    WriteLn(fp, line);
+    WriteStr(fp, line, ctr+1);
     WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
-    Flush(fp);
-
     inc(ctr);
-    if USE_EXCEL then
-      THelper.WriteCSVToExcel(excSheet, ctr+1, line, False);
   end;
 
   if USE_EXCEL then
@@ -163,13 +173,11 @@ begin
 
   Writeln(fp, headerStr);
 
-  for k := 1 to maxGens do
-  begin
+  for k := 1 to maxGens do begin
     NUM_GENS := k;
     WriteLn('Num generations = ' + IntToStr(NUM_GENS));
     Write(fp, IntToStr(NUM_GENS));
-    for i := 0 to NHEURS - 1 do
-    begin
+    for i := 0 to NHEURS - 1 do begin
       WriteLn(heurs[i].name);
       profit := heurs[i].fn;
       Write(fp, ';' + FloatToStr(profit));
@@ -200,8 +208,7 @@ begin
   sw := TStopwatch.Create;
   line := ParamStr(1);
 
-  for i := 0 to NHEURS - 1 do
-  begin
+  for i := 0 to NHEURS - 1 do begin
     sw.Start;
     profit := heurs[i].fn;
     time := sw.Stop;

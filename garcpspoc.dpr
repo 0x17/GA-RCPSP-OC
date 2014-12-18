@@ -4,9 +4,6 @@ program garcpspoc;
 
 {$R *.res}
 
-// TODO:
-// Priority rules Aktivitätenliste-Generierung von F# hier rüber portieren. Über generisches SortBy f vals.
-
 uses
   sysutils,
   main in 'main.pas',

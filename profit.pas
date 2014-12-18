@@ -1,7 +1,5 @@
 ﻿unit profit;
 
-// Berechnung des Profits für einen konkreten Plan einer Testinstanz.
-
 interface
 
 uses sysutils, projectdata, ssgs, esschedule, math, resprofiles, globals;

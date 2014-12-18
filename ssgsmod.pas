@@ -12,11 +12,6 @@ end;
 
 implementation
 
-// Modifiziertes SSGS: AG j ist bei Einplanung in Periode stj zulässig gdw.
-// genügend Restkapazität über die Bearbeitungsdauer zur Verfügung steht bei
-// Gesamtkapazität von
-// 1. Falls b_j=0: K_r
-// 2. Falls b_j=1: K_r+zmax_r
 class procedure TSSGSMod.Solve(const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 var fts: JobData;
 begin
@@ -25,10 +20,6 @@ begin
   SolveCore(order, b, 1, sts, fts, resRemaining);
 end;
 
-// Wahr, gdw. AG j bei Einplanung in Periode stj über gesamte Laufzeit genügend
-// Restkapazität zur Verfügung steht bei Gesamtkapazität von
-// 1. useOc=false: K_r
-// 2. useOc=true: K_r+zmax_r
 class function TSSGSMod.ResourceFeasible(const useOc: Integer; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau, z: Integer;
 begin
