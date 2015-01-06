@@ -5,7 +5,6 @@ interface
 uses classes, sysutils, helpers;
 
 type
-  ByteMx2D = Array of Array of Byte;
   JobData = Array of Integer;
   ResData = Array of Integer;
   ResDataDbl = Array of Double;
@@ -34,6 +33,8 @@ type
 
     procedure LoadFromFile(filename: String);
     procedure ComputeESFTS;
+
+    procedure InvertPrecedence;
 
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
@@ -183,6 +184,11 @@ begin
     T := T + durations[j];
 
   CloseFile(fp);
+end;
+
+procedure ProjData.InvertPrecedence;
+begin
+  THelper.Transpose(adjMx);
 end;
 
 end.

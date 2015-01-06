@@ -2,7 +2,7 @@ unit gassgsz;
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc;
+uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc, fbi;
 
 function RunGASSGSZ: Double;
 
@@ -81,6 +81,7 @@ begin
       zfilled[r,t] := z[r];
 
   TSSGS.Solve(order, zfilled, sts, resRemaining);
+  TFBI.Improve(sts, zfilled, resRemaining);
   result := CalcProfit(sts, resRemaining);
 end;
 

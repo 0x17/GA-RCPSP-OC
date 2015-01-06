@@ -104,7 +104,7 @@ var
     solvetime := time / 1000.0;
 
     line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
-    WriteLn('Profit=' + FloatToStr(profit) + '\nSolvetime=' + FloatToStr(solvetime) + '\n');
+    WriteLn('Profit=' + FloatToStr(profit) + #10 + 'Solvetime=' + FloatToStr(solvetime) + #10);
   end;
 
 begin

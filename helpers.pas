@@ -10,12 +10,16 @@ uses classes, sysutils, strutils
   ,dateutils
 {$endif};
 
-type THelper = class
-  class function FilenameFromPath(path: String): String;
-  class function RandomRangeIncl(lb, ub: Integer): Integer;
-  class procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
-  class function ListProjFilesInDir(path: String): TStringList;
-  class procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
+type
+  ByteMx2D = Array of Array of Byte;
+
+  THelper = class
+    class function FilenameFromPath(path: String): String;
+    class function RandomRangeIncl(lb, ub: Integer): Integer;
+    class procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
+    class function ListProjFilesInDir(path: String): TStringList;
+    class procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
+    class procedure Transpose(var A: ByteMx2D);
 end;
 
 type TStopwatch = class(TObject)
@@ -92,6 +96,18 @@ begin
   end;
 
   FreeAndNil(parts);
+end;
+
+class procedure THelper.Transpose(var A: ByteMx2D);
+var i, j, tmp: Integer;
+begin
+  Assert(High(A)=High(A[0]), 'Matrix must be quadratic!');
+  for j := 0 to High(A[0]) do
+    for i := j+1 to High(A) do begin
+      tmp := A[i,j];
+      A[i,j] := A[j,i];
+      A[j,i] := tmp;
+    end;
 end;
 
 //==============================================================================

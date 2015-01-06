@@ -24,7 +24,7 @@ implementation
 procedure TActivityListTauIndividual.InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer);
 begin
   order[childIndex] := parent.order[parentIndex];
-  tau[childIndex] := TActivityListTauIndividual(parent).tau[parentIndex];
+  tau[childIndex] := TActivityListTauIndividual(parent).tau[parentIndex];    
 end;
 
 procedure TActivityListTauIndividual.Swap(var lambda, tau: JobData; i1, i2: Integer);

@@ -23,8 +23,8 @@ uses
   individual in 'individual.pas',
   gassgsz in 'gassgsz.pas',
   gassgstau in 'gassgstau.pas',
-  priorityrules in 'priorityrules.pas',
-  gassgszt in 'gassgszt.pas';
+  gassgszt in 'gassgszt.pas',
+  fbi in 'fbi.pas';
 
 begin
   try
