@@ -1,18 +1,21 @@
-unit schedulevisualizer;
+unit visualizer;
 
 // Visualisiere Ablaufplan je Ressource in einer Excel-Tabelle
 
 interface
 
-uses projectdata, excel2000, comobj, strutils, sysutils;
+uses projectdata, excel2000, comobj, strutils, sysutils, globals, helpers;
 
-type TScheduleVisualizer = class
-  class procedure Visualize(const ps: ProjData; const sts: JobData; filename: String);
+type TVisualizer = class
+  class procedure VisualizeSchedule(const sts: JobData; filename: String);
+  class procedure VisualizeGraph(filename: String);
+private
+  class procedure SerializePrecedenceToDot(filename: String);
 end;
 
 implementation
 
-class procedure TScheduleVisualizer.Visualize(const ps: ProjData; const sts: JobData; filename: String);
+class procedure TVisualizer.VisualizeSchedule(const sts: JobData; filename: String);
   var
   excObj, excWb, excSheet: Variant;
   r, bottomRow: Integer;
@@ -67,6 +70,42 @@ begin
 
   //excWb.Close(SaveChanges := True);
   excWb.Save;
+end;
+
+
+class procedure TVisualizer.SerializePrecedenceToDot(filename: String);
+var
+  dotFile: TextFile;
+  i, j: Integer;
+  resStr, sep: String;
+  r: Integer;
+begin
+  AssignFile(dotFile, filename+'.dot');
+  Rewrite(dotFile);
+
+  WriteLn(dotFile, 'digraph precedence {');
+  for i := 0 to ps.numJobs-1 do
+    for j := 0 to ps.numJobs-1 do
+      if ps.adjMx[i,j] = 1 then
+        WriteLn(dotFile, IntToStr(i)+'->'+IntToStr(j));
+  for j := 0 to ps.numJobs-1 do begin
+    resStr := '';
+    for r := 0 to ps.numRes-1 do begin
+      if r <> 0 then sep := ',' else sep := '';
+      resStr := Concat(resStr, sep, IntToStr(ps.demands[j,r]));
+    end;
+    WriteLn(dotFile, IntToStr(j)+'[label="('+IntToStr(ps.durations[j])+') '+IntToStr(j)+' ('+ resStr +')"];');
+  end;
+  WriteLn(dotFile, '}');
+
+  CloseFile(dotFile);
+end;
+
+class procedure TVisualizer.VisualizeGraph(filename: String);
+begin
+  SerializePrecedenceToDot(filename);
+  THelper.RunCommand('C:\Program Files (x86)\Graphviz2.34\bin\dot.exe', '-Tpdf ' + filename + '.dot -o ' + filename + '.pdf');
+  THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\Acrobat.exe', filename+'.pdf');
 end;
 
 end.

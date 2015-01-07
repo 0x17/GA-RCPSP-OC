@@ -2,7 +2,7 @@ unit fbi;
 
 interface
 
-uses projectdata, globals, ssgs;
+uses projectdata, globals, ssgs, visualizer;
 
 type TFBI = class
   class procedure Improve(var sts: JobData;  const z: ResourceProfile; out resRemaining: ResourceProfile);
@@ -29,22 +29,6 @@ var
     end;
   end;
 
-  function JobWithMinSt: Integer;
-  var k, minSt: Integer;
-  begin
-    minSt := ps.numPeriods-1;
-    result := 0;
-    for k := 0 to ps.numJobs-1 do begin
-      if rem[k] = 0 then
-        continue;
-
-      if sts[k] <= minSt then begin
-        minSt := sts[k];
-        result := k;
-      end;
-    end;
-  end;
-
   procedure FillSet;
   var j: Integer;
   begin
@@ -62,25 +46,37 @@ var
     end;
   end;
 
-  procedure SetOrderToAscSts;
-  var j: Integer;
+  procedure Transform;
+  var
+    j: Integer;
+    oldSts: JobData;
   begin
-    FillSet;
-    for j := 0 to ps.numJobs-1 do begin
-      order[j] := JobWithMinSt;
-      rem[order[j]] := 0;
-    end;
+    SetLength(oldSts, ps.numJobs);
+
+    for j := 0 to ps.numJobs-1 do
+      oldSts[j] := sts[j];
+
+    for j := 1 to ps.numJobs-1 do
+      sts[j] := oldSts[0] - (oldSts[j] + ps.durations[j]);
   end;
 
 begin
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
 
+  TVisualizer.VisualizeGraph('fbi_proj');
+  TVisualizer.VisualizeSchedule(sts, 'sts');
+
   SetOrderToDescFts;
   ps.InvertPrecedence;
   TSSGS.Solve(order, z, sts, resRemaining);
+  Transform;
 
-  SetOrderToAscSts;
+  TVisualizer.VisualizeGraph('fbi_proj_inv');
+  TVisualizer.VisualizeSchedule(sts, 'backward-pass');
+
+  // Assure precedence feasibility of order!
+  SetOrderToDescFts;
   ps.InvertPrecedence;
   TSSGS.Solve(order, z, sts, resRemaining);
 end;

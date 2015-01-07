@@ -2,7 +2,7 @@ unit helpers;
 
 interface
 
-uses classes, sysutils, strutils
+uses classes, shellapi, sysutils, strutils
 
 {$ifdef Win32}
   {$ifdef FPC},windows{$else},math,windows{$endif}
@@ -20,6 +20,7 @@ type
     class function ListProjFilesInDir(path: String): TStringList;
     class procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
     class procedure Transpose(var A: ByteMx2D);
+    class procedure RunCommand(cmd, args: String);
 end;
 
 type TStopwatch = class(TObject)
@@ -108,6 +109,15 @@ begin
       A[i,j] := A[j,i];
       A[j,i] := tmp;
     end;
+end;
+
+class procedure THelper.RunCommand(cmd, args: String);
+var
+  argsWchar, cmdWchar: array[0..511] of WideChar;
+begin
+  StringToWideChar(cmd, cmdWchar, 512);
+  StringToWideChar(args, argsWchar, 512);
+  ShellExecute(0, 'open', cmdWchar, argsWchar, nil, 1);
 end;
 
 //==============================================================================

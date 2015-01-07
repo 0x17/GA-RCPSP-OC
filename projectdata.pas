@@ -36,6 +36,8 @@ type
 
     procedure InvertPrecedence;
 
+    procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
+
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
     procedure ParseReqDur(var fp: TextFile);
@@ -189,6 +191,16 @@ end;
 procedure ProjData.InvertPrecedence;
 begin
   THelper.Transpose(adjMx);
+end;
+
+procedure ProjData.CheckSchedulePrecedenceFeasibility(const sts: JobData);
+var
+  i, j: Integer;
+begin
+  for j := 0 to numJobs-1 do
+    for i := 0 to numJobs-1 do
+      if adjMx[i,j] = 1 then
+        Assert(sts[i] + durations[i] <= sts[j]);
 end;
 
 end.
