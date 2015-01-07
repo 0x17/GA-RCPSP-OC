@@ -2,7 +2,7 @@ unit gassgszt;
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc;
+uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc, fbi;
 
 function RunGASSGSZT: Double;
 
@@ -73,6 +73,7 @@ var
   j: Integer;
 begin
   TSSGS.Solve(order, oc, sts, resRemaining);
+  TFBI.Improve(sts, oc, resRemaining);
   result := CalcProfit(sts, resRemaining);
 
   for j := 0 to ps.numJobs-1 do

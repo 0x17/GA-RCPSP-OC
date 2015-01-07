@@ -5,7 +5,7 @@
         <FrameworkType>None</FrameworkType>
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -162,7 +162,7 @@
         <DCCReference Include="gassgsbeta.pas"/>
         <DCCReference Include="topsort.pas"/>
         <DCCReference Include="esschedule.pas"/>
-        <DCCReference Include="schedulevisualizer.pas"/>
+        <DCCReference Include="visualizer.pas"/>
         <DCCReference Include="resprofiles.pas"/>
         <DCCReference Include="individual.pas"/>
         <DCCReference Include="gassgsz.pas"/>

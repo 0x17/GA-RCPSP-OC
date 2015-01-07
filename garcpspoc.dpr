@@ -18,7 +18,7 @@ uses
   gassgsbeta in 'gassgsbeta.pas',
   topsort in 'topsort.pas',
   esschedule in 'esschedule.pas',
-  schedulevisualizer in 'schedulevisualizer.pas',
+  visualizer in 'visualizer.pas',
   resprofiles in 'resprofiles.pas',
   individual in 'individual.pas',
   gassgsz in 'gassgsz.pas',

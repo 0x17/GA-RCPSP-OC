@@ -4,7 +4,7 @@ unit visualizer;
 
 interface
 
-uses projectdata, excel2000, comobj, strutils, sysutils, globals, helpers;
+uses projectdata, {$ifndef FPC}excel2000,{$endif} comobj, sysutils, globals, helpers;
 
 type TVisualizer = class
   class procedure Mute;
@@ -26,7 +26,8 @@ class procedure TVisualizer.Unmute;
 begin quiet := False; end;
 
 class procedure TVisualizer.VisualizeSchedule(const sts: JobData; filename: String);
-  var
+{$ifndef FPC}
+var
   excObj, excWb, excSheet: Variant;
   r, bottomRow: Integer;
 
@@ -83,7 +84,10 @@ begin
   //excWb.Close(SaveChanges := True);
   excWb.Save;
 end;
-
+{$else}
+begin
+end;
+{$endif}
 
 class procedure TVisualizer.SerializePrecedenceToDot(filename: String);
 var

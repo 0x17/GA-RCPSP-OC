@@ -3,13 +3,13 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="9"/>
-    <BuildModes Active="Debug"/>
-    <Units Count="55">
+    <BuildModes Active="Release"/>
+    <Units Count="58">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="rcpspoc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="43" Y="5"/>
@@ -31,12 +31,10 @@
         <Filename Value="ssgs.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgs"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="35"/>
         <CursorPos X="48" Y="26"/>
         <UsageCount Value="171"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -65,10 +63,12 @@
         <Filename Value="helpers.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="helpers"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="19"/>
-        <CursorPos X="22" Y="14"/>
+        <TopLine Value="1"/>
+        <CursorPos X="15" Y="5"/>
         <UsageCount Value="168"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -90,10 +90,11 @@
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
-        <EditorIndex Value="4"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="45" Y="17"/>
+        <TopLine Value="40"/>
+        <CursorPos X="17" Y="34"/>
         <UsageCount Value="163"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -122,7 +123,7 @@
         <Filename Value="individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="40" Y="15"/>
@@ -216,11 +217,10 @@
         <Filename Value="fbi.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fbi"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="20"/>
-        <CursorPos X="1" Y="68"/>
+        <TopLine Value="1"/>
+        <CursorPos X="29" Y="89"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -501,15 +501,40 @@
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\objpas.pp"/>
         <UnitName Value="objpas"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="64"/>
-        <CursorPos X="15" Y="91"/>
+        <TopLine Value="1"/>
+        <CursorPos X="8" Y="28"/>
         <UsageCount Value="10"/>
       </Unit54>
+      <Unit55>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\ascdef.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="439"/>
+        <CursorPos X="10" Y="469"/>
+        <UsageCount Value="10"/>
+      </Unit55>
+      <Unit56>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\unifun.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="440"/>
+        <CursorPos X="10" Y="470"/>
+        <UsageCount Value="10"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="visualizer.pas"/>
+        <UnitName Value="visualizer"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="59" Y="7"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit57>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="5" HistoryIndex="4">
+    <JumpHistory Count="19" HistoryIndex="18">
       <Position1>
         <Filename Value="rcpspoc.lpr"/>
         <Caret Line="10" Column="53" TopLine="1"/>
@@ -523,25 +548,72 @@
         <Caret Line="147" Column="5" TopLine="125"/>
       </Position3>
       <Position4>
-        <Filename Value="ssgs.pas"/>
-        <Caret Line="87" Column="25" TopLine="50"/>
-      </Position4>
-      <Position5>
         <Filename Value="fbi.pas"/>
         <Caret Line="67" Column="7" TopLine="20"/>
+      </Position4>
+      <Position5>
+        <Filename Value="helpers.pas"/>
+        <Caret Line="119" Column="33" TopLine="84"/>
       </Position5>
+      <Position6>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="7" Column="19" TopLine="1"/>
+      </Position7>
+      <Position8>
+        <Filename Value="individual.pas"/>
+        <Caret Line="15" Column="40" TopLine="1"/>
+      </Position8>
+      <Position9>
+        <Filename Value="helpers.pas"/>
+        <Caret Line="119" Column="33" TopLine="84"/>
+      </Position9>
+      <Position10>
+        <Filename Value="individual.pas"/>
+        <Caret Line="15" Column="40" TopLine="1"/>
+      </Position10>
+      <Position11>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="7" Column="50" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="helpers.pas"/>
+        <Caret Line="5" Column="15" TopLine="1"/>
+      </Position12>
+      <Position13>
+        <Filename Value="individual.pas"/>
+        <Caret Line="15" Column="40" TopLine="1"/>
+      </Position13>
+      <Position14>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="91" Column="1" TopLine="46"/>
+      </Position14>
+      <Position15>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="13" Column="57" TopLine="1"/>
+      </Position15>
+      <Position16>
+        <Filename Value="fbi.pas"/>
+        <Caret Line="68" Column="1" TopLine="20"/>
+      </Position16>
+      <Position17>
+        <Filename Value="visualizer.pas"/>
+        <Caret Line="7" Column="59" TopLine="1"/>
+      </Position17>
+      <Position18>
+        <Filename Value="fbi.pas"/>
+        <Caret Line="5" Column="34" TopLine="1"/>
+      </Position18>
+      <Position19>
+        <Filename Value="fbi.pas"/>
+        <Caret Line="89" Column="29" TopLine="1"/>
+      </Position19>
     </JumpHistory>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="fbi.pas"/>
-        <Line Value="68"/>
-      </Item1>
-    </BreakPoints>
     <Watches Count="4">
       <Item1>
         <Expression Value="resRemaining"/>

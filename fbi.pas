@@ -90,9 +90,11 @@ var
 begin
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
+
   SetOrderToDescFts;
   ps.InvertPrecedence;
   TSSGS.Solve(order, z, sts, resRemaining);
+
   FlipSchedule(sts);
   ps.InvertPrecedence;
   SetOrderToAscSts;

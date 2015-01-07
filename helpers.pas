@@ -4,7 +4,7 @@ interface
 
 uses classes, shellapi, sysutils, strutils
 
-{$ifdef Win32}
+{$ifdef MSWINDOWS}
   {$ifdef FPC},windows{$else},math,windows{$endif}
 {$else}
   ,dateutils
@@ -14,27 +14,27 @@ type
   ByteMx2D = Array of Array of Byte;
 
   THelper = class
-    class function FilenameFromPath(path: String): String;
+    class function FilenameFromPath(const path: String): String;
     class function RandomRangeIncl(lb, ub: Integer): Integer;
     class procedure SkipChar(var fp: TextFile; c: Char; n: Integer);
-    class function ListProjFilesInDir(path: String): TStringList;
+    class function ListProjFilesInDir(const path: String): TStringList;
     class procedure WriteCSVToExcel(sheet: Variant; rowNum: Integer; csvStr: String; allStrings: Boolean = True);
     class procedure Transpose(var A: ByteMx2D);
-    class procedure RunCommand(cmd, args: String);
+    class procedure RunCommand(const cmd, args: String);
 end;
 
 type TStopwatch = class(TObject)
   procedure Start();
   function Stop(): Cardinal;
 private
-  before: {$ifndef Win32}TDateTime{$else}Cardinal{$endif};
+  before: {$ifndef MSWINDOWS}TDateTime{$else}Cardinal{$endif};
 end;
 
 implementation
 
-const PATH_SEP = {$ifdef Win32}'\'{$else}'/'{$endif};
+const PATH_SEP = {$ifdef MSWINDOWS}'\'{$else}'/'{$endif};
 
-class function THelper.FilenameFromPath(path: String): String;
+class function THelper.FilenameFromPath(const path: String): String;
 begin
   result := RightStr(path, Length(path) - LastDelimiter(PATH_SEP, path));
 end;
@@ -57,7 +57,7 @@ begin
   until skipCounter = n;
 end;
 
-class function THelper.ListProjFilesInDir(path: String): TStringList;
+class function THelper.ListProjFilesInDir(const path: String): TStringList;
 var
   sr: TSearchRec;
   oldwd: String;
@@ -111,19 +111,19 @@ begin
     end;
 end;
 
-class procedure THelper.RunCommand(cmd, args: String);
-var
-  argsWchar, cmdWchar: array[0..511] of WideChar;
+class procedure THelper.RunCommand(const cmd, args: String);
+const BUF_SIZE = 512;
+var argsWchar, cmdWchar: array[0..BUF_SIZE-1] of WideChar;
 begin
-  StringToWideChar(cmd, cmdWchar, 512);
-  StringToWideChar(args, argsWchar, 512);
-  ShellExecute(0, 'open', cmdWchar, argsWchar, nil, 1);
+  StringToWideChar(cmd, cmdWchar, BUF_SIZE);
+  StringToWideChar(args, argsWchar, BUF_SIZE);
+  ShellExecuteW(0, 'open', cmdWchar, argsWchar, nil, 1);
 end;
 
 //==============================================================================
 procedure TStopwatch.Start();
 begin
-  {$ifndef Win32}
+  {$ifndef MSWINDOWS}
   before := Now;
   {$else}
   before := GetTickCount;
@@ -132,7 +132,7 @@ end;
 
 function TStopwatch.Stop(): Cardinal;
 begin
-  {$ifndef Win32}
+  {$ifndef MSWINDOWS}
   result := MilliSecondsBetween(Now, before);
   {$else}
   result := GetTickCount - before;

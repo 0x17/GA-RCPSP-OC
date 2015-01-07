@@ -7,7 +7,7 @@ procedure Entrypoint();
 implementation
 
 uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
-{$ifdef Win32}
+{$ifdef MSWINDOWS}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
@@ -68,7 +68,7 @@ var
 
   procedure ExcelPreamble;
   begin
-    {$ifdef Win32}
+    {$ifdef MSWINDOWS}
     if USE_EXCEL then
     begin
       if FileExists('test.xlsx') then DeleteFile('test.xlsx');
@@ -85,13 +85,13 @@ var
     {$endif}
   end;
 
-  procedure WriteStr(var fp: TextFile; s: String; row: Integer); inline;
+  procedure WriteStr(var fp: TextFile; s: String; row: Integer);
   begin
     WriteLn(s);
     WriteLn(fp, s);
     Flush(fp);
     if USE_EXCEL then
-      THelper.WriteCSVToExcel(excSheet, row, headerStr);
+      THelper.WriteCSVToExcel(excSheet, row, s);
   end;
 
   procedure SolveHeur(const h: THeur);
