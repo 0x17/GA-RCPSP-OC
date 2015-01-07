@@ -7,6 +7,7 @@ uses helpers, projectdata, globals;
 type TTopSort = class
   class procedure Sort(out order: JobData);
   class procedure RandomSort(out order: JobData);
+  class procedure UpdateDecisionSet(var order, dset: JobData; index: Integer);
 private
   class function AllPredsBefore(var order: JobData; index, j: Integer): Boolean;
   class function FindJobWithAllPredsBefore(var order: JobData; index: Integer): Integer;
@@ -130,6 +131,25 @@ begin
   order[0] := 0;
   for i := 1 to ps.numJobs - 1 do
     order[i] := FindRandomJobWithAllPredsBefore(order, i);
+end;
+
+class procedure TTopSort.UpdateDecisionSet(var order, dset: JobData; index: Integer);
+var
+  j, k: Integer;
+  before: Boolean;
+begin
+  for j := 0 to ps.numJobs-1 do begin
+    before := False;
+    for k := 0 to index-1 do
+      if order[k] = j then
+        before := True;
+
+    if not(before) and AllPredsBefore(order, index, j) then
+      dset[j] := 1
+    else
+      dset[j] := 0;
+  end;
+
 end;
 
 end.

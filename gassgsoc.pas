@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgsoc, topsort, helpers;
+uses classes, sysutils, individual, projectdata, globals, ssgsoc, helpers, algens;
 
 function RunGASSGSOC: Double;
 
@@ -107,21 +107,15 @@ end;
 
 procedure TActivityListIndividual.InitializePopulation(var population: IndivArray);
 var
-  i, j: Integer;
-  prioRules: JobDataArray;
+  i: Integer;
+  alg: IALGenerator;
 begin
   inherited InitializePopulation(population);
 
-  ProjData.InitPriorityRulesFromFile(ps, prioRules);
-  for i := 0 to 12 do
-  begin
-    SetLength(TActivityListIndividual(population[i]).order, ps.numJobs);
-    for j := 0 to ps.numJobs-1 do
-      TActivityListIndividual(population[i]).order[j] := prioRules[i, j];
-  end;
-
-  for i := 13 to POP_SIZE * 2 - 1 do
-    TTopSort.RandomSort(TActivityListIndividual(population[i]).order);
+  alg := RBBRSGenerator.Create;
+  for i := 0 to POP_SIZE * 2 - 1 do
+    alg.PickSample(TActivityListIndividual(population[i]).order);
+  FreeAndNil(alg);
 end;
 
 function RunGASSGSOC: Double;

@@ -2,10 +2,10 @@ unit helpers;
 
 interface
 
-uses classes, shellapi, sysutils, strutils
+uses classes, sysutils, strutils
 
 {$ifdef MSWINDOWS}
-  {$ifdef FPC},windows{$else},math,windows{$endif}
+  {$ifdef FPC},windows{$else},math,windows,shellapi{$endif}
 {$else}
   ,dateutils
 {$endif};

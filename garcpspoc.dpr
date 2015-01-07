@@ -24,7 +24,8 @@ uses
   gassgsz in 'gassgsz.pas',
   gassgstau in 'gassgstau.pas',
   gassgszt in 'gassgszt.pas',
-  fbi in 'fbi.pas';
+  fbi in 'fbi.pas',
+  algens in 'algens.pas';
 
 begin
   try

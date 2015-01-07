@@ -28,8 +28,7 @@ begin
 end;
 
 procedure TActivityListTauIndividual.Swap(var lambda, tau: JobData; i1, i2: Integer);
-var
-  tmp, tmp2: Integer;
+var tmp, tmp2: Integer;
 begin
   tmp := lambda[i1];
   tmp2 := tau[i1];
@@ -42,8 +41,7 @@ begin
 end;
 
 procedure TActivityListTauIndividual.SwapNeighborhood(var lambda, tau: JobData);
-var
-  i: Integer;
+var i: Integer;
 begin
   for i := 2 to ps.numJobs - 2 do
     if (THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
