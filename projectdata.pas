@@ -37,6 +37,7 @@ type
     procedure InvertPrecedence;
 
     procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
+    function OrderFeasible(const order: JobData): Boolean;
 
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
@@ -201,6 +202,18 @@ begin
     for i := 0 to numJobs-1 do
       if adjMx[i,j] = 1 then
         Assert(sts[i] + durations[i] <= sts[j]);
+end;
+
+function ProjData.OrderFeasible(const order: JobData): Boolean;
+var i, j: Integer;
+begin
+  result := True;
+  for j := 0 to numJobs-1 do
+    for i := 0 to j do
+      if adjMx[order[j], order[i]] = 1 then begin
+        result := False;
+        Exit;
+      end;
 end;
 
 end.

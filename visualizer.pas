@@ -7,13 +7,23 @@ interface
 uses projectdata, excel2000, comobj, strutils, sysutils, globals, helpers;
 
 type TVisualizer = class
+  class procedure Mute;
+  class procedure Unmute;
+
   class procedure VisualizeSchedule(const sts: JobData; filename: String);
   class procedure VisualizeGraph(filename: String);
 private
+  class var quiet: Boolean;
   class procedure SerializePrecedenceToDot(filename: String);
 end;
 
 implementation
+
+class procedure TVisualizer.Mute;
+begin quiet := True; end;
+
+class procedure TVisualizer.Unmute;
+begin quiet := False; end;
 
 class procedure TVisualizer.VisualizeSchedule(const sts: JobData; filename: String);
   var
@@ -45,6 +55,8 @@ class procedure TVisualizer.VisualizeSchedule(const sts: JobData; filename: Stri
     end;
   end;
 begin
+  if quiet then Exit;
+
   DeleteFile('C:\Users\a.schnabel\Documents\'+filename+'.xlsx');
 
   excObj := CreateOleObject('Excel.Application');
@@ -103,6 +115,7 @@ end;
 
 class procedure TVisualizer.VisualizeGraph(filename: String);
 begin
+  if quiet then Exit;
   SerializePrecedenceToDot(filename);
   THelper.RunCommand('C:\Program Files (x86)\Graphviz2.34\bin\dot.exe', '-Tpdf ' + filename + '.dot -o ' + filename + '.pdf');
   THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\Acrobat.exe', filename+'.pdf');
