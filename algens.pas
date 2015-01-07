@@ -77,17 +77,19 @@ end;
 
 procedure RBBRSGenerator.ComputeCumulativeProbabilities(const dset: JobData; out cumProbs: DblArray);
 var
-  j, sumRegrets, dsetSize: Integer;
+  j, sumRegrets, dsetSize, k: Integer;
   regretValues: JobData;
   c: Double;
 begin
   dsetSize := ArrSetCardinality(dset);
   SetLength(regretValues, dsetSize);
   sumRegrets := 0;
+  k := 0;
   for j := 0 to ps.numJobs-1 do begin
     if dset[j] = 1 then begin
-      regretValues[j] := -ps.lfts[j] - (-ps.lfts[ps.numJobs-1]);
-      sumRegrets := sumRegrets + regretValues[j];
+      regretValues[k] := -ps.lfts[j] - (-ps.lfts[ps.numJobs-1]);
+      sumRegrets := sumRegrets + regretValues[k];
+      inc(k);
     end;
   end;
 
