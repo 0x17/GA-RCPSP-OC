@@ -13,6 +13,10 @@ type TSSGS = class
   class procedure ScheduleJob(j, stj: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
   class procedure InitializeResidualCapacity(out resRemaining: ResourceProfile);
   class procedure InitializeJobTimes(out sts, fts: JobData);
+
+  class procedure SortActivityListByPriorities(var order: JobData; var pvals: JobData);
+  class procedure ScheduleToActivityList(const sts: JobData; out order: JobData);
+  class procedure ReverseActivityList(var order: JobData);
 end;
 
 implementation
@@ -89,6 +93,61 @@ begin
   SolveCore(order, 1, z, sts, fts, resRemaining);
 end;
 
+class procedure TSSGS.SortActivityListByPriorities(var order: JobData; var pvals: JobData);
+  procedure Helper(iLo, iHi: Integer);
+  var
+    Lo, Hi: Integer;
+    Mid, T: Integer;
+    T2: Integer;
+  begin
+    Lo := iLo;
+    Hi := iHi;
+    Mid := pvals[(Lo + Hi) div 2];
+    repeat
+      while pvals[Lo] < Mid do Inc(Lo);
+      while pvals[Hi] > Mid do Dec(Hi);
+      if Lo <= Hi then
+      begin
+        T := pvals[Lo];
+        pvals[Lo] := pvals[Hi];
+        pvals[Hi] := T;
+
+        T2 := order[Lo];
+        order[Lo] := order[Hi];
+        order[Hi] := T2;
+
+        Inc(Lo);
+        Dec(Hi);
+      end;
+    until Lo > Hi;
+    if Hi > iLo then Helper(iLo, Hi);
+    if Lo < iHi then Helper(Lo, iHi);
+  end;
+begin
+  Helper(0, ps.numJobs-1);
+end;
+
+class procedure TSSGS.ScheduleToActivityList(const sts: JobData; out order: JobData);
+var
+  stsCpy: JobData;
+  j: Integer;
+begin
+  SetLength(order, ps.numJobs);
+  for j := 0 to ps.numJobs-1 do order[j] := j;
+  stsCpy := Copy(sts, 0, ps.numJobs);
+  SortActivityListByPriorities(order, stsCpy);
+end;
+
+class procedure TSSGS.ReverseActivityList(var order: JobData);
+var j, tmp: Integer;
+begin
+  Assert(ps.numJobs mod 2 = 0);
+  for j := 0 to (ps.numJobs div 2) - 1 do begin
+    tmp := order[j];
+    order[j] := order[ps.numJobs-1-j];
+    order[ps.numJobs-1-j] := tmp;
+  end;
+end;
 
 end.
 

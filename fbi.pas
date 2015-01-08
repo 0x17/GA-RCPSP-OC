@@ -91,6 +91,7 @@ begin
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
 
+  // Refactor to using generic scheduleToActivityList-method!
   SetOrderToDescFts;
   ps.InvertPrecedence;
   TSSGS.Solve(order, z, sts, resRemaining);

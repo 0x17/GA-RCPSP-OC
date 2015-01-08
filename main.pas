@@ -6,7 +6,7 @@ procedure Entrypoint();
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
+uses classes, sysutils, tests, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
 {$ifdef MSWINDOWS}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
@@ -230,8 +230,12 @@ begin
   {$endif}
 
   //WriteConvergence(100);
-  WriteOptsAndTime;
+
+  //WriteOptsAndTime;
+
   //SolveCmdLineProj;
+
+  RunTests;
 end;
 
 end.
