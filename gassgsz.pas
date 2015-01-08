@@ -86,15 +86,24 @@ begin
 end;
 
 procedure TActivityListZIndividual.InitializePopulation(var population: IndivArray);
-var i, r: Integer;
+var
+  i, r, t: Integer;
+  z: ResourceProfile;
 begin
   inherited InitializePopulation(population);
+
+  SetLength(z, ps.numRes, ps.numPeriods);
 
   for i := 0 to POP_SIZE * 2 - 1 do
   begin
     SetLength(TActivityListZIndividual(population[i]).z, ps.numRes);
-    for r := 0 to ps.numRes - 1 do
+    for r := 0 to ps.numRes - 1 do begin
       TActivityListZIndividual(population[i]).z[r] := THelper.RandomRangeIncl(0, ps.zmax[r]);
+      for t := 0 to ps.numPeriods-1 do
+        z[r,t] := TActivityListZIndividual(population[i]).z[r];
+    end;
+
+    TFBI.Improve(TActivityListZIndividual(population[i]).order, z);
   end;
 end;
 

@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgsoc, helpers, algens;
+uses classes, sysutils, individual, projectdata, globals, ssgsoc, helpers, algens, ssgs;
 
 function RunGASSGSOC: Double;
 

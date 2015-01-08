@@ -25,7 +25,8 @@ uses
   gassgstau in 'gassgstau.pas',
   gassgszt in 'gassgszt.pas',
   fbi in 'fbi.pas',
-  algens in 'algens.pas';
+  algens in 'algens.pas',
+  tests in 'tests.pas';
 
 begin
   try

@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgsoc, gassgsoc, helpers;
+uses classes, sysutils, individual, projectdata, globals, ssgsoc, gassgsoc, helpers, fbi;
 
 function RunGASSGSTau: Double;
 
@@ -82,8 +82,10 @@ begin
   for i := 0 to POP_SIZE * 2 - 1 do
   begin
     SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
-    for j := 0 to ps.numJobs - 1 do
+    for j := 0 to ps.numJobs - 1 do begin
       TActivityListTauIndividual(population[i]).tau[j] := THelper.RandomRangeIncl(0, 99);
+      TFBI.Improve(TActivityListTauIndividual(population[i]).order, TActivityListTauIndividual(population[i]).tau);
+    end;
   end;
 end;
 

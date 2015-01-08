@@ -112,7 +112,6 @@ begin
   ComputeCumulativeProbabilities(dset, cumProbs);
   dsetSize := ArrSetCardinality(dset);
   r := Random;
-  result := 0;
 
   if r < cumProbs[0] then begin
     result := ArrSetNth(dset, 0);

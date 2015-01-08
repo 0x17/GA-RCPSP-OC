@@ -94,6 +94,8 @@ begin
 
     SetLength(TActivityListOCIndividual(population[i]).fts, ps.numJobs);
     population[i].Fitness;
+
+    TFBI.Improve(TActivityListOCIndividual(population[i]).order, TActivityListOCIndividual(population[i]).oc);
   end;
 
 end;
