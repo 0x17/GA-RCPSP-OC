@@ -26,11 +26,12 @@ begin
   SetLength(sts, 4);
   sts[0] := 0;
   sts[1] := 3;
-  sts[2] := 1;
+  sts[2] := 0; // dup for stab check
   sts[3] := 5;
 
   ps := ProjData.Create;
   ps.numJobs := 4;
+  ps.numPeriods := 100;
   TSSGS.ScheduleToActivityList(sts, order);
   Assert(order[0] = 0);
   Assert(order[1] = 2);

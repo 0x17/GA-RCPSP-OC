@@ -29,14 +29,11 @@ var
   begin
     maxFt := 0;
     result := 0;
-    for k := 0 to ps.numJobs-1 do begin
-      if rem[k] = 0 then
-        continue;
-      if sts[k] + ps.durations[k] >= maxFt then begin
+    for k := 0 to ps.numJobs-1 do
+      if (rem[k] = 1) and (sts[k] + ps.durations[k] >= maxFt) then begin
         maxFt := sts[k] + ps.durations[k];
         result := k;
       end;
-    end;
   end;
 
   function JobWithMinSt: Integer;
@@ -44,14 +41,11 @@ var
   begin
     minSt := ps.numPeriods-1;
     result := 0;
-    for k := 0 to ps.numJobs-1 do begin
-      if rem[k] = 0 then
-        continue;
-      if sts[k] < minSt then begin
+    for k := 0 to ps.numJobs-1 do
+      if (rem[k] = 1) and (sts[k] < minSt) then begin
         minSt := sts[k];
         result := k;
       end;
-    end;
   end;
 
   procedure FillSet;
@@ -81,6 +75,7 @@ var
     end;
   end;
 begin
+  // TODO: Use insertion sort TSSGS.ScheduleToActivityList...
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
 
@@ -90,7 +85,7 @@ begin
 
   FlipSchedule(sts);
   ps.InvertPrecedence;
-  SetOrderToAscSts;
+  TSSGS.ScheduleToActivityList(sts, order);
   TSSGS.Solve(order, z, sts, resRemaining);
 end;
 

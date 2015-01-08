@@ -14,7 +14,6 @@ type TSSGS = class
   class procedure InitializeResidualCapacity(out resRemaining: ResourceProfile);
   class procedure InitializeJobTimes(out sts, fts: JobData);
 
-  class procedure SortActivityListByPriorities(var order: JobData; var pvals: JobData);
   class procedure ScheduleToActivityList(const sts: JobData; out order: JobData);
   class procedure ReverseActivityList(var order: JobData);
 end;
@@ -93,50 +92,32 @@ begin
   SolveCore(order, 1, z, sts, fts, resRemaining);
 end;
 
-class procedure TSSGS.SortActivityListByPriorities(var order: JobData; var pvals: JobData);
-  procedure Helper(iLo, iHi: Integer);
-  var
-    Lo, Hi: Integer;
-    Mid, T: Integer;
-    T2: Integer;
-  begin
-    Lo := iLo;
-    Hi := iHi;
-    Mid := pvals[(Lo + Hi) div 2];
-    repeat
-      while pvals[Lo] < Mid do Inc(Lo);
-      while pvals[Hi] > Mid do Dec(Hi);
-      if Lo <= Hi then
-      begin
-        T := pvals[Lo];
-        pvals[Lo] := pvals[Hi];
-        pvals[Hi] := T;
-
-        T2 := order[Lo];
-        order[Lo] := order[Hi];
-        order[Hi] := T2;
-
-        Inc(Lo);
-        Dec(Hi);
-      end;
-    until Lo > Hi;
-    if Hi > iLo then Helper(iLo, Hi);
-    if Lo < iHi then Helper(Lo, iHi);
-  end;
-begin
-  Helper(0, ps.numJobs-1);
-end;
-
 class procedure TSSGS.ScheduleToActivityList(const sts: JobData; out order: JobData);
 var
-  stsCpy: JobData;
+  rem: JobData;
   j: Integer;
+
+  function JobWithMinSt: Integer;
+  var k, minSt: Integer;
+  begin
+    minSt := ps.numPeriods-1;
+    result := 0;
+    for k := 0 to ps.numJobs-1 do
+      if (rem[k] = 1) and (sts[k] < minSt) then begin
+        minSt := sts[k];
+        result := k;
+      end;
+  end;
 begin
   SetLength(order, ps.numJobs);
+  SetLength(rem, ps.numJobs);
   for j := 0 to ps.numJobs-1 do
-    order[j] := j;
-  stsCpy := Copy(sts, 0, ps.numJobs);
-  SortActivityListByPriorities(order, stsCpy);
+    rem[j] := 1;
+
+  for j := 0 to ps.numJobs-1 do begin
+    order[j] := JobWithMinSt;
+    rem[order[j]] := 0;
+  end;
 end;
 
 class procedure TSSGS.ReverseActivityList(var order: JobData);
