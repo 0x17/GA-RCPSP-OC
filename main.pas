@@ -231,11 +231,11 @@ begin
 
   //WriteConvergence(100);
 
-  //WriteOptsAndTime;
+  WriteOptsAndTime;
 
   //SolveCmdLineProj;
 
-  RunTests;
+  //RunTests;
 end;
 
 end.

@@ -133,7 +133,8 @@ var
   j: Integer;
 begin
   SetLength(order, ps.numJobs);
-  for j := 0 to ps.numJobs-1 do order[j] := j;
+  for j := 0 to ps.numJobs-1 do
+    order[j] := j;
   stsCpy := Copy(sts, 0, ps.numJobs);
   SortActivityListByPriorities(order, stsCpy);
 end;

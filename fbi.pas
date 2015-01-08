@@ -6,22 +6,16 @@ uses projectdata, globals, ssgs, visualizer;
 
 type TFBI = class
   class procedure Improve(var sts: JobData;  const z: ResourceProfile; out resRemaining: ResourceProfile);
-private
-  class procedure FlipSchedule(var sts: JobData);
 end;
 
 implementation
 
-class procedure TFBI.FlipSchedule(var sts: JobData);
+procedure FlipSchedule(var sts: JobData);
 var
   j: Integer;
   oldSts: JobData;
 begin
-  SetLength(oldSts, ps.numJobs);
-
-  for j := 0 to ps.numJobs-1 do
-    oldSts[j] := sts[j];
-
+  oldSts := Copy(sts, 0, ps.numJobs);
   for j := 0 to ps.numJobs-1 do
     sts[j] := oldSts[0] - (oldSts[j] + ps.durations[j]);
 end;
@@ -86,12 +80,10 @@ var
       rem[order[j]] := 0;
     end;
   end;
-
 begin
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
 
-  // Refactor to using generic scheduleToActivityList-method!
   SetOrderToDescFts;
   ps.InvertPrecedence;
   TSSGS.Solve(order, z, sts, resRemaining);
