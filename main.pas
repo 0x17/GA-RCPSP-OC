@@ -119,7 +119,7 @@ begin
 
   WriteStr(fp, headerStr, 1);
 
-  fnames := THelper.ListProjFilesInDir('../Projekte/j30');
+  fnames := THelper.ListProjFilesInDir('../Projekte/j30filtered');
   ctr := 0;
   sw := TStopwatch.Create;
 
@@ -129,7 +129,7 @@ begin
     if not(FileExists(fname+'.PRULES')) then
       raise Exception.Create('Priority rules not found for ' + fname);
 
-    InitProject(fname);
+    InitProject('../Projekte/j30filtered/j3026_8.sm'(*fname*));
 
     if ps.minMs <> ps.maxMs then begin
       line := fname;
@@ -141,6 +141,8 @@ begin
     WriteStr(fp, line, ctr+1);
     WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
     inc(ctr);
+
+    break;
   end;
 
   if USE_EXCEL then
@@ -162,7 +164,7 @@ var
    profit: Double;
 begin
   FillHeuristics(heurs);
-  InitProject('j30filtered/j3011_7.sm');
+  InitProject('../Projekte/j30filtered/j3026_8.sm');
 
   AssignFile(fp, 'convergence.txt');
   Rewrite(fp);
@@ -226,7 +228,7 @@ end;
 procedure Entrypoint;
 begin
   {$ifndef FPC}
-  ReportMemoryLeaksOnShutdown := False;
+  ReportMemoryLeaksOnShutdown := True;
   {$endif}
 
   //WriteConvergence(100);

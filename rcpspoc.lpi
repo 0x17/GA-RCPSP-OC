@@ -120,7 +120,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="20">
+    <Units Count="21">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -221,6 +221,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="algens"/>
       </Unit19>
+      <Unit20>
+        <Filename Value="tests.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="tests"/>
+      </Unit20>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

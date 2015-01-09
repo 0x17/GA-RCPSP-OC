@@ -117,7 +117,9 @@ var argsWchar, cmdWchar: array[0..BUF_SIZE-1] of WideChar;
 begin
   StringToWideChar(cmd, cmdWchar, BUF_SIZE);
   StringToWideChar(args, argsWchar, BUF_SIZE);
+  {$ifdef MSWINDOWS}
   ShellExecuteW(0, 'open', cmdWchar, argsWchar, nil, 1);
+  {$endif}
 end;
 
 //==============================================================================
@@ -140,4 +142,4 @@ begin
 end;
 
 end.
-
+

@@ -82,7 +82,7 @@ end;
 //==============================================================================
 procedure Cross(var population: IndivArray);
 var
-   i, i1, i2, ix1, ix2, ctr, k: Integer;
+   i, i2, ix1, ix2, ctr, k: Integer;
    taken: Array[0..POP_SIZE-1] of Boolean;
 begin
   for i := 0 to POP_SIZE - 1 do
@@ -91,23 +91,18 @@ begin
   // Für jedes zu findene Paar
   for i := 0 to (POP_SIZE div 2) - 1 do
   begin
-    // Wähle i1/i2-ten Index aus noch nicht vergebenen
-    i1 := THelper.RandomRangeIncl(0, POP_SIZE-1-2*i);
-    i2 := THelper.RandomRangeIncl(0, POP_SIZE-1-2*i);
+    // Wähle Index 1 aus besten noch nicht vergebenen
+    ix1 := 0;
+    for ctr := 0 to (POP_SIZE div 2) - 1 do
+      if not(taken[ctr]) then begin
+        ix1 := ctr;
+        break;
+      end;
 
-    if i1 = i2 then continue;
-
-    // Suche i1-ten nicht vergebenen Index raus
-    k := 0;
-    ctr := 0;
-    while ctr < i1 do begin
-      if not(taken[k]) then inc(ctr);
-      inc(k);
-    end;
-    ix1 := k;
-
-    // Such i2-ten nicht vergebenen Index raus
-    k := 0;
+    // Wähle Index 2 zufällig aus schlechteren noch nicht vergebenen
+    // Bestimme Index von i2-tem nicht vergebenem in schlechteren Bereich
+    i2 := THelper.RandomRangeIncl(0, (POP_SIZE div 2)-1-i);
+    k := POP_SIZE div 2;
     ctr := 0;
     while ctr < i2 do begin
       if not(taken[k]) then inc(ctr);
@@ -135,6 +130,10 @@ var
   i, j: Integer;
   fvals: TFValArray;
 begin
+  for i := 0 to POP_SIZE-1 do
+    fvals[i] := -population[i].Fitness;
+  TSortHelper.QuickSortKeys(population, fvals, 0, POP_SIZE-1);
+
   for i := 1 to NUM_GENS do
   begin
     Cross(population);
@@ -148,10 +147,7 @@ begin
       TFitnessComputation.CalcSerial(population, fvals);
 
     TSortHelper.QuickSortKeys(population, fvals, 0, POP_SIZE*2-1);
-
-    //Write('Generation ', i, #13);
   end;
-  //WriteLn;
 
   best := population[0];
   result := population[0].Fitness;
@@ -198,4 +194,4 @@ begin
     fvp[i-six] := -pop[i].Fitness;
 end;
 
-end.
+end.
