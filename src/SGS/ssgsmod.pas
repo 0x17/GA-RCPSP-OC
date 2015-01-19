@@ -20,6 +20,21 @@ begin
   SolveCore(order, b, 1, sts, fts, resRemaining);
 end;
 
+class procedure TSSGSMod.SolveCore(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
+var i, j, t: Integer;
+begin
+  for i := startFrom to ps.numJobs-1 do
+  begin
+    j := order[i];
+
+    t := TSSGS.AllPredsFinished(fts, j);
+    while not ResourceFeasible(b[j], resRemaining, j, t) do
+      inc(t);
+
+    TSSGS.ScheduleJob(j, t, sts, fts, resRemaining);
+  end;
+end;
+
 class function TSSGSMod.ResourceFeasible(const useOc: Integer; const resRemaining: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau, z: Integer;
 begin
@@ -37,21 +52,6 @@ begin
         end;
       end;
   result := true
-end;
-
-class procedure TSSGSMod.SolveCore(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile);
-var i, j, t: Integer;
-begin
-  for i := startFrom to ps.numJobs-1 do
-  begin
-    j := order[i];
-
-    t := TSSGS.AllPredsFinished(fts, j);
-    while not ResourceFeasible(b[j], resRemaining, j, t) do
-      inc(t);
-
-    TSSGS.ScheduleJob(j, t, sts, fts, resRemaining);
-  end;
 end;
 
 end.

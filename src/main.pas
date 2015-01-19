@@ -12,14 +12,30 @@ uses classes, sysutils, tests, projectdata, topsort, profit, helpers, globals, g
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
 
-const NHEURS = 5;
+procedure WriteOptsAndTime; forward;
+procedure WriteConvergence(maxGens: Integer); forward;
 
-type TComputeOpt = function: Double;
-     THeur = record
-       name: String;
-       fn: TComputeOpt;
-     end;
-     THeurs = Array of THeur;
+procedure Entrypoint;
+begin
+  {$ifndef FPC}
+  ReportMemoryLeaksOnShutdown := False;
+  {$endif}
+
+  //WriteConvergence(100);
+
+  WriteOptsAndTime;
+  //RunTests;
+end;
+
+type
+  TComputeOpt = function: Double;
+  THeur = record
+    name: String;
+    fn: TComputeOpt;
+  end;
+  THeurs = Array of THeur;
+
+const NHEURS = 5;
 
 procedure FillHeuristics(out heurs: THeurs);
 begin
@@ -85,7 +101,7 @@ var
     {$endif}
   end;
 
-  procedure WriteStr(var fp: TextFile; s: String; row: Integer);
+  procedure WriteStr(var fp: TextFile; const s: String; row: Integer);
   begin
     WriteLn(s);
     WriteLn(fp, s);
@@ -108,7 +124,7 @@ var
   end;
 
 begin
-  NUM_GENS := 100;
+  numSchedules := 50000;
   FillHeuristics(heurs);
 
   BuildHeaderStr;
@@ -119,7 +135,7 @@ begin
 
   WriteStr(fp, headerStr, 1);
 
-  fnames := THelper.ListProjFilesInDir('../Projekte/j30filtered');
+  fnames := THelper.ListProjFilesInDir('../Projekte/j30');
   ctr := 0;
   sw := TStopwatch.Create;
 
@@ -129,7 +145,7 @@ begin
     if not(FileExists(fname+'.PRULES')) then
       raise Exception.Create('Priority rules not found for ' + fname);
 
-    InitProject('../Projekte/j30filtered/j3026_8.sm'(*fname*));
+    InitProject(fname);
 
     if ps.minMs <> ps.maxMs then begin
       line := fname;
@@ -141,8 +157,6 @@ begin
     WriteStr(fp, line, ctr+1);
     WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
     inc(ctr);
-
-    break;
   end;
 
   if USE_EXCEL then
@@ -164,7 +178,7 @@ var
    profit: Double;
 begin
   FillHeuristics(heurs);
-  InitProject('../Projekte/j30filtered/j3026_8.sm');
+  InitProject('j30filtered/j3011_7.sm');
 
   AssignFile(fp, 'convergence.txt');
   Rewrite(fp);
@@ -176,9 +190,9 @@ begin
   Writeln(fp, headerStr);
 
   for k := 1 to maxGens do begin
-    NUM_GENS := k;
-    WriteLn('Num generations = ' + IntToStr(NUM_GENS));
-    Write(fp, IntToStr(NUM_GENS));
+    numSchedules := k;
+    WriteLn('Num schedules = ' + IntToStr(numSchedules));
+    Write(fp, IntToStr(numSchedules));
     for i := 0 to NHEURS - 1 do begin
       WriteLn(heurs[i].name);
       profit := heurs[i].fn;
@@ -190,54 +204,6 @@ begin
   end;
 
   CloseFile(fp);
-end;
-
-procedure SolveCmdLineProj;
-var
-  fp: TextFile;
-  heurs: THeurs;
-  i: Integer;
-  sw: TStopwatch;
-  time: Cardinal;
-  solvetime, profit: Double;
-  line: String;
-begin
-  NUM_GENS := 100;
-  FillHeuristics(heurs);
-  InitProject(ParamStr(1));
-  AssignFile(fp, ParamStr(2));
-  Rewrite(fp);
-  sw := TStopwatch.Create;
-  line := ParamStr(1);
-
-  for i := 0 to NHEURS - 1 do begin
-    sw.Start;
-    profit := heurs[i].fn;
-    time := sw.Stop;
-    solvetime := time / 1000.0;
-    line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
-  end;
-
-  WriteLn(fp, line);
-  CloseFile(fp);
-
-  FreeAndNil(ps);
-  FreeAndNil(sw);
-end;
-
-procedure Entrypoint;
-begin
-  {$ifndef FPC}
-  ReportMemoryLeaksOnShutdown := True;
-  {$endif}
-
-  //WriteConvergence(100);
-
-  WriteOptsAndTime;
-
-  //SolveCmdLineProj;
-
-  //RunTests;
 end;
 
 end.

@@ -12,15 +12,7 @@ end;
 
 implementation
 
-procedure FlipSchedule(var sts: JobData);
-var
-  j: Integer;
-  oldSts: JobData;
-begin
-  oldSts := Copy(sts, 0, ps.numJobs);
-  for j := 0 to ps.numJobs-1 do
-    sts[j] := oldSts[0] - (oldSts[j] + ps.durations[j]);
-end;
+procedure FlipSchedule(var sts: JobData); forward;
 
 class procedure TFBI.Improve(var sts: JobData; const z: ResourceProfile; out resRemaining: ResourceProfile);
 var
@@ -51,6 +43,29 @@ begin
   TSSGS.ScheduleToActivityList(sts, order);
 end;
 
+procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile); forward;
+
+class procedure TFBI.Improve(var order: JobData; const tau: JobData);
+var
+  sts: JobData;
+  z, resRem: ResourceProfile;
+begin
+  TSSGSOC.SolveWithTau(order, tau, sts);
+  InferProfileFromSchedule(sts, z, resRem);
+  Improve(sts, z, resRem);
+  TSSGS.ScheduleToActivityList(sts, order);
+end;
+
+procedure FlipSchedule(var sts: JobData);
+var
+  j: Integer;
+  oldSts: JobData;
+begin
+  oldSts := Copy(sts, 0, ps.numJobs);
+  for j := 0 to ps.numJobs-1 do
+    sts[j] := oldSts[0] - (oldSts[j] + ps.durations[j]);
+end;
+
 procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
 var
   r, t: Integer;
@@ -73,17 +88,6 @@ begin
   for r := 0 to ps.numRes-1 do
     for t := 0 to ps.numPeriods-1 do
       z[r,t] := Max(0, -resRem[r,t]);
-end;
-
-class procedure TFBI.Improve(var order: JobData; const tau: JobData);
-var
-  sts: JobData;
-  z, resRem: ResourceProfile;
-begin
-  TSSGSOC.SolveWithTau(order, tau, sts);
-  InferProfileFromSchedule(sts, z, resRem);
-  Improve(sts, z, resRem);
-  TSSGS.ScheduleToActivityList(sts, order);
 end;
 
 end.

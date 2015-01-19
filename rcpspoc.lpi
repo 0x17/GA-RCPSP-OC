@@ -30,7 +30,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -57,7 +57,6 @@
           </Linking>
           <Other>
             <Verbosity>
-              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
             <CompilerMessages>
@@ -76,7 +75,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -99,7 +98,6 @@
           </Linking>
           <Other>
             <Verbosity>
-              <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
             <CompilerMessages>
@@ -127,102 +125,102 @@
         <UnitName Value="rcpspoc"/>
       </Unit0>
       <Unit1>
-        <Filename Value="projectdata.pas"/>
+        <Filename Value="src\projectdata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="projectdata"/>
       </Unit1>
       <Unit2>
-        <Filename Value="ssgs.pas"/>
+        <Filename Value="src\SGS\ssgs.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgs"/>
       </Unit2>
       <Unit3>
-        <Filename Value="topsort.pas"/>
+        <Filename Value="src\topsort.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="topsort"/>
       </Unit3>
       <Unit4>
-        <Filename Value="profit.pas"/>
+        <Filename Value="src\profit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="profit"/>
       </Unit4>
       <Unit5>
-        <Filename Value="helpers.pas"/>
+        <Filename Value="src\helpers.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="helpers"/>
       </Unit5>
       <Unit6>
-        <Filename Value="ssgsoc.pas"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsoc"/>
       </Unit6>
       <Unit7>
-        <Filename Value="main.pas"/>
+        <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
       </Unit7>
       <Unit8>
-        <Filename Value="ssgsmod.pas"/>
+        <Filename Value="src\SGS\ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsmod"/>
       </Unit8>
       <Unit9>
-        <Filename Value="resprofiles.pas"/>
+        <Filename Value="src\resprofiles.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="resprofiles"/>
       </Unit9>
       <Unit10>
-        <Filename Value="individual.pas"/>
+        <Filename Value="src\individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
       </Unit10>
       <Unit11>
-        <Filename Value="esschedule.pas"/>
+        <Filename Value="src\SGS\esschedule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="esschedule"/>
       </Unit11>
       <Unit12>
-        <Filename Value="globals.pas"/>
+        <Filename Value="src\globals.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="globals"/>
       </Unit12>
       <Unit13>
-        <Filename Value="gassgsoc.pas"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsoc"/>
       </Unit13>
       <Unit14>
-        <Filename Value="gassgsbeta.pas"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsbeta"/>
       </Unit14>
       <Unit15>
-        <Filename Value="gassgstau.pas"/>
+        <Filename Value="src\GeneticAlgorithms\gassgstau.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgstau"/>
       </Unit15>
       <Unit16>
-        <Filename Value="gassgsz.pas"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsz.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsz"/>
       </Unit16>
       <Unit17>
-        <Filename Value="gassgszt.pas"/>
+        <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
       </Unit17>
       <Unit18>
-        <Filename Value="fbi.pas"/>
+        <Filename Value="src\fbi.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fbi"/>
       </Unit18>
       <Unit19>
-        <Filename Value="algens.pas"/>
+        <Filename Value="src\algens.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="algens"/>
       </Unit19>
       <Unit20>
-        <Filename Value="tests.pas"/>
+        <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
       </Unit20>
@@ -236,7 +234,6 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\;C:\Users\a.schnabel\Downloads\omnithreadlibrary-read-only\src\"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
@@ -252,7 +249,6 @@
     </CodeGeneration>
     <Other>
       <Verbosity>
-        <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
         <ShowHintsForSenderNotUsed Value="True"/>
       </Verbosity>
       <CompilerMessages>

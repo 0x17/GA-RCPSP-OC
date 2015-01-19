@@ -39,6 +39,8 @@ type
     procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
     function OrderFeasible(const order: JobData): Boolean;
 
+    function ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
+
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
     procedure ParseReqDur(var fp: TextFile);
@@ -195,8 +197,7 @@ begin
 end;
 
 procedure ProjData.CheckSchedulePrecedenceFeasibility(const sts: JobData);
-var
-  i, j: Integer;
+var i, j: Integer;
 begin
   for j := 0 to numJobs-1 do
     for i := 0 to numJobs-1 do
@@ -214,6 +215,17 @@ begin
         result := False;
         Exit;
       end;
+end;
+
+function ProjData.ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
+var
+  r: Integer;
+  sumRatios: Double;
+begin
+  sumRatios := 0;
+  for r := 0 to numRes - 1 do
+    sumRatios := sumRatios + (resRemaining[r,t] + zmax[r])/(capacities[r] + zmax[r]);
+  result := 1 / numRes * sumRatios;
 end;
 
 end.
