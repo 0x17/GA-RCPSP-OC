@@ -2,7 +2,7 @@ unit gassgszt;
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc, fbi;
+uses projectdata, individual, gassgsoc;
 
 function RunGASSGSZT: Double;
 
@@ -16,6 +16,8 @@ type TActivityListOCIndividual = class(TActivityListIndividual)
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgs, helpers, profit, fbi;
 
 function RunGASSGSZT: Double;
 var
@@ -88,7 +90,7 @@ var
 begin
   TSSGS.Solve(order, oc, sts, resRemaining);
   TFBI.Improve(sts, oc, resRemaining);
-  result := CalcProfit(sts, resRemaining);
+  result := TProfit.CalcProfit(sts, resRemaining);
 
   for j := 0 to ps.numJobs-1 do
     fts[j] := sts[j] + ps.durations[j];

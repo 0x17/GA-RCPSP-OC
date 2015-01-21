@@ -2,7 +2,7 @@ unit ssgsmod;
 
 interface
 
-uses classes, sysutils, projectdata, globals, ssgs;
+uses projectdata;
 
 type TSSGSMod = class
   class procedure Solve(const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
@@ -11,6 +11,8 @@ type TSSGSMod = class
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgs;
 
 class procedure TSSGSMod.Solve(const order, b: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 var fts: JobData;

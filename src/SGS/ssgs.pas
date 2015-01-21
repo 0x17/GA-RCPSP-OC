@@ -2,7 +2,7 @@ unit ssgs;
 
 interface
 
-uses classes, sysutils, projectdata, globals;
+uses projectdata;
 
 type
   TDecideFunc = function(const dset: JobData): Integer;
@@ -23,6 +23,8 @@ type
   end;
 
 implementation
+
+uses classes, sysutils, globals;
 
 class function TSSGS.ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
 var r, tau: Integer;
@@ -180,4 +182,4 @@ begin
 end;
 
 end.
-
+

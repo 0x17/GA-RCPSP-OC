@@ -2,7 +2,7 @@ unit algens;
 
 interface
 
-uses projectdata, globals, topsort, math;
+uses projectdata;
 
 type
   IALGenerator = class
@@ -36,6 +36,8 @@ type
   end;
 
 implementation
+
+uses globals, topsort {$ifndef FPC},math{$endif};
 
 //==============================================================================
 
@@ -206,4 +208,4 @@ begin
 end;
 
 end.
-
+

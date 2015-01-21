@@ -9,6 +9,7 @@ uses
   main in 'src/main.pas',
   globals in 'src/globals.pas',
   helpers in 'src/helpers.pas',
+  peakcrossover in 'src/peakcrossover.pas',
   profit in 'src/profit.pas',
   projectdata in 'src/projectdata.pas',
   ssgs in 'src/SGS/ssgs.pas',
@@ -28,9 +29,12 @@ uses
   algens in 'src/algens.pas',
   tests in 'src/tests.pas';
 
+var main: TMain;
 begin
   try
-    Entrypoint();
+    main := TMain.Create;
+    main.Entrypoint;
+    main.Free;
   except
     on E: Exception do begin
       Writeln(E.ClassName, ': ', E.Message);

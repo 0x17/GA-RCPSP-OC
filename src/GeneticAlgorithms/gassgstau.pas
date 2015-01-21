@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgsoc, gassgsoc, helpers, fbi;
+uses projectdata, individual, gassgsoc;
 
 function RunGASSGSTau: Double;
 
@@ -20,6 +20,8 @@ protected
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgsoc, helpers, fbi;
 
 function RunGASSGSTau: Double;
 var

@@ -2,7 +2,7 @@ unit gassgsz;
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgs, helpers, profit, gassgsoc, fbi;
+uses individual, gassgsoc, projectdata;
 
 function RunGASSGSZ: Double;
 
@@ -15,6 +15,8 @@ type TActivityListZIndividual = class(TActivityListIndividual)
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgs, helpers, profit, fbi;
 
 function RunGASSGSZ: Double;
 var
@@ -91,7 +93,7 @@ begin
 
   TSSGS.Solve(order, zfilled, sts, resRemaining);
   TFBI.Improve(sts, zfilled, resRemaining);
-  result := CalcProfit(sts, resRemaining);
+  result := TProfit.CalcProfit(sts, resRemaining);
 end;
 
 procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);

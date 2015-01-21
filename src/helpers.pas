@@ -2,13 +2,7 @@ unit helpers;
 
 interface
 
-uses classes, sysutils, strutils
-
-{$ifdef MSWINDOWS}
-  {$ifdef FPC},windows{$else},math,windows,shellapi{$endif}
-{$else}
-  ,dateutils
-{$endif};
+uses classes;
 
 type
   ByteMx2D = Array of Array of Byte;
@@ -31,6 +25,13 @@ private
 end;
 
 implementation
+
+uses sysutils, strutils
+{$ifdef MSWINDOWS}
+  {$ifdef FPC},windows{$else},math,windows,shellapi{$endif}
+{$else}
+  ,dateutils
+{$endif};
 
 const PATH_SEP = {$ifdef MSWINDOWS}'\'{$else}'/'{$endif};
 
@@ -142,4 +143,4 @@ begin
 end;
 
 end.
-
+

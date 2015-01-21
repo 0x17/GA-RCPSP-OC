@@ -2,7 +2,7 @@ unit individual;
 
 interface
 
-uses globals, helpers, classes, sysutils;
+uses classes;
 
 type
   IIndividual = class; // forward decl.
@@ -40,6 +40,8 @@ function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: 
 procedure FreePopulation(var population: IndivArray);
 
 implementation
+
+uses globals, helpers, sysutils;
 
 const NUM_THREADS = 8;
 
@@ -204,8 +206,7 @@ begin
 end;
 
 procedure TCalcFitnessThread.Execute;
-var
-  i: Integer;
+var i: Integer;
 begin
   SetLength(fvp, eix-six+1);
   for i := six to eix do

@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, individual, projectdata, globals, ssgsoc, helpers, algens;
+uses projectdata, individual;
 
 function RunGASSGSOC: Double;
 
@@ -14,6 +14,7 @@ type TActivityListIndividual = class(IIndividual)
   function Fitness: Double; override;
 
   function OnePointCrossover(const mother, father: TActivityListIndividual): Integer;
+  procedure PeakCrossover(const mother, father: TActivityListIndividual);
 
 protected
   procedure Swap(var lambda: JobData; i1, i2: Integer); inline;
@@ -25,6 +26,8 @@ protected
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgsoc, helpers, algens, peakcrossover;
 
 procedure FillNeighbourhood(const origin: IIndividual; var population: IndivArray); forward;
 
@@ -103,6 +106,18 @@ begin
   InheritRemaining(result, father);
 end;
 
+procedure TActivityListIndividual.PeakCrossover(const mother, father: TActivityListIndividual);
+var
+  motherSts: JobData;
+  resRem, z: ResourceProfile;
+  peaks: JobDataArray;
+begin
+  // TODO: Implement!
+  TSSGSOC.Solve(mother.order, motherSts);
+  ps.InferProfileFromSchedule(motherSts, resRem, z);
+  TPeakCrossover.CollectPeaks(motherSts, resRem, peaks);
+end;
+
 procedure TActivityListIndividual.Swap(var lambda: JobData; i1, i2: Integer);
 var
   tmp: Integer;
@@ -157,4 +172,4 @@ begin
 end;
 
 end.
-
+

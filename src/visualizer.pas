@@ -20,10 +20,14 @@ end;
 implementation
 
 class procedure TVisualizer.Mute;
-begin quiet := True; end;
+begin
+  quiet := True;
+end;
 
 class procedure TVisualizer.Unmute;
-begin quiet := False; end;
+begin
+  quiet := False;
+end;
 
 class procedure TVisualizer.VisualizeSchedule(const sts: JobData; filename: String);
 {$ifndef FPC}
@@ -125,4 +129,4 @@ begin
   THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\Acrobat.exe', filename+'.pdf');
 end;
 
-end.
+end.

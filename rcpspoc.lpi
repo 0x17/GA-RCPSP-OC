@@ -118,7 +118,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="21">
+    <Units Count="23">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -224,6 +224,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
       </Unit20>
+      <Unit21>
+        <Filename Value="src\visualizer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="visualizer"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="src\peakcrossover.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="peakcrossover"/>
+      </Unit22>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

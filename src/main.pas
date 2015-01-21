@@ -2,7 +2,25 @@ unit main;
 
 interface
 
-procedure Entrypoint();
+type TMain = class
+  constructor Create;
+  procedure Entrypoint();
+private
+  const NHEURS = 5;
+  type
+    TComputeOpt = function: Double;
+    THeur = record
+      name: String;
+      fn: TComputeOpt;
+    end;
+    THeurs = Array of THeur;
+
+  var heurs: THeurs;
+
+  procedure InitProject(const fname: String);
+  procedure WriteOptsAndTime(const path, outFname: String);
+  procedure WriteConvergence(const projFname, outFname: String; maxGens: Integer);
+end;
 
 implementation
 
@@ -12,32 +30,7 @@ uses classes, sysutils, tests, projectdata, topsort, profit, helpers, globals, g
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
 
-procedure WriteOptsAndTime; forward;
-procedure WriteConvergence(maxGens: Integer); forward;
-
-procedure Entrypoint;
-begin
-  {$ifndef FPC}
-  ReportMemoryLeaksOnShutdown := False;
-  {$endif}
-
-  //WriteConvergence(100);
-
-  WriteOptsAndTime;
-  //RunTests;
-end;
-
-type
-  TComputeOpt = function: Double;
-  THeur = record
-    name: String;
-    fn: TComputeOpt;
-  end;
-  THeurs = Array of THeur;
-
-const NHEURS = 5;
-
-procedure FillHeuristics(out heurs: THeurs);
+constructor TMain.Create;
 begin
   SetLength(heurs, NHEURS);
   heurs[0].name := 'GA-SSGS-Zrt';
@@ -52,17 +45,28 @@ begin
   heurs[4].fn := @RunGASSGSOC;
 end;
 
-procedure InitProject(fname: String);
+procedure TMain.Entrypoint;
+begin
+  {$ifndef FPC}
+  ReportMemoryLeaksOnShutdown := False;
+  {$endif}
+
+  //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
+  //WriteOptsAndTime('../Projekte/j30', 'heursOptsAndTime.txt');
+  RunTests;
+end;
+
+procedure TMain.InitProject(const fname: String);
 begin
   if ps <> nil then FreeAndNil(ps);
   ps := ProjData.Create;
   ps.LoadFromFile(fname);
   TTopSort.Sort(ps.topOrder);
-  CalcMinMaxMakespanCosts;
+  TProfit.CalcMinMaxMakespanCosts;
   ps.ComputeESFTS;
 end;
 
-procedure WriteOptsAndTime;
+procedure TMain.WriteOptsAndTime(const path, outFname: String);
 var
   fnames: TStringList;
   headerStr, line, fname: String;
@@ -72,7 +76,6 @@ var
   ctr, fileCount, i: Integer;
   excObj, excWb, excSheet: Variant;
   solvetime, profit: Double;
-  heurs: THeurs;
 
   procedure BuildHeaderStr;
   var i: Integer;
@@ -125,17 +128,16 @@ var
 
 begin
   numSchedules := 50000;
-  FillHeuristics(heurs);
 
   BuildHeaderStr;
   ExcelPreamble;
 
-  AssignFile(fp, 'heurOptsAndTime.txt');
+  AssignFile(fp, outFname);
   Rewrite(fp);
 
   WriteStr(fp, headerStr, 1);
 
-  fnames := THelper.ListProjFilesInDir('../Projekte/j30');
+  fnames := THelper.ListProjFilesInDir(path);
   ctr := 0;
   sw := TStopwatch.Create;
 
@@ -169,7 +171,7 @@ begin
   FreeAndNil(ps);
 end;
 
-procedure WriteConvergence(maxGens: Integer);
+procedure TMain.WriteConvergence(const projFname, outFname: String; maxGens: Integer);
 var
    fp: TextFile;
    headerStr: String;
@@ -177,10 +179,9 @@ var
    i, k: Integer;
    profit: Double;
 begin
-  FillHeuristics(heurs);
-  InitProject('j30filtered/j3011_7.sm');
+  InitProject(projFname);
 
-  AssignFile(fp, 'convergence.txt');
+  AssignFile(fp, outFname);
   Rewrite(fp);
 
   headerStr := 'ngens';

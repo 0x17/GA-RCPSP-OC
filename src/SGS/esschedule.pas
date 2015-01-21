@@ -2,13 +2,15 @@ unit esschedule;
 
 interface
 
-uses classes, sysutils, projectdata, globals, ssgs;
+uses projectdata;
 
 type TESSchedule = class
   class procedure Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 end;
 
 implementation
+
+uses classes, sysutils, globals, ssgs;
 
 class procedure TESSchedule.Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile);
 var

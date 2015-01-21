@@ -2,7 +2,7 @@
 
 interface
 
-uses gassgsoc, individual, projectdata, globals, helpers, ssgsmod, profit;
+uses gassgsoc, projectdata, individual;
 
 function RunGASSGSBeta: Double;
 
@@ -19,6 +19,8 @@ protected
 end;
 
 implementation
+
+uses globals, helpers, ssgsmod, profit;
 
 function RunGASSGSBeta: Double;
 var
@@ -74,7 +76,7 @@ var
   resRemaining: ResourceProfile;
 begin
   TSSGSMod.Solve(order, b, sts, resRemaining);
-  result := CalcProfit(sts, resRemaining);
+  result := TProfit.CalcProfit(sts, resRemaining);
 end;
 
 procedure TActivityListBetaIndividual.Swap(i1, i2: Integer);

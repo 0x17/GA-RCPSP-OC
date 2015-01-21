@@ -2,7 +2,7 @@ unit resprofiles;
 
 interface
 
-uses projectdata, globals;
+uses projectdata;
 
 type TResProfiles = class
   class procedure ZeroOC(out z: ResourceProfile);
@@ -10,6 +10,8 @@ type TResProfiles = class
 end;
 
 implementation
+
+uses globals;
 
 class procedure TResProfiles.ZeroOC(out z: ResourceProfile);
 var r, t: Integer;
@@ -29,4 +31,4 @@ begin
           z[r,t] := ps.zmax[r];
 end;
 
-end.
+end.

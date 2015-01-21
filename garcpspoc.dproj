@@ -5,7 +5,7 @@
         <FrameworkType>None</FrameworkType>
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -150,27 +150,28 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="main.pas"/>
-        <DCCReference Include="globals.pas"/>
-        <DCCReference Include="helpers.pas"/>
-        <DCCReference Include="profit.pas"/>
-        <DCCReference Include="projectdata.pas"/>
-        <DCCReference Include="ssgs.pas"/>
-        <DCCReference Include="ssgsmod.pas"/>
-        <DCCReference Include="ssgsoc.pas"/>
-        <DCCReference Include="gassgsoc.pas"/>
-        <DCCReference Include="gassgsbeta.pas"/>
-        <DCCReference Include="topsort.pas"/>
-        <DCCReference Include="esschedule.pas"/>
-        <DCCReference Include="visualizer.pas"/>
-        <DCCReference Include="resprofiles.pas"/>
-        <DCCReference Include="individual.pas"/>
-        <DCCReference Include="gassgsz.pas"/>
-        <DCCReference Include="gassgstau.pas"/>
-        <DCCReference Include="gassgszt.pas"/>
-        <DCCReference Include="fbi.pas"/>
-        <DCCReference Include="algens.pas"/>
-        <DCCReference Include="tests.pas"/>
+        <DCCReference Include="src\main.pas"/>
+        <DCCReference Include="src\globals.pas"/>
+        <DCCReference Include="src\helpers.pas"/>
+        <DCCReference Include="src\peakcrossover.pas"/>
+        <DCCReference Include="src\profit.pas"/>
+        <DCCReference Include="src\projectdata.pas"/>
+        <DCCReference Include="src\SGS\ssgs.pas"/>
+        <DCCReference Include="src\SGS\ssgsmod.pas"/>
+        <DCCReference Include="src\SGS\ssgsoc.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\gassgsoc.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <DCCReference Include="src\topsort.pas"/>
+        <DCCReference Include="src\SGS\esschedule.pas"/>
+        <DCCReference Include="src\visualizer.pas"/>
+        <DCCReference Include="src\resprofiles.pas"/>
+        <DCCReference Include="src\individual.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\gassgsz.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\gassgstau.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\gassgszt.pas"/>
+        <DCCReference Include="src\fbi.pas"/>
+        <DCCReference Include="src\algens.pas"/>
+        <DCCReference Include="src\tests.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

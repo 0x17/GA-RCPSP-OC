@@ -2,17 +2,22 @@
 
 interface
 
-uses sysutils, projectdata, ssgs, esschedule, math, resprofiles, globals;
+uses projectdata;
 
-function CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
-procedure CalcMinMaxMakespanCosts;
-procedure ComputeRevenueBuffer;
+type TProfit = class
+  class function CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
+  class procedure CalcMinMaxMakespanCosts;
+  class procedure ComputeRevenueBuffer;
+private
+  class function TotalOCCosts(const resRemaining: ResourceProfile): Double;
+  class function Revenue(makespan: Integer): Double;
+end;
 
 implementation
 
-function TotalOCCosts(const resRemaining: ResourceProfile): Double; forward;
+uses sysutils, ssgs, esschedule, math, resprofiles, globals;
 
-procedure CalcMinMaxMakespanCosts;
+class procedure TProfit.CalcMinMaxMakespanCosts;
 var
   sts: JobData;
   z, resRemaining: ResourceProfile;
@@ -52,12 +57,12 @@ begin
   ps.maxMs := sts[ps.numJobs-1];
 end;
 
-function Revenue(makespan: Integer): Double;
+class function TProfit.Revenue(makespan: Integer): Double;
 begin
   result := ps.maxCosts - ps.maxCosts / Power(ps.maxMs - ps.minMs, 2) * Power(makespan - ps.minMs, 2);
 end;
 
-function TotalOCCosts(const resRemaining: ResourceProfile): Double;
+class function TProfit.TotalOCCosts(const resRemaining: ResourceProfile): Double;
 var r, t: Integer;
 begin
   result := 0.0;
@@ -67,12 +72,12 @@ begin
         result := result - resRemaining[r,t] * ps.kappa[r];
 end;
 
-function CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
+class function TProfit.CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
 begin
   result := Revenue(sts[ps.numJobs-1]) - TotalOCCosts(resRemaining);
 end;
 
-procedure ComputeRevenueBuffer;
+class procedure TProfit.ComputeRevenueBuffer;
 var t: Integer;
 begin
   SetLength(ps.revenueBuf, ps.numPeriods);

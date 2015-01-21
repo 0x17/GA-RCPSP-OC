@@ -7,7 +7,7 @@
 
 interface
 
-uses classes, sysutils, projectdata, profit, ssgs, globals, resprofiles, math;
+uses projectdata;
 
 type TSSGSOC = class
   class function SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
@@ -17,6 +17,8 @@ private
 end;
 
 implementation
+
+uses classes, sysutils, profit, ssgs, globals, resprofiles, math;
 
 class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
 begin
@@ -70,7 +72,7 @@ begin
 
         for t := tauPrecFeas to tauResFeas do
           if TSSGS.ResourceFeasible(resRemaining, maxOc, j, t) then begin
-            //resRemainingTmp := Copy(resRemaining, 0, SizeOf(Integer)*ps.numRes*ps.numPeriods);
+            //resRemainingTmp := Copy(resRemaining, 0, ps.numRes*ps.numPeriods);
             for k1 := 0 to ps.numRes - 1 do
                 for k2 := 0 to ps.numPeriods - 1 do
                     resRemainingTmp[k1,k2] := resRemaining[k1,k2];
@@ -78,7 +80,7 @@ begin
             TSSGS.ScheduleJob(j, t, sts, fts, resRemainingTmp);
             TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
 
-            p := CalcProfit(sts, resRemainingTmp);
+            p := TProfit.CalcProfit(sts, resRemainingTmp);
             if p > bestProfit then
             begin
               bestProfit := p;
@@ -97,8 +99,8 @@ begin
   end;
 
   if tau[0] = -1 then result := bestProfit
-  else result := CalcProfit(sts, resRemaining);
+  else result := TProfit.CalcProfit(sts, resRemaining);
 end;
 
 end.
-
+

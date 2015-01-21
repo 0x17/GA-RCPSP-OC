@@ -2,11 +2,11 @@ unit tests;
 
 interface
 
-uses projectdata, ssgs, globals, sysutils, topsort, profit, resprofiles;
-
 procedure RunTests;
 
 implementation
+
+uses projectdata, ssgs, globals, sysutils, topsort, profit, resprofiles, peakcrossover;
 
 procedure InitExampleProject;
 const FNAME = '../Projekte/j30filtered/j3011_7.sm';
@@ -15,7 +15,7 @@ begin
   ps := ProjData.Create;
   ps.LoadFromFile(fname);
   TTopSort.Sort(ps.topOrder);
-  CalcMinMaxMakespanCosts;
+  TProfit.CalcMinMaxMakespanCosts;
   ps.ComputeESFTS;
 end;
 
@@ -76,13 +76,27 @@ begin
   // TODO: Add asserts for sts
 end;
 
+procedure TestCollectPeaks;
+var
+  order, sts: JobData;
+  peaks: JobDataArray;
+  resRem, z: ResourceProfile;
+begin
+  order := Copy(ps.topOrder, 0, ps.numJobs);
+  TResProfiles.ZeroOC(z);
+  TSSGS.Solve(order, z, sts, resRem);
+  ps.InferProfileFromSchedule(sts, z, resRem);
+  TPeakCrossover.CollectPeaks(sts, resRem, peaks);
+end;
+
 procedure RunTests;
 begin
   InitExampleProject;
   TestScheduleToActivityList;
   TestReverseActivityList;
   TestPriorityRuleSGS;
+  TestCollectPeaks;
   FreeAndNil(ps);
 end;
 
-end.
+end.

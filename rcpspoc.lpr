@@ -4,7 +4,10 @@ program rcpspoc;
 
 uses {$ifndef Win32}cthreads,{$endif} main;
 
+var main: TMain;
 begin
-  Entrypoint();
+  main := TMain.Create;
+  main.Entrypoint();
+  main.Free;
 end.
 

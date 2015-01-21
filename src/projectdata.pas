@@ -2,7 +2,7 @@
 
 interface
 
-uses classes, sysutils, helpers;
+uses helpers;
 
 type
   JobData = Array of Integer;
@@ -39,6 +39,7 @@ type
     procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
     function OrderFeasible(const order: JobData): Boolean;
 
+    procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
     function ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
 
   private
@@ -47,6 +48,8 @@ type
   end;
 
 implementation
+
+uses classes, sysutils, math;
 
 const lineFeed = #10;
 
@@ -215,6 +218,30 @@ begin
         result := False;
         Exit;
       end;
+end;
+
+procedure ProjData.InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
+var
+  r, t: Integer;
+  j: Integer;
+begin
+  SetLength(resRem, numRes, numPeriods);
+  SetLength(z, numRes, numPeriods);
+
+  for r := 0 to numRes-1 do
+    for t := 0 to numPeriods-1 do
+      resRem[r,t] := capacities[r];
+
+
+  for j := 0 to numJobs-1 do
+    for r := 0 to numRes-1 do
+      if demands[j,r] > 0 then
+        for t := sts[j] to sts[j]+durations[j]-1 do
+          resRem[r,t] := resRem[r,t] - demands[j,r];
+
+  for r := 0 to numRes-1 do
+    for t := 0 to numPeriods-1 do
+      z[r,t] := Max(0, -resRem[r,t]);
 end;
 
 function ProjData.ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
