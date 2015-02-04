@@ -21,7 +21,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgsoc, helpers, fbi;
+uses classes, sysutils, globals, ssgsoc, helpers;
 
 function AllocateIndividual: IIndividual;
 begin
@@ -38,15 +38,16 @@ var i, j: Integer;
 begin
   inherited InitializePopulation(population);
 
+  // Initialize parents
   for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
     for j := 0 to ps.numJobs - 1 do begin
       TActivityListTauIndividual(population[i]).tau[j] := THelper.RandomRangeIncl(0, 99);
-      TFBI.Improve(TActivityListTauIndividual(population[i]).order, TActivityListTauIndividual(population[i]).tau);
     end;
   end;
 
+  // Initialize children without information
   for i := Length(population) div 2 to Length(population) - 1 do
     SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
 end;

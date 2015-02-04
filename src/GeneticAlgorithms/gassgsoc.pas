@@ -28,7 +28,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgsoc, helpers, algenerator, naive, bbrsm, peakcrossover;
+uses classes, sysutils, globals, ssgsoc, helpers, algenerator, bbrsm, rbbrsm;
 
 function AllocateIndividual: IIndividual;
 begin
@@ -59,7 +59,7 @@ var
 begin
   inherited InitializePopulation(population);
 
-  alg := NaiveGenerator.Create; //RBBRSGenerator.Create;
+  alg := RBBRSGenerator.Create;
   for i := 0 to Length(population) div 2 - 1 do
     alg.PickSample(TActivityListIndividual(population[i]).order);
   FreeAndNil(alg);
@@ -74,9 +74,6 @@ begin
   daughterC := TActivityListIndividual(daughter);
   sonC := TActivityListIndividual(son);
   otherC := TActivityListIndividual(other);
-
-//  TPeakCrossover.Crossover(self, otherC, daughterC);
-//  TPeakCrossover.Crossover(otherC, self, sonC);
 
   daughterC.OnePointCrossover(self, otherC);
   sonC.OnePointCrossover(otherC, self);

@@ -242,7 +242,7 @@
       <Unit24>
         <Filename Value="src\Sampling\naive.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="naivespl"/>
+        <UnitName Value="naive"/>
       </Unit24>
       <Unit25>
         <Filename Value="src\Sampling\rbbrsm.pas"/>

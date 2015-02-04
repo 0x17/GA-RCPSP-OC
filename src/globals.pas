@@ -8,9 +8,8 @@ const USE_EXCEL = False;
       POP_SIZE = 80;
       PROB_MUTATE = 5;
 
-var numSchedules: Integer;
-
 var ps: ProjData;
+    numSchedules: Integer;
 
 implementation
 

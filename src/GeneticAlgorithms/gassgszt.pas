@@ -17,7 +17,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgs, helpers, profit, fbi;
+uses classes, sysutils, globals, ssgs, helpers, profit;
 
 function AllocateIndividual: IIndividual;
 begin
@@ -34,6 +34,7 @@ var i, r, t: Integer;
 begin
   inherited InitializePopulation(population);
 
+  // Initialize parents
   for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListOCIndividual(population[i]).oc, ps.numRes, ps.numPeriods);
@@ -43,19 +44,17 @@ begin
 
     SetLength(TActivityListOCIndividual(population[i]).fts, ps.numJobs);
 
-    //population[i].Fitness;
-    //TFBI.Improve(TActivityListOCIndividual(population[i]).order, TActivityListOCIndividual(population[i]).oc);
+    population[i].Fitness;
   end;
 
+  // Initialize children without information
   for i := Length(population) div 2 to Length(population) - 1 do begin
     SetLength(TActivityListOCIndividual(population[i]).oc, ps.numRes, ps.numPeriods);
     SetLength(TActivityListOCIndividual(population[i]).fts, ps.numJobs);
-  end;
+  end
 end;
 
 procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
-procedure OnePointCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
-procedure RandomCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
 
 procedure TActivityListOCIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 var otherC, daughterC, sonC: TActivityListOCIndividual;
@@ -64,10 +63,8 @@ begin
   daughterC := TActivityListOCIndividual(daughter);
   sonC := TActivityListOCIndividual(son);
 
-//  OnePointCrossoverSmart(self, otherC, daughterC);
-//  OnePointCrossoverSmart(otherC, self, sonC);
-  RandomCrossoverOC(self, otherC, daughterC);
-  RandomCrossoverOC(otherC, self, sonC);
+  OnePointCrossoverSmart(self, otherC, daughterC);
+  OnePointCrossoverSmart(otherC, self, sonC);
 end;
 
 procedure MutateOC(var oc: ResourceProfile); forward;
@@ -82,7 +79,6 @@ function TActivityListOCIndividual.Fitness: Double;
 var j: Integer;
 begin
   TSSGS.Solve(order, oc, sts, resRem);
-  //TFBI.Improve(sts, oc, resRem);
   result := TProfit.CalcProfit(sts, resRem);
 
   for j := 0 to ps.numJobs-1 do

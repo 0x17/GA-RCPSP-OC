@@ -154,7 +154,7 @@ var
 begin
   SetLength(taken, Length(population) div 2);
   for i := 0 to Length(taken) - 1 do
-      taken[i] := false;
+    taken[i] := false;
   popSize := Length(population) div 2;
 
   // Für jedes zu findene Paar

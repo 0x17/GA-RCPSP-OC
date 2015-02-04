@@ -40,6 +40,7 @@ begin
 
   SetLength(z, ps.numRes, ps.numPeriods);
 
+  // Initialize parents
   for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListZIndividual(population[i]).z, ps.numRes);
@@ -48,10 +49,9 @@ begin
       for t := 0 to ps.numPeriods-1 do
         z[r,t] := TActivityListZIndividual(population[i]).z[r];
     end;
-
-    //TFBI.Improve(TActivityListZIndividual(population[i]).order, z);
   end;
 
+  // Initialize children without information
   for i := Length(population) div 2 to Length(population) - 1 do
     SetLength(TActivityListZIndividual(population[i]).z, ps.numRes);
 end;
@@ -67,6 +67,7 @@ begin
   otherC := TActivityListZIndividual(other);
   daughterC := TActivityListZIndividual(daughter);
   sonC := TActivityListZIndividual(son);
+
   RandomCrossoverOC(z, otherC.z, daughterC.z);
   RandomCrossoverOC(otherC.z, z, sonC.z);
 end;
@@ -88,7 +89,6 @@ begin
       zfilled[r,t] := z[r];
 
   TSSGS.Solve(order, zfilled, sts, resRem);
-  //TFBI.Improve(sts, zfilled, resRem);
   result := TProfit.CalcProfit(sts, resRem);
 end;
 
