@@ -5,7 +5,7 @@
         <FrameworkType>None</FrameworkType>
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -156,6 +156,10 @@
         <DCCReference Include="src\peakcrossover.pas"/>
         <DCCReference Include="src\profit.pas"/>
         <DCCReference Include="src\projectdata.pas"/>
+        <DCCReference Include="src\Sampling\bbrsm.pas"/>
+        <DCCReference Include="src\Sampling\algenerator.pas"/>
+        <DCCReference Include="src\Sampling\naive.pas"/>
+        <DCCReference Include="src\Sampling\rbbrsm.pas"/>
         <DCCReference Include="src\SGS\ssgs.pas"/>
         <DCCReference Include="src\SGS\ssgsmod.pas"/>
         <DCCReference Include="src\SGS\ssgsoc.pas"/>
@@ -170,8 +174,8 @@
         <DCCReference Include="src\GeneticAlgorithms\gassgstau.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgszt.pas"/>
         <DCCReference Include="src\fbi.pas"/>
-        <DCCReference Include="src\algens.pas"/>
         <DCCReference Include="src\tests.pas"/>
+        <DCCReference Include="src\compfitness.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -19,19 +19,14 @@ implementation
 
 uses classes, sysutils, globals, ssgs, helpers, profit, fbi;
 
-function RunGASSGSZT: Double;
-var
-  population: IndivArray;
-  bestIndiv: IIndividual;
-  i: Integer;
+function AllocateIndividual: IIndividual;
 begin
-  SetLength(population, POP_SIZE*2);
-  for i := 0 to POP_SIZE * 2 - 1 do
-    population[i] := TActivityListOCIndividual.Create;
+  result := TActivityListOCIndividual.Create;
+end;
 
-  population[0].InitializePopulation(population);
-  result := RunGA(population, bestIndiv, False);
-  FreePopulation(population);
+function RunGASSGSZT: Double;
+begin
+  result := TGACore.Run(AllocateIndividual, False);
 end;
 
 procedure TActivityListOCIndividual.InitializePopulation(var population: IndivArray);
@@ -39,7 +34,7 @@ var i, r, t: Integer;
 begin
   inherited InitializePopulation(population);
 
-  for i := 0 to Length(population) - 1 do
+  for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListOCIndividual(population[i]).oc, ps.numRes, ps.numPeriods);
     for r := 0 to ps.numRes - 1 do
@@ -47,13 +42,20 @@ begin
         TActivityListOCIndividual(population[i]).oc[r, t] := THelper.RandomRangeIncl(0, ps.zmax[r]);
 
     SetLength(TActivityListOCIndividual(population[i]).fts, ps.numJobs);
-    population[i].Fitness;
 
-    TFBI.Improve(TActivityListOCIndividual(population[i]).order, TActivityListOCIndividual(population[i]).oc);
+    //population[i].Fitness;
+    //TFBI.Improve(TActivityListOCIndividual(population[i]).order, TActivityListOCIndividual(population[i]).oc);
+  end;
+
+  for i := Length(population) div 2 to Length(population) - 1 do begin
+    SetLength(TActivityListOCIndividual(population[i]).oc, ps.numRes, ps.numPeriods);
+    SetLength(TActivityListOCIndividual(population[i]).fts, ps.numJobs);
   end;
 end;
 
 procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
+procedure OnePointCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
+procedure RandomCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
 
 procedure TActivityListOCIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 var otherC, daughterC, sonC: TActivityListOCIndividual;
@@ -62,16 +64,10 @@ begin
   daughterC := TActivityListOCIndividual(daughter);
   sonC := TActivityListOCIndividual(son);
 
-  OnePointCrossoverSmart(self, otherC, daughterC);
-  OnePointCrossoverSmart(otherC, self, sonC);
-
-  //TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
-  //TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
-
-  //OnePointCrossoverOC(self, otherC, daughterC);
-  //OnePointCrossoverOC(otherC, self, sonC);
-  //RandomCrossoverOC(self, otherC, daughterC);
-  //RandomCrossoverOC(otherC, self, sonC);
+//  OnePointCrossoverSmart(self, otherC, daughterC);
+//  OnePointCrossoverSmart(otherC, self, sonC);
+  RandomCrossoverOC(self, otherC, daughterC);
+  RandomCrossoverOC(otherC, self, sonC);
 end;
 
 procedure MutateOC(var oc: ResourceProfile); forward;
@@ -83,14 +79,11 @@ begin
 end;
 
 function TActivityListOCIndividual.Fitness: Double;
-var
-  sts: JobData;
-  resRemaining: ResourceProfile;
-  j: Integer;
+var j: Integer;
 begin
-  TSSGS.Solve(order, oc, sts, resRemaining);
-  TFBI.Improve(sts, oc, resRemaining);
-  result := TProfit.CalcProfit(sts, resRemaining);
+  TSSGS.Solve(order, oc, sts, resRem);
+  //TFBI.Improve(sts, oc, resRem);
+  result := TProfit.CalcProfit(sts, resRem);
 
   for j := 0 to ps.numJobs-1 do
     fts[j] := sts[j] + ps.durations[j];
@@ -126,12 +119,10 @@ begin
   q := THelper.RandomRangeIncl(0, ps.numPeriods-1);
   for r := 0 to ps.numRes - 1 do
       for t := 0 to ps.numPeriods - 1 do
-      begin
         if t < q then
            daughter.oc[r,t] := mother.oc[r,t]
         else
            daughter.oc[r,t] := father.oc[r,t];
-      end;
 end;
 
 procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);

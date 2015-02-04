@@ -10,33 +10,33 @@ interface
 uses projectdata;
 
 type TSSGSOC = class
-  class function SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
-  class function Solve(const order: JobData; out sts: JobData): Double;
+  class function SolveWithTau(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
+  class function Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 private
-  class function SolveCommon(const order, tau: JobData; out sts: JobData): Double;
+  class function SolveCommon(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 end;
 
 implementation
 
 uses classes, sysutils, profit, ssgs, globals, resprofiles, math;
 
-class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData): Double;
+class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 begin
-  result := SolveCommon(order, tau, sts);
+  result := SolveCommon(order, tau, sts, resRemaining);
 end;
 
-class function TSSGSOC.Solve(const order: JobData; out sts: JobData): Double;
+class function TSSGSOC.Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 var tau: JobData;
 begin
   SetLength(tau, ps.numJobs);
   tau[0] := -1;
-  result := SolveCommon(order, tau, sts);
+  result := SolveCommon(order, tau, sts, resRemaining);
 end;
 
-class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData): Double;
+class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 var
   ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
-  zeroOc, maxOc, resRemaining, resRemainingTmp: ResourceProfile;
+  zeroOc, maxOc, resRemainingTmp: ResourceProfile;
   p, bestProfit: Double;
   fts: JobData;
 begin

@@ -6,7 +6,7 @@ procedure RunTests;
 
 implementation
 
-uses projectdata, ssgs, globals, sysutils, topsort, profit, resprofiles, peakcrossover;
+uses projectdata, ssgs, globals, sysutils, topsort, profit;
 
 procedure InitExampleProject;
 const FNAME = '../Projekte/j30filtered/j3011_7.sm';
@@ -56,46 +56,11 @@ begin
     Assert(order[j] = revOrder[j]);
 end;
 
-function MyPr(const dset: JobData): Integer;
-var j: Integer;
-begin
-  result := 0;
-  for j := 0 to ps.numJobs-1 do
-    if dset[j] = 1 then
-      result := j;
-end;
-
-procedure TestPriorityRuleSGS;
-var
-  z, resRem: ResourceProfile;
-  sts: JobData;
-begin
-  SetLength(resRem, ps.numRes, ps.numPeriods);
-  TResProfiles.MaxOC(z);
-  TSSGS.SolveWithDecider(MyPr, z, sts, resRem);
-  // TODO: Add asserts for sts
-end;
-
-procedure TestCollectPeaks;
-var
-  order, sts: JobData;
-  peaks: JobDataArray;
-  resRem, z: ResourceProfile;
-begin
-  order := Copy(ps.topOrder, 0, ps.numJobs);
-  TResProfiles.ZeroOC(z);
-  TSSGS.Solve(order, z, sts, resRem);
-  ps.InferProfileFromSchedule(sts, z, resRem);
-  TPeakCrossover.CollectPeaks(sts, resRem, peaks);
-end;
-
 procedure RunTests;
 begin
   InitExampleProject;
   TestScheduleToActivityList;
   TestReverseActivityList;
-  TestPriorityRuleSGS;
-  TestCollectPeaks;
   FreeAndNil(ps);
 end;
 

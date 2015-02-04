@@ -72,8 +72,7 @@ begin
   SetLength(sts, ps.numJobs);
   SetLength(fts, ps.numJobs);
 
-  for j := 0 to ps.numJobs - 1 do
-    sts[j] := -1;
+  ps.Fill(sts, -1);
 
   SetLength(dset, ps.numJobs);
 
@@ -126,7 +125,7 @@ end;
 
 class procedure TSSGS.ScheduleToActivityList(const sts: JobData; out order: JobData; leq: Boolean);
 var
-  rem: JobData;
+  rem: JobSet;
   j: Integer;
 
   function JobWithMinSt: Integer;
@@ -143,8 +142,7 @@ var
 begin
   SetLength(order, ps.numJobs);
   SetLength(rem, ps.numJobs);
-  for j := 0 to ps.numJobs-1 do
-    rem[j] := 1;
+  ps.Fill(rem, 1);
 
   for j := 0 to ps.numJobs-1 do begin
     order[j] := JobWithMinSt;
@@ -164,7 +162,7 @@ begin
 end;
 
 // TODO: Implement, refactor, cleanup
-procedure ComputeDecisionSet(const sts: JobData; var dset: JobData);
+procedure ComputeDecisionSet(const sts: JobData; var dset: JobSet);
 var i, j: Integer;
 begin
   for j := 0 to ps.numJobs - 1 do begin
@@ -182,4 +180,5 @@ begin
 end;
 
 end.
+
 

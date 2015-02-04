@@ -22,19 +22,14 @@ implementation
 
 uses globals, helpers, ssgsmod, profit;
 
-function RunGASSGSBeta: Double;
-var
-  population: IndivArray;
-  bestIndiv: IIndividual;
-  i: Integer;
+function AllocateIndiv: IIndividual;
 begin
-  SetLength(population, POP_SIZE*2);
-  for i := 0 to POP_SIZE * 2 - 1 do
-    population[i] := TActivityListBetaIndividual.Create;
+  result := TActivityListBetaIndividual.Create;
+end;
 
-  population[0].InitializePopulation(population);
-  result := RunGA(population, bestIndiv, False);
-  FreePopulation(population);
+function RunGASSGSBeta: Double;
+begin
+  result := TGACore.Run(AllocateIndiv, False);
 end;
 
 procedure TActivityListBetaIndividual.InitializePopulation(var population: IndivArray);
@@ -45,7 +40,7 @@ begin
   for i := 0 to Length(population) - 1 do
   begin
     SetLength(TActivityListBetaIndividual(population[i]).b, ps.numJobs);
-    for j := 0 to ps.numJobs - 1 do
+    for j := 0 to ps.numJobs-1 do
       TActivityListBetaIndividual(population[i]).b[j] := 0;
   end;
 end;
@@ -71,12 +66,9 @@ begin
 end;
 
 function TActivityListBetaIndividual.Fitness: Double;
-var
-  sts: JobData;
-  resRemaining: ResourceProfile;
 begin
-  TSSGSMod.Solve(order, b, sts, resRemaining);
-  result := TProfit.CalcProfit(sts, resRemaining);
+  TSSGSMod.Solve(order, b, sts, resRem);
+  result := TProfit.CalcProfit(sts, resRem);
 end;
 
 procedure TActivityListBetaIndividual.Swap(i1, i2: Integer);

@@ -23,19 +23,14 @@ implementation
 
 uses classes, sysutils, globals, ssgsoc, helpers, fbi;
 
-function RunGASSGSTau: Double;
-var
-  population: IndivArray;
-  bestIndiv: IIndividual;
-  i: Integer;
+function AllocateIndividual: IIndividual;
 begin
-  SetLength(population, POP_SIZE*2);
-  for i := 0 to POP_SIZE * 2 - 1 do
-    population[i] := TActivityListTauIndividual.Create;
+  result := TActivityListTauIndividual.Create;
+end;
 
-  population[0].InitializePopulation(population);
-  result := RunGA(population, bestIndiv, False);
-  FreePopulation(population);
+function RunGASSGSTau: Double;
+begin
+  result := TGACore.Run(AllocateIndividual, False);
 end;
 
 procedure TActivityListTauIndividual.InitializePopulation(var population: IndivArray);
@@ -43,7 +38,7 @@ var i, j: Integer;
 begin
   inherited InitializePopulation(population);
 
-  for i := 0 to Length(population) - 1 do
+  for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
     for j := 0 to ps.numJobs - 1 do begin
@@ -51,6 +46,9 @@ begin
       TFBI.Improve(TActivityListTauIndividual(population[i]).order, TActivityListTauIndividual(population[i]).tau);
     end;
   end;
+
+  for i := Length(population) div 2 to Length(population) - 1 do
+    SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
 end;
 
 procedure TActivityListTauIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
@@ -69,14 +67,13 @@ var j: Integer;
 begin
   SwapNeighborhood(order, tau);
   for j := 0 to ps.numJobs - 1 do
-    if THelper.RandomRangeIncl(0, 99) <= PROB_MUTATE-1 then
+    if THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE then
       tau[j] := THelper.RandomRangeIncl(0, 99);
 end;
 
 function TActivityListTauIndividual.Fitness: Double;
-var sts: JobData;
 begin
-  result := TSSGSOC.SolveWithTau(order, tau, sts);
+  result := TSSGSOC.SolveWithTau(order, tau, sts, resRem);
 end;
 
 procedure TActivityListTauIndividual.SwapNeighborhood(var lambda, tau: JobData);

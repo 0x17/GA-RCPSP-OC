@@ -12,25 +12,23 @@ type TActivityListZIndividual = class(TActivityListIndividual)
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
+private
+  procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);
+  procedure MutateOC(var z: ResData);
 end;
 
 implementation
 
-uses classes, sysutils, globals, ssgs, helpers, profit, fbi;
+uses classes, sysutils, globals, ssgs, helpers, profit;
+
+function AllocateIndividual: IIndividual;
+begin
+  result := TActivityListZIndividual.Create;
+end;
 
 function RunGASSGSZ: Double;
-var
-  population: IndivArray;
-  bestIndiv: IIndividual;
-  i: Integer;
 begin
-  SetLength(population, POP_SIZE*2);
-  for i := 0 to POP_SIZE * 2 - 1 do
-    population[i] := TActivityListZIndividual.Create;
-
-  population[0].InitializePopulation(population);
-  result := RunGA(population, bestIndiv, False);
-  FreePopulation(population);
+  result := TGACore.Run(AllocateIndividual, False);
 end;
 
 procedure TActivityListZIndividual.InitializePopulation(var population: IndivArray);
@@ -42,7 +40,7 @@ begin
 
   SetLength(z, ps.numRes, ps.numPeriods);
 
-  for i := 0 to Length(population) - 1 do
+  for i := 0 to Length(population) div 2 - 1 do
   begin
     SetLength(TActivityListZIndividual(population[i]).z, ps.numRes);
     for r := 0 to ps.numRes - 1 do begin
@@ -51,11 +49,12 @@ begin
         z[r,t] := TActivityListZIndividual(population[i]).z[r];
     end;
 
-    TFBI.Improve(TActivityListZIndividual(population[i]).order, z);
+    //TFBI.Improve(TActivityListZIndividual(population[i]).order, z);
   end;
-end;
 
-procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData); forward;
+  for i := Length(population) div 2 to Length(population) - 1 do
+    SetLength(TActivityListZIndividual(population[i]).z, ps.numRes);
+end;
 
 procedure TActivityListZIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 var otherC, daughterC, sonC: TActivityListZIndividual;
@@ -72,8 +71,6 @@ begin
   RandomCrossoverOC(otherC.z, z, sonC.z);
 end;
 
-procedure MutateOC(var z: ResData); forward;
-
 procedure TActivityListZIndividual.Mutate;
 begin
   SwapNeighborhood(order);
@@ -82,8 +79,7 @@ end;
 
 function TActivityListZIndividual.Fitness: Double;
 var
-  sts: JobData;
-  zfilled, resRemaining: ResourceProfile;
+  zfilled: ResourceProfile;
   r, t: Integer;
 begin
   SetLength(zfilled, ps.numRes, ps.numPeriods);
@@ -91,12 +87,12 @@ begin
     for t := 0 to ps.numPeriods-1 do
       zfilled[r,t] := z[r];
 
-  TSSGS.Solve(order, zfilled, sts, resRemaining);
-  TFBI.Improve(sts, zfilled, resRemaining);
-  result := TProfit.CalcProfit(sts, resRemaining);
+  TSSGS.Solve(order, zfilled, sts, resRem);
+  //TFBI.Improve(sts, zfilled, resRem);
+  result := TProfit.CalcProfit(sts, resRem);
 end;
 
-procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);
+procedure TActivityListZIndividual.RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);
 var r, q: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -109,7 +105,7 @@ begin
   end;
 end;
 
-procedure MutateOC(var z: ResData);
+procedure TActivityListZIndividual.MutateOC(var z: ResData);
 var
   r, q: Integer;
 begin

@@ -7,14 +7,15 @@ uses projectdata, individual;
 function RunGASSGSOC: Double;
 
 type TActivityListIndividual = class(IIndividual)
-  order: JobData;
+  order, sts: JobData;
+  resRem: ResourceProfile;
   procedure InitializePopulation(var population: IndivArray); override;
+  procedure FillNeighborhood(const origin: IIndividual; var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
 
   function OnePointCrossover(const mother, father: TActivityListIndividual): Integer;
-  procedure PeakCrossover(const mother, father: TActivityListIndividual);
 
 protected
   procedure Swap(var lambda: JobData; i1, i2: Integer); inline;
@@ -27,35 +28,19 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgsoc, helpers, algens, peakcrossover;
+uses classes, sysutils, globals, ssgsoc, helpers, algenerator, naive, bbrsm, peakcrossover;
 
-procedure FillNeighbourhood(const origin: IIndividual; var population: IndivArray); forward;
-
-function RunGASSGSOC: Double;
-var
-  population: IndivArray;
-  bestIndiv: IIndividual;
-  i: Integer;
+function AllocateIndividual: IIndividual;
 begin
-  SetLength(population, POP_SIZE * 2);
-  for i := 0 to POP_SIZE * 2 - 1 do
-    population[i] := TActivityListIndividual.Create;
-
-  population[0].InitializePopulation(population);
-  {result := }RunGA(population, bestIndiv, True);
-
-  // Populationsgröße halbieren
-  for i := POP_SIZE to POP_SIZE * 2 - 1 do
-    population[i].Free;
-  SetLength(population, POP_SIZE);
-
-  FillNeighbourhood(bestIndiv, population);
-  result := RunGA(population, bestIndiv, True);
-
-  FreePopulation(population);
+  result := TActivityListIndividual.Create;
 end;
 
-procedure FillNeighbourhood(const origin: IIndividual; var population: IndivArray);
+function RunGASSGSOC: Double;
+begin
+  result := TGACore.Run(AllocateIndividual, True);
+end;
+
+procedure TActivityListIndividual.FillNeighborhood(const origin: IIndividual; var population: IndivArray);
 var
   alg: IALGenerator;
   i: Integer;
@@ -74,16 +59,27 @@ var
 begin
   inherited InitializePopulation(population);
 
-  alg := RBBRSGenerator.Create;
-  for i := 0 to Length(population) - 1 do
+  alg := NaiveGenerator.Create; //RBBRSGenerator.Create;
+  for i := 0 to Length(population) div 2 - 1 do
     alg.PickSample(TActivityListIndividual(population[i]).order);
   FreeAndNil(alg);
+
+  for i := Length(population) div 2 to Length(population)-1 do
+    SetLength(TActivityListIndividual(population[i]).order, ps.numJobs);
 end;
 
 procedure TActivityListIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
+var daughterC, sonC, otherC: TActivityListIndividual;
 begin
-  TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
-  TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
+  daughterC := TActivityListIndividual(daughter);
+  sonC := TActivityListIndividual(son);
+  otherC := TActivityListIndividual(other);
+
+//  TPeakCrossover.Crossover(self, otherC, daughterC);
+//  TPeakCrossover.Crossover(otherC, self, sonC);
+
+  daughterC.OnePointCrossover(self, otherC);
+  sonC.OnePointCrossover(otherC, self);
 end;
 
 procedure TActivityListIndividual.Mutate;
@@ -92,9 +88,8 @@ begin
 end;
 
 function TActivityListIndividual.Fitness: Double;
-var sts: JobData;
 begin
-  result := TSSGSOC.Solve(order, sts);
+  result := TSSGSOC.Solve(order, sts, resRem);
 end;
 
 function TActivityListIndividual.OnePointCrossover(const mother, father: TActivityListIndividual): Integer;
@@ -104,18 +99,6 @@ begin
   InheritFirst(result, mother);
   // q,..,len-1 von Vater, falls nicht von Mutter
   InheritRemaining(result, father);
-end;
-
-procedure TActivityListIndividual.PeakCrossover(const mother, father: TActivityListIndividual);
-var
-  motherSts: JobData;
-  resRem, z: ResourceProfile;
-  peaks: JobDataArray;
-begin
-  // TODO: Implement!
-  TSSGSOC.Solve(mother.order, motherSts);
-  ps.InferProfileFromSchedule(motherSts, resRem, z);
-  TPeakCrossover.CollectPeaks(motherSts, resRem, peaks);
 end;
 
 procedure TActivityListIndividual.Swap(var lambda: JobData; i1, i2: Integer);

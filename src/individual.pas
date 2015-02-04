@@ -2,14 +2,13 @@ unit individual;
 
 interface
 
-uses classes;
-
 type
-  IIndividual = class; // forward decl.
+  IIndividual = class;
   IndivArray = Array of IIndividual;
 
   IIndividual = class
-    procedure InitializePopulation(var pop: IndivArray); virtual;
+    procedure InitializePopulation(var population: IndivArray); virtual;
+    procedure FillNeighborhood(const origin: IIndividual; var population: IndivArray); virtual; abstract;
     procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;
     procedure Mutate; virtual; abstract;
     function Fitness: Double; virtual; abstract;
@@ -22,34 +21,34 @@ type
   TFValArray = Array of Double;
   TFValPartArray = Array of Double;
 
-  TFitnessComputation = class
-    class procedure CalcSerial(var population: IndivArray; out fvals: TFValArray);
-    class procedure CalcParallel(var population: IndivArray; out fvals: TFValArray);
-  end;
+  IndivAllocator = function: IIndividual;
 
-  TCalcFitnessThread = class(TThread)
-    six, eix: Integer;
-    pop: IndivArray;
-    fvp: TFValPartArray;
-    constructor Create(var population: IndivArray; startIx, endIx: Integer);
-  protected
-    procedure Execute; override;
+  TGACore = class
+    class function Run(allocator: IndivAllocator; parallelComp: Boolean): Double;
+    class function MainLoop(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
+    class procedure FreePopulation(var population: IndivArray);
+  private
+    class procedure Cross(var population: IndivArray);
   end;
-
-function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
-procedure FreePopulation(var population: IndivArray);
 
 implementation
 
-uses globals, helpers, sysutils;
+uses globals, helpers, sysutils, compfitness;
 
-const NUM_THREADS = 8;
+procedure AllocIndividuals(out population: IndivArray; size: Integer; allocator: IndivAllocator);
+var i: Integer;
+begin
+  SetLength(population, size);
+  for i := 0 to size - 1 do
+    population[i] := allocator;
+end;
 
-procedure IIndividual.InitializePopulation(var pop: IndivArray);
+procedure IIndividual.InitializePopulation(var population: IndivArray);
 begin
   RandSeed := 23;
 end;
 
+//==============================================================================
 class procedure TSortHelper.QuickSortKeys(var keys: IndivArray; var fvals: array of Double;  iLo, iHi: Integer);
 var
   Lo, Hi: Integer;
@@ -81,7 +80,73 @@ begin
 end;
 
 //==============================================================================
-procedure Cross(var population: IndivArray);
+class function TGACore.Run(allocator: IndivAllocator; parallelComp: Boolean): Double;
+var
+  population: IndivArray;
+  bestIndiv: IIndividual;
+begin
+  AllocIndividuals(population, POP_SIZE*2, allocator);
+  population[0].InitializePopulation(population);
+  result := TGACore.MainLoop(population, bestIndiv, parallelComp);
+
+  // Populationsgröße halbieren
+  {for i := POP_SIZE to POP_SIZE * 2 - 1 do
+    population[i].Free;
+  SetLength(population, POP_SIZE);
+
+  population[0].FillNeighborhood(bestIndiv, population);
+  result := TGACore.MainLoop(population, bestIndiv, True);}
+
+  TGACore.FreePopulation(population);
+end;
+
+class function TGACore.MainLoop(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
+var
+  i, j, numIter: Integer;
+  maxParentIx, minChildIx, maxChildIx: Integer;
+  fvals: TFValArray;
+begin
+  maxParentIx := Length(population) div 2 - 1;
+  minChildIx := maxParentIx + 1;
+  maxChildIx := Length(population) - 1;
+
+  // Compute fitness (objective value, schedule, residual capacity) for all parents
+  SetLength(fvals, Length(population));
+  for i := 0 to maxParentIx do
+    fvals[i] := -population[i].Fitness;
+  TSortHelper.QuickSortKeys(population, fvals, 0, maxParentIx);
+
+  //numIter := (numSchedules div 2) div (Length(population) div 2);
+  numIter := 100;
+
+  for i := 1 to numIter do
+  begin
+    Cross(population);
+
+    // Only mutate children, leave parents unchanged
+    for j := minChildIx to maxChildIx do
+      population[j].Mutate;
+
+    // Only compute fitness for children here (parents already computed!)
+    if parallelComp then TFitnessComputation.CalcParallel(population, fvals, minChildIx, maxChildIx)
+    else TFitnessComputation.CalcSerial(population, fvals, minChildIx, maxChildIx);
+
+    TSortHelper.QuickSortKeys(population, fvals, 0, maxChildIx);
+  end;
+
+  best := population[0];
+  result := population[0].Fitness;
+end;
+
+class procedure TGACore.FreePopulation(var population: IndivArray);
+var i: Integer;
+begin
+  for i := 0 to Length(population)-1 do
+    FreeAndNil(population[i]);
+  SetLength(population, 0);
+end;
+
+class procedure TGACore.Cross(var population: IndivArray);
 type BArray = Array of Boolean;
 var
    i, i2, ix1, ix2, ctr, k, popSize: Integer;
@@ -119,98 +184,6 @@ begin
 
     population[ix1].Crossover(population[ix2], population[popSize+i*2], population[popSize+i*2+1]);
   end;
-end;
-
-procedure FreePopulation(var population: IndivArray);
-var i: Integer;
-begin
-  for i := 0 to Length(population)-1 do
-    FreeAndNil(population[i]);
-  SetLength(population, 0);
-end;
-
-function RunGA(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
-var
-  i, j, numIter: Integer;
-  maxParentIx, minChildIx, maxChildIx: Integer;
-  fvals: TFValArray;
-begin
-  maxParentIx := Length(population) div 2 - 1;
-  minChildIx := maxParentIx + 1;
-  maxChildIx := Length(population) - 1;
-
-  // TODO: In Valls wohl nur Elterngeneration erst erzeugt, nicht POP_SIZE*2=Length(population)
-  SetLength(fvals, Length(population));
-  for i := 0 to maxChildIx do
-    fvals[i] := -population[i].Fitness;
-  TSortHelper.QuickSortKeys(population, fvals, 0, maxChildIx);
-
-  numIter := (numSchedules div 2) div (Length(population) div 2);
-
-  for i := 1 to numIter do
-  begin
-    Cross(population);
-
-    for j := minChildIx to maxChildIx do
-      population[j].Mutate;
-
-    // FBI (DJ) sollte hier bereits auf alle Kinder angewendet werden! Siehe Fig 3
-
-    if parallelComp then
-      TFitnessComputation.CalcParallel(population, fvals)
-    else
-      TFitnessComputation.CalcSerial(population, fvals);
-
-    TSortHelper.QuickSortKeys(population, fvals, 0, maxChildIx);
-  end;
-
-  best := population[0];
-  result := population[0].Fitness;
-end;
-
-//==============================================================================
-class procedure TFitnessComputation.CalcSerial(var population: IndivArray; out fvals: TFValArray);
-var i: Integer;
-begin
-  SetLength(fvals, Length(population));
-  for i := 0 to Length(population)-1 do
-    fvals[i] := -population[i].Fitness;
-end;
-
-class procedure TFitnessComputation.CalcParallel(var population: IndivArray; out fvals: TFValArray);
-var
-  i, j, numIndivPerThread: Integer;
-  threads: Array[0..NUM_THREADS-1] of TCalcFitnessThread;
-begin
-  SetLength(fvals, Length(population));
-  numIndivPerThread := Length(population) div NUM_THREADS;
-
-  for i := 0 to NUM_THREADS - 1 do
-    threads[i] := TCalcFitnessThread.Create(population, numIndivPerThread * i, numIndivPerThread * (i+1) - 1);
-
-  for i := 0 to NUM_THREADS - 1 do
-  begin
-    threads[i].WaitFor;
-    for j := 0 to numIndivPerThread - 1 do
-      fvals[i*numIndivPerThread+j] := threads[i].fvp[j];
-    FreeAndNil(threads[i]);
-  end;
-end;
-
-constructor TCalcFitnessThread.Create(var population: IndivArray; startIx, endIx: Integer);
-begin
-  pop := population;
-  six := startIx;
-  eix := endIx;
-  inherited Create(False);
-end;
-
-procedure TCalcFitnessThread.Execute;
-var i: Integer;
-begin
-  SetLength(fvp, eix-six+1);
-  for i := six to eix do
-    fvp[i-six] := -pop[i].Fitness;
 end;
 
 end.

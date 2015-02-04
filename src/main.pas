@@ -24,7 +24,7 @@ end;
 
 implementation
 
-uses classes, sysutils, tests, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
+uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
 {$ifdef MSWINDOWS}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
@@ -52,8 +52,8 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  //WriteOptsAndTime('../Projekte/j30', 'heursOptsAndTime.txt');
-  RunTests;
+  WriteOptsAndTime('../Projekte/j30', 'heursOptsAndTime.txt');
+  //RunTests;
 end;
 
 procedure TMain.InitProject(const fname: String);

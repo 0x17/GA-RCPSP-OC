@@ -6,11 +6,13 @@ uses helpers;
 
 type
   JobData = Array of Integer;
+  JobSet = JobData;
   ResData = Array of Integer;
   ResDataDbl = Array of Double;
   JobResData = Array of Array of Integer;
   ResourceProfile = Array of Array of Integer;
   JobDataArray = Array of JobData;
+  JobSetArray = JobDataArray;
 
   ProjData = class
     numJobs, numRes, numPeriods, T: Integer;
@@ -40,7 +42,13 @@ type
     function OrderFeasible(const order: JobData): Boolean;
 
     procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
+    procedure InferOCFromSchedule(const resRem: ResourceProfile; out z: ResourceProfile);
     function ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
+
+    procedure Fill(var jobs: JobData; val: Integer); inline;
+
+    function JobSetCardinality(const aset: JobSet): Integer;
+    function JobSetNth(const aset: JobSet; n: Integer): Integer;
 
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
@@ -158,9 +166,9 @@ begin
 
   // Precedence
   SetLength(adjMx, numJobs, numJobs);
-  for i := 0 to numJobs - 1 do
-    for j := 0 to numJobs - 1 do
-        adjMx[i,j] := 0;
+  for i := 0 to numJobs-1 do
+    for j := 0 to numJobs-1 do
+      adjMx[i,j] := 0;
 
   for j := 1 to numJobs do
     ParsePrecedenceLine(fp);
@@ -176,15 +184,14 @@ begin
   THelper.SkipChar(fp, lineFeed, 3);
   SetLength(capacities, numRes);
   for r := 0 to numRes - 1 do
-      Read(fp, capacities[r]);
+    Read(fp, capacities[r]);
 
   // Setze kappa und zmax erstmal auf feste (bzw. kapazitätsabhängige) Werte für alle Projekte.
   SetLength(zmax, numRes);
   SetLength(kappa, numRes);
-  for r := 0 to numRes - 1 do
-  begin
-      zmax[r] := Trunc(0.5 * capacities[r]);
-      kappa[r] := 0.5;
+  for r := 0 to numRes - 1 do begin
+    zmax[r] := Trunc(0.5 * capacities[r]);
+    kappa[r] := 0.5;
   end;
 
   T := 0;
@@ -226,7 +233,6 @@ var
   j: Integer;
 begin
   SetLength(resRem, numRes, numPeriods);
-  SetLength(z, numRes, numPeriods);
 
   for r := 0 to numRes-1 do
     for t := 0 to numPeriods-1 do
@@ -239,6 +245,13 @@ begin
         for t := sts[j] to sts[j]+durations[j]-1 do
           resRem[r,t] := resRem[r,t] - demands[j,r];
 
+  InferOCFromSchedule(resRem, z);
+end;
+
+procedure ProjData.InferOCFromSchedule(const resRem: ResourceProfile; out z: ResourceProfile);
+var r, t: Integer;
+begin
+  SetLength(z, numRes, numPeriods);
   for r := 0 to numRes-1 do
     for t := 0 to numPeriods-1 do
       z[r,t] := Max(0, -resRem[r,t]);
@@ -251,8 +264,38 @@ var
 begin
   sumRatios := 0;
   for r := 0 to numRes - 1 do
-    sumRatios := sumRatios + (resRemaining[r,t] + zmax[r])/(capacities[r] + zmax[r]);
+    sumRatios := sumRatios + (capacities[r] - resRemaining[r,t])/(capacities[r] + zmax[r]);
   result := 1 / numRes * sumRatios;
+end;
+
+procedure ProjData.Fill(var jobs: JobData; val: Integer);
+var j: Integer;
+begin
+  for j := 0 to numJobs - 1 do
+    jobs[j] := val;
+end;
+
+function ProjData.JobSetCardinality(const aset: JobSet): Integer;
+var j: Integer;
+begin
+  result := 0;
+  for j := 0 to numJobs-1 do
+    result := result + aset[j];
+end;
+
+function ProjData.JobSetNth(const aset: JobSet; n: Integer): Integer;
+var j, ctr: Integer;
+begin
+  ctr := 0;
+  result := 0;
+  for j := 0 to numJobs-1 do
+  begin
+    ctr := ctr + aset[j];
+    if ctr = n+1 then begin
+      result := j;
+      Exit;
+    end;
+  end;
 end;
 
 end.

@@ -30,7 +30,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -75,7 +75,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -118,7 +118,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="23">
+    <Units Count="27">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -215,25 +215,45 @@
         <UnitName Value="fbi"/>
       </Unit18>
       <Unit19>
-        <Filename Value="src\algens.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="algens"/>
-      </Unit19>
-      <Unit20>
         <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
-      </Unit20>
-      <Unit21>
+      </Unit19>
+      <Unit20>
         <Filename Value="src\visualizer.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="visualizer"/>
-      </Unit21>
-      <Unit22>
+      </Unit20>
+      <Unit21>
         <Filename Value="src\peakcrossover.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="peakcrossover"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="src\compfitness.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="compfitness"/>
       </Unit22>
+      <Unit23>
+        <Filename Value="src\Sampling\bbrsm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="bbrsm"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="src\Sampling\naive.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="naivespl"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="src\Sampling\rbbrsm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="rbbrsm"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="src\Sampling\algenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="algenerator"/>
+      </Unit26>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -244,6 +264,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="src\Sampling"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

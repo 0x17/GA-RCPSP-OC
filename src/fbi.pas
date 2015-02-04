@@ -8,13 +8,13 @@ type TFBI = class
   class procedure Improve(var sts: JobData;  const z: ResourceProfile; out resRemaining: ResourceProfile); overload;
   class procedure Improve(var order: JobData; const z: ResourceProfile); overload;
   class procedure Improve(var order: JobData; const tau: JobData); overload;
+private
+  class procedure FlipSchedule(var sts: JobData);
 end;
 
 implementation
 
 uses globals, ssgs, ssgsoc;
-
-procedure FlipSchedule(var sts: JobData); forward;
 
 class procedure TFBI.Improve(var sts: JobData; const z: ResourceProfile; out resRemaining: ResourceProfile);
 var
@@ -50,13 +50,13 @@ var
   sts: JobData;
   z, resRem: ResourceProfile;
 begin
-  TSSGSOC.SolveWithTau(order, tau, sts);
-  ps.InferProfileFromSchedule(sts, z, resRem);
+  TSSGSOC.SolveWithTau(order, tau, sts, resRem);
+  ps.InferOCFromSchedule(resRem, z);
   Improve(sts, z, resRem);
   TSSGS.ScheduleToActivityList(sts, order);
 end;
 
-procedure FlipSchedule(var sts: JobData);
+class procedure TFBI.FlipSchedule(var sts: JobData);
 var
   j: Integer;
   oldSts: JobData;
@@ -65,7 +65,5 @@ begin
   for j := 0 to ps.numJobs-1 do
     sts[j] := oldSts[0] - (oldSts[j] + ps.durations[j]);
 end;
-
-
 
 end.
