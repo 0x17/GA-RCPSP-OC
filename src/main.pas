@@ -15,16 +15,20 @@ private
     end;
     THeurs = Array of THeur;
 
-  var heurs: THeurs;
+  var
+    heurs: THeurs;
+  const
+    active: Array[0..NHEURS-1] of Integer = (0, 0, 1, 0, 0);
 
   procedure InitProject(const fname: String);
   procedure WriteOptsAndTime(const path, outFname: String);
   procedure WriteConvergence(const projFname, outFname: String; maxGens: Integer);
+  procedure RunBranchAndBound;
 end;
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
+uses classes, sysutils, projectdata, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
 {$ifdef MSWINDOWS}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
@@ -52,8 +56,17 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  WriteOptsAndTime('../Projekte/j30', 'heursOptsAndTime.txt');
+  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
   //RunTests;
+  RunBranchAndBound;
+end;
+
+procedure TMain.RunBranchAndBound;
+var bb: TBranchAndBound;
+begin
+  bb := TBranchAndBound.Create('../Projekte/j30filtered/j3011_7.sm');
+  bb.Solve;
+  FreeAndNil(bb);
 end;
 
 procedure TMain.InitProject(const fname: String);
@@ -82,7 +95,8 @@ var
   begin
     headerStr := 'filename';
     for i := 0 to NHEURS-1 do
-      headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
+      if active[i] = 1 then
+        headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
   end;
 
   procedure ExcelPreamble;
@@ -150,9 +164,11 @@ begin
     InitProject(fname);
 
     if ps.minMs <> ps.maxMs then begin
-      line := fname;
-      for i := 0 to NHEURS - 1 do
-        SolveHeur(heurs[i]);
+      line := ChangeFileExt(ExtractFileName(fname), '');
+      for i := 0 to NHEURS - 1 do begin
+        if active[i] = 1 then
+          SolveHeur(heurs[i]);
+      end;
     end else
       line := 'NA;NA;NA;NA;NA;NA;NA;NA;NA;NA;NA';
 

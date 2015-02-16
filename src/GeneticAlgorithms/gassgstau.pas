@@ -13,8 +13,8 @@ type TActivityListTauIndividual = class(TActivityListIndividual)
   procedure Mutate; override;
   function Fitness: Double; override;
 private
-  procedure SwapNeighborhood(var lambda, tau: JobData);
-  procedure Swap(var lambda, tau: JobData; i1, i2: Integer); inline;
+  procedure SwapNeighborhood;
+  procedure Swap(i1, i2: Integer); inline;
 protected
   procedure InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer); override;
 end;
@@ -66,7 +66,7 @@ end;
 procedure TActivityListTauIndividual.Mutate;
 var j: Integer;	
 begin
-  SwapNeighborhood(order, tau);
+  SwapNeighborhood;
   for j := 0 to ps.numJobs - 1 do
     if THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE then
       tau[j] := THelper.RandomRangeIncl(0, 99);
@@ -77,24 +77,24 @@ begin
   result := TSSGSOC.SolveWithTau(order, tau, sts, resRem);
 end;
 
-procedure TActivityListTauIndividual.SwapNeighborhood(var lambda, tau: JobData);
+procedure TActivityListTauIndividual.SwapNeighborhood;
 var i: Integer;
 begin
   for i := 2 to ps.numJobs - 2 do
-    if (THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[lambda[i-1], lambda[i]] = 0) then
-      Swap(lambda, tau, i, i-1);
+    if (THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE) and (ps.adjMx[order[i-1], order[i]] = 0) then
+      Swap(i, i-1);
 end;
 
-procedure TActivityListTauIndividual.Swap(var lambda, tau: JobData; i1, i2: Integer);
+procedure TActivityListTauIndividual.Swap(i1, i2: Integer);
 var tmp, tmp2: Integer;
 begin
-  tmp := lambda[i1];
+  tmp := order[i1];
   tmp2 := tau[i1];
 
-  lambda[i1] := lambda[i2];
+  order[i1] := order[i2];
   tau[i1] := tau[i2];
 
-  lambda[i2] := tmp;
+  order[i2] := tmp;
   tau[i2] := tmp2;
 end;
 

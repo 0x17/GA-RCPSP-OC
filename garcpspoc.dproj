@@ -130,6 +130,8 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <DCC_AssertionsAtRuntime>false</DCC_AssertionsAtRuntime>
+        <DCC_ImportedDataReferences>false</DCC_ImportedDataReferences>
         <Debugger_CWD>C:\Users\a.schnabel\Dropbox\Arbeit\Scheduling\GA-RCPSP-OC</Debugger_CWD>
         <DCC_IOChecking>false</DCC_IOChecking>
         <VerInfo_Locale>1033</VerInfo_Locale>
@@ -168,7 +170,6 @@
         <DCCReference Include="src\topsort.pas"/>
         <DCCReference Include="src\SGS\esschedule.pas"/>
         <DCCReference Include="src\visualizer.pas"/>
-        <DCCReference Include="src\resprofiles.pas"/>
         <DCCReference Include="src\individual.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgsz.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgstau.pas"/>
@@ -176,6 +177,7 @@
         <DCCReference Include="src\fbi.pas"/>
         <DCCReference Include="src\tests.pas"/>
         <DCCReference Include="src\compfitness.pas"/>
+        <DCCReference Include="src\branchandbound.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -8,19 +8,18 @@ type TProfit = class
   class function CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
   class procedure CalcMinMaxMakespanCosts;
   class procedure ComputeRevenueBuffer;
-private
-  class function TotalOCCosts(const resRemaining: ResourceProfile): Double;
   class function Revenue(makespan: Integer): Double;
+  class function TotalOCCosts(const resRemaining: ResourceProfile): Double;
 end;
 
 implementation
 
-uses sysutils, ssgs, esschedule, math, resprofiles, globals;
+uses sysutils, ssgs, esschedule, math, globals;
 
 class procedure TProfit.CalcMinMaxMakespanCosts;
 var
   sts: JobData;
-  z, resRemaining: ResourceProfile;
+  resRemaining: ResourceProfile;
   tkappa, tkappari: Integer;
   tkappar: Double;
   r, j: Integer;
@@ -52,8 +51,7 @@ begin
   ps.minMs := Max(sts[ps.numJobs-1], tkappa);
 
   // Bestimme maximale Makespan über SSGS mit z_rt = 0
-  TResProfiles.ZeroOC(z);
-  TSSGS.Solve(ps.topOrder, z, sts, resRemaining);
+  TSSGS.Solve(ps.topOrder, ps.zeroOC, sts, resRemaining);
   ps.maxMs := sts[ps.numJobs-1];
 end;
 
@@ -86,4 +84,4 @@ begin
 end;
 
 end.
-
+

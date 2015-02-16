@@ -29,11 +29,13 @@ type
     minMs, maxMs: Integer;
     minCosts, maxCosts: Double;
 
+    zeroOc, maxOc: ResourceProfile;
+
     name: String;
 
     class procedure InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
 
-    procedure LoadFromFile(filename: String);
+    procedure LoadFromFile(const filename: String);
     procedure ComputeESFTS;
 
     procedure InvertPrecedence;
@@ -53,6 +55,9 @@ type
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
     procedure ParseReqDur(var fp: TextFile);
+
+    procedure InitMaxOC;
+    procedure InitZeroOC;
   end;
 
 implementation
@@ -142,7 +147,7 @@ begin
   end;
 end;
 
-procedure ProjData.LoadFromFile(filename: String);
+procedure ProjData.LoadFromFile(const filename: String);
 var
   fp: TextFile;
   i, j, r: Integer;
@@ -199,6 +204,9 @@ begin
     T := T + durations[j];
 
   CloseFile(fp);
+
+  InitMaxOC;
+  InitZeroOC;
 end;
 
 procedure ProjData.InvertPrecedence;
@@ -298,5 +306,23 @@ begin
   end;
 end;
 
-end.
+procedure ProjData.InitZeroOC;
+var r, t: Integer;
+begin
+  SetLength(zeroOc, numRes, numPeriods);
+  for r := 0 to numRes - 1 do
+      for t := 0 to numPeriods - 1 do
+          zeroOc[r,t] := 0;
+end;
 
+procedure ProjData.InitMaxOC;
+var r, t: Integer;
+begin
+  SetLength(maxOc, numRes, numPeriods);
+  for r := 0 to numRes - 1 do
+      for t := 0 to numPeriods - 1 do
+          maxOc[r,t] := zmax[r];
+end;
+
+end.
+

@@ -2,7 +2,7 @@ program rcpspoc;
 
 {$ifdef FPC}{$mode delphi}{$H+}{$endif}
 
-uses {$ifndef Win32}cthreads,{$endif} main;
+uses {$ifndef Win32}cthreads,{$endif} main, branchandbound;
 
 var main: TMain;
 begin
@@ -10,4 +10,4 @@ begin
   main.Entrypoint();
   main.Free;
 end.
-
+

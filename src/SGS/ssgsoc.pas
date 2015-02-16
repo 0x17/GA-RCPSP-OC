@@ -18,7 +18,7 @@ end;
 
 implementation
 
-uses classes, sysutils, profit, ssgs, globals, resprofiles, math;
+uses classes, sysutils, profit, ssgs, globals, math;
 
 class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 begin
@@ -36,7 +36,7 @@ end;
 class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 var
   ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
-  zeroOc, maxOc, resRemainingTmp: ResourceProfile;
+  resRemainingTmp: ResourceProfile;
   p, bestProfit: Double;
   fts: JobData;
 begin
@@ -45,10 +45,6 @@ begin
   SetLength(resRemainingTmp, ps.numRes, ps.numPeriods);
   // Setze verbleibende Ressourcen r,t auf Kapazität
   TSSGS.InitializeResidualCapacity(resRemaining);
-
-  // Setze Zusatzkapazitätsprofile
-  TResProfiles.ZeroOC(zeroOc);
-  TResProfiles.MaxOC(maxOc);
 
   // Initialisiere sts, fts
   TSSGS.InitializeJobTimes(sts, fts);
@@ -61,7 +57,7 @@ begin
 
     // Bestimme Zeitpunkt, wo Einplanung ressourcenzulässig ohne Zusatzkapazität ist
     for tauResFeas := tauPrecFeas to ps.numPeriods - 1 do
-      if TSSGS.ResourceFeasible(resRemaining, zeroOc, j, tauResFeas) then
+      if TSSGS.ResourceFeasible(resRemaining, ps.zeroOc, j, tauResFeas) then
         break;
 
     if tau[0] = -1 then
@@ -71,14 +67,14 @@ begin
         bestT := tauPrecFeas;
 
         for t := tauPrecFeas to tauResFeas do
-          if TSSGS.ResourceFeasible(resRemaining, maxOc, j, t) then begin
+          if TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, t) then begin
             //resRemainingTmp := Copy(resRemaining, 0, ps.numRes*ps.numPeriods);
             for k1 := 0 to ps.numRes - 1 do
                 for k2 := 0 to ps.numPeriods - 1 do
                     resRemainingTmp[k1,k2] := resRemaining[k1,k2];
 
             TSSGS.ScheduleJob(j, t, sts, fts, resRemainingTmp);
-            TSSGS.SolveCore(order, ix+1, zeroOc, sts, fts, resRemainingTmp);
+            TSSGS.SolveCore(order, ix+1, ps.zeroOc {maxOc}, sts, fts, resRemainingTmp);
 
             p := TProfit.CalcProfit(sts, resRemainingTmp);
             if p > bestProfit then
@@ -91,8 +87,8 @@ begin
     else
       begin
         // Wähle t zwischen tauPrecFeas..tauResFeas mithilfe von tau-Vektor
-        bestT := tauPrecFeas + Floor((tauResFeas - tauPrecFeas) / 100 * tau[j]);
-        while not(TSSGS.ResourceFeasible(resRemaining, maxOc, j, bestT)) do inc(bestT);
+        bestT := tauPrecFeas + Round((tauResFeas - tauPrecFeas) / 100 * tau[j]);
+        while not(TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, bestT)) do inc(bestT);
       end;
 
     TSSGS.ScheduleJob(j, bestT, sts, fts, resRemaining);
@@ -103,4 +99,4 @@ begin
 end;
 
 end.
-
+

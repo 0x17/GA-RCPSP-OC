@@ -20,7 +20,7 @@ end;
 
 implementation
 
-uses globals, helpers, ssgsmod, profit;
+uses globals, helpers, ssgsmod, profit, ssgsoc;
 
 function AllocateIndiv: IIndividual;
 begin
@@ -66,9 +66,16 @@ begin
 end;
 
 function TActivityListBetaIndividual.Fitness: Double;
+var
+  tau: JobData;
+  j: Integer;
 begin
   TSSGSMod.Solve(order, b, sts, resRem);
   result := TProfit.CalcProfit(sts, resRem);
+  {SetLength(tau, ps.numJobs);
+  for j := 0 to ps.numJobs - 1 do
+    if b[j] = 1 then tau[j] := 0 else tau[j] := 99;
+  result := TSSGSOC.SolveWithTau(order, tau, sts, resRem);}
 end;
 
 procedure TActivityListBetaIndividual.Swap(i1, i2: Integer);
@@ -90,4 +97,4 @@ begin
 end;
 
 end.
-
+
