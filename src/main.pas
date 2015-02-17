@@ -62,11 +62,37 @@ begin
 end;
 
 procedure TMain.RunBranchAndBound;
-var bb: TBranchAndBound;
+var
+  bb: TBranchAndBound;
+  sts: JobData;
+  db, solvetime: Double;
+  time: Cardinal;
+  j: Integer;
+  sw: TStopwatch;
+  resRem: ResourceProfile;
 begin
   bb := TBranchAndBound.Create('../Projekte/j30filtered/j3011_7.sm');
-  bb.Solve;
+  SetLength(sts, ps.numJobs);
+
+  sw := TStopwatch.Create;
+  sw.Start;
+  db := bb.Solve(sts);
+  time := sw.Stop;
+  solvetime := time / 1000.0;
+
+  writeln('makespan = ', sts[ps.numJobs-1]);
+  ps.InferProfileFromSchedule(sts, resRem);
+  writeln('oc costs = ', FloatToStr(TProfit.TotalOCCosts(resRem)));
+  writeln('revenue = ', FloatToStr(TProfit.Revenue(sts[ps.numJobs-1])));
+  writeln('profit = ', FloatToStr(db));
+  writeln('solvetime = ', FloatToStr(solvetime));
+  write('(');
+  for j := 0 to ps.numJobs-1 do write(sts[j], '; ');
+  writeln(')');
+  readln;
+
   FreeAndNil(bb);
+  FreeAndNil(sw);
 end;
 
 procedure TMain.InitProject(const fname: String);

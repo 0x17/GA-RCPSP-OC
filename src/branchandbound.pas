@@ -7,9 +7,11 @@ uses projectdata;
 type TBranchAndBound = class
   constructor Create(const fname: String);
   destructor Destroy; override;
-  procedure Solve;
+  function Solve(out solution: JobData): Double;
 private
   lb: Double;
+  lbSts: JobData;
+
   procedure Branch(sts: JobData; resRem: ResourceProfile);
   function ComputeUpperBound(const sts: JobData; const resRem: ResourceProfile): Double;
 end;
@@ -40,7 +42,7 @@ begin
   FreeAndNil(ps);
 end;
 
-procedure TBranchAndBound.Solve;
+function TBranchAndBound.Solve(out solution: JobData): Double;
 var
   sts: JobData;
   i: Integer;
@@ -52,32 +54,79 @@ begin
   sts[0] := 0;
   TSSGS.InitializeResidualCapacity(resRem);
   Branch(sts, resRem);
+  result := lb;
+  solution := Copy(lbSts, 0, ps.numJobs);
+end;
+
+procedure BranchLog(const sts: JobData); inline;
+var j: Integer;
+begin
+  write('BRANCH (');
+  for j := 0 to ps.numJobs-1 do write(sts[j], '; ');
+  writeln(')');
+end;
+
+type BoolArray = Array of Boolean;
+
+function ComputeEligibles(const sts: JobData): BoolArray;
+var i, j: Integer;
+begin
+  SetLength(result, ps.numJobs);
+  for j := 0 to ps.numJobs-1 do begin
+    result[j] := False;
+    // Job itself not scheduled
+    if sts[j] = -1 then begin
+      // All preds scheduled?
+      result[j] := True;
+      for i := 0 to ps.numJobs-1 do
+        if (sts[i] = -1) and (ps.adjMx[i,j] = 1) then begin
+          result[j] := False;
+          break;
+        end;
+    end;
+  end;
+end;
+
+function MaxST(const sts: JobData; out mjob: Integer): Integer; inline;
+var j: Integer;
+begin
+  result := sts[0];
+  mjob := 0;
+  for j := 1 to ps.numJobs-1 do
+    if (sts[j] <> -1) and (sts[j] > result) then begin
+      result := sts[j];
+      mjob := j;
+    end;
 end;
 
 procedure TBranchAndBound.Branch(sts: JobData; resRem: ResourceProfile);
 var
-  i, j, tPrecFeas, tResFeas, t, tau: Integer;
-  eligible: Boolean;
-  ub: Double;
-  r: Integer;
+  i, j, tPrecFeas, tResFeas, t, tau, r, mjob: Integer;
+  eligibles: BoolArray;
+  ub, nprofit: Double;
+  resRemCp: ResourceProfile;
+
+  resRemDbg: ResourceProfile;
 begin
-  // Found leaf? Update lower bound!
-  if sts[ps.numJobs-1] <> -1 then
-    lb := Max(lb, TProfit.CalcProfit(sts, resRem));
+  // Found leaf? Update lower bound (if better)!
+  if sts[ps.numJobs-1] <> -1 then begin
+    nprofit := TProfit.CalcProfit(sts, resRem);
+    if nprofit > lb then begin
+      lb := nprofit;
+      lbSts := Copy(sts, 0, ps.numJobs);
+    end;
+    exit;
+  end;
 
-  for j := 0 to ps.numJobs-1 do
-    // Job itself not scheduled
-    if sts[j] = -1 then begin
-      // All preds scheduled?
-      eligible := True;
-      for i := 0 to ps.numJobs-1 do
-        if (sts[j] = -1) and (ps.adjMx[i,j] = 1) then
-          eligible := False;
+  // Compute eligibles
+  eligibles := ComputeEligibles(sts);
 
-      if eligible then begin
+  // Branch over eligibles
+  for j := 0 to ps.numJobs-1 do begin
+    if eligibles[j] then begin
         // First period of precedence feasibility (all preds finished)
         tPrecFeas := 0;
-        for i := 0 to ps.numJobs do
+        for i := 0 to ps.numJobs - 1 do
           if (ps.adjMx[i, j] = 1) and (sts[i] + ps.durations[i] > tPrecFeas) then
             tPrecFeas := sts[i] + ps.durations[i];
 
@@ -88,25 +137,46 @@ begin
 
         // Branch on all possible periods between precedence and resource feasibility
         for t := tPrecFeas to tResFeas do begin
-          // Schedule at t and update remaining capacity
+          if not TSSGS.ResourceFeasible(resRem, ps.maxOc, j, t) then
+            continue;
+
+          // Prevent duplicate scheduling orders ("activity lists")
+          if t < MaxST(sts, mjob) then // or build activity list while branching?
+            continue;
+          if (t = sts[mjob]) and (mjob > j) then
+            continue;
+
+          writeln(j, ' ', t);
+
+          //sts[j] := -1;
+
+          (*ps.InferProfileFromSchedule(sts, resRemDbg);
+          if TProfit.TotalOCCosts(resRem) <> TProfit.TotalOCCosts(resRemDbg) then
+            writeln(TProfit.TotalOCCosts(resRem), TProfit.TotalOCCosts(resRemDbg));
+          assert(TProfit.TotalOCCosts(resRem) = TProfit.TotalOCCosts(resRemDbg));*)
+
           sts[j] := t;
-          for tau := t to t+ps.durations[j]-1 do
-            for r := 0 to ps.numRes-1 do
-              resRem[r,tau] := resRem[r,tau] - ps.demands[j,r];
+          // Copy residual capacities and update
+          resRemCp := resRem;
+          SetLength(resRemCp, ps.numRes, ps.numPeriods);
+          for r := 0 to ps.numRes-1 do
+            if ps.demands[j,r] > 0 then
+              for tau := t to t+ps.durations[j]-1 do begin
+                resRemCp[r,tau] := resRemCp[r,tau] - ps.demands[j,r];
+                Assert(resRem[r,tau] = resRemCp[r,tau] + ps.demands[j,r]);
+              end;
+
+          ps.InferProfileFromSchedule(sts, resRemDbg);
+          assert(TProfit.TotalOCCosts(resRemCp) = TProfit.TotalOCCosts(resRemDbg));
 
           // Compute upper bound profit for completed schedule
-          ub := ComputeUpperBound(sts, resRem);
-          if ub >= lb then
-            Branch(sts, resRem);
-
-          // Reset remaining capacity
-          for tau := t to t+ps.durations[j]-1 do
-            for r := 0 to ps.numRes-1 do
-              resRem[r,tau] := resRem[r,tau] + ps.demands[j,r];
+          ub := ComputeUpperBound(sts, resRemCp);
+          if ub > lb then begin
+            Branch(Copy(sts, 0, ps.numJobs), resRemCp);
+          end else writeln('BOUND'); // FIXME: resRem und sts werden beim BOUNDING unsync!!!!!!!!!!!
         end;
       end;
-    end;
-
+  end;
 end;
 
 function TBranchAndBound.ComputeUpperBound(const sts: JobData; const resRem: ResourceProfile): Double;
@@ -133,7 +203,8 @@ begin
     if (sts[j] <> -1) and (sts[j] + ps.durations[j] > ftpartial) then
       ftpartial := sts[j] + ps.durations[j];
 
-  alpha := Ceil(maxSum / ps.capacities[maxRes]);
+  // FIXME: Also use zmax but ut getting negative!
+  alpha := Ceil(maxSum / (ps.capacities[maxRes] + ps.zmax[maxRes]));
   result := TProfit.Revenue(ftpartial + alpha) - TProfit.TotalOCCosts(resRem);
 end;
 

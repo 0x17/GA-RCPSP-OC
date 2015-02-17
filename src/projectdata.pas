@@ -43,7 +43,8 @@ type
     procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
     function OrderFeasible(const order: JobData): Boolean;
 
-    procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
+    procedure InferProfileFromSchedule(const sts: JobData; out resRem: ResourceProfile); overload;
+    procedure InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile); overload;
     procedure InferOCFromSchedule(const resRem: ResourceProfile; out z: ResourceProfile);
     function ResourceUtilisationRatio(const resRemaining: ResourceProfile; t: Integer): Double;
 
@@ -235,10 +236,8 @@ begin
       end;
 end;
 
-procedure ProjData.InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
-var
-  r, t: Integer;
-  j: Integer;
+procedure ProjData.InferProfileFromSchedule(const sts: JobData; out resRem: ResourceProfile);
+var j, r, t: Integer;
 begin
   SetLength(resRem, numRes, numPeriods);
 
@@ -246,13 +245,16 @@ begin
     for t := 0 to numPeriods-1 do
       resRem[r,t] := capacities[r];
 
-
   for j := 0 to numJobs-1 do
     for r := 0 to numRes-1 do
-      if demands[j,r] > 0 then
+      if (demands[j,r] > 0) and (sts[j] <> -1) then
         for t := sts[j] to sts[j]+durations[j]-1 do
           resRem[r,t] := resRem[r,t] - demands[j,r];
+end;
 
+procedure ProjData.InferProfileFromSchedule(const sts: JobData; out z, resRem: ResourceProfile);
+begin
+  InferProfileFromSchedule(sts, resRem);
   InferOCFromSchedule(resRem, z);
 end;
 
@@ -325,4 +327,4 @@ begin
 end;
 
 end.
-
+
