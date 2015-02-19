@@ -13,6 +13,9 @@ function RunGASSGSBeta6: Double;
 function RunGASSGSBeta7: Double;
 function RunGASSGSBeta8: Double;
 
+function GetBetaName(i: Integer): String;
+function GetBetaTexName(i: Integer): String;
+
 type TActivityListBetaIndividual = class(TActivityListIndividual)
   b: JobData;
   crossB: Boolean;
@@ -38,22 +41,41 @@ begin
   result := TActivityListBetaIndividual.Create;
 end;
 
-function RunGASSGSBeta(i: Integer): Double;
-  procedure FillNthPermutation(n: Integer; out digits: Array of Boolean);
-  var p: Integer;
-  begin
-    for p := 0 to 2 do begin
-      if n mod 2 = 1 then digits[p] := True else digits[p] := False;
-      n := n div 2;
-    end;
+procedure FillNthPermutation(n: Integer; out digits: Array of Boolean);
+var p: Integer;
+begin
+  for p := 0 to 2 do begin
+    if n mod 2 = 1 then digits[p] := True else digits[p] := False;
+    n := n div 2;
   end;
+end;
 
+function RunGASSGSBeta(i: Integer): Double;
 var digits: Array[0..2] of Boolean;
 begin
   FillNthPermutation(i, digits);
   TActivityListBetaIndividual.SetOptions(digits[0], digits[1], digits[2]);
-  writeln('Beta ', i, ' linked=', digits[0], ' sepcross=', digits[1], ' upperSgs=', digits[2]);
   result := TGACore.Run(AllocateIndiv, False);
+end;
+
+function B2S(b: Boolean): String; begin if b then result := 'true' else result := 'false'; end;
+
+function GetBetaName(i: Integer): String;
+var digits: Array[0..2] of Boolean;
+begin
+  FillNthPermutation(i, digits);
+  result := '(linked=' + B2S(digits[0]) + ' sepcross=' + B2S(digits[1]) + ' upper=' + B2S(digits[2]) + ')';
+end;
+
+function GetBetaTexName(i: Integer): String;
+var digits: Array[0..2] of Boolean;
+begin
+  FillNthPermutation(i, digits);
+  result := '(\lambda|\beta^{';
+  if digits[0] then result := result + 'L' else result := result + 'l';
+  if digits[1] then result := result + 'S' else result := result + 's';
+  if digits[2] then result := result + 'U' else result := result + 'u';
+  result := result + '})';
 end;
 
 function RunGASSGSBeta1: Double; begin result := RunGASSGSBeta(0); end;

@@ -9,7 +9,7 @@ implementation
 uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer;
 
 procedure InitExampleProject;
-const FNAME = '../Projekte/j30filtered/j3011_7.sm';
+const FNAME = '../Projekte/j30filtered/j301_1.sm';
 begin
   if ps <> nil then FreeAndNil(ps);
   ps := ProjData.Create;
