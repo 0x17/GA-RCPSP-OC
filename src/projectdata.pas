@@ -39,6 +39,7 @@ type
     procedure ComputeESFTS;
 
     procedure InvertPrecedence;
+    procedure ReorderJobsAscDepth;
 
     procedure CheckSchedulePrecedenceFeasibility(const sts: JobData);
     function OrderFeasible(const order: JobData): Boolean;
@@ -52,6 +53,8 @@ type
 
     function JobSetCardinality(const aset: JobSet): Integer;
     function JobSetNth(const aset: JobSet; n: Integer): Integer;
+
+    function MaxValue(jobs: JobData): Integer; inline;
 
   private
     procedure ParsePrecedenceLine(var fp: TextFile);
@@ -210,6 +213,58 @@ begin
   InitZeroOC;
 end;
 
+// Disposition method
+procedure ProjData.ReorderJobsAscDepth;
+var
+  depths, mapping: JobData;
+
+  procedure Traverse(src, depth: Integer);
+  var k: Integer;
+  begin
+    if depth > depths[src] then
+      depths[src] := depth;
+
+    for k := 0 to numJobs-1 do
+      if adjMx[src,k] = 1 then
+        Traverse(k, depth+1);
+  end;
+
+  procedure DepthsToMapping;
+  var ctr, d, j, maxDepth: Integer;
+  begin
+    maxDepth := MaxValue(depths);
+
+    ctr := 0;
+    for d := 0 to maxDepth do
+      for j := 0 to numJobs-1 do
+        if depths[j] = d then begin
+          mapping[ctr] := j;
+          inc(ctr);
+        end;
+  end;
+
+  procedure AdaptPrecedenceRelation;
+  var
+    i, j: Integer;
+    adjMxCp: ByteMx2D;
+  begin
+    adjMxCp := adjMx;
+    SetLength(adjMxCp, numJobs, numJobs);
+    for i := 0 to numJobs-1 do
+      for j := 0 to numJobs-1 do
+        adjMx[i,j] := adjMxCp[mapping[i], mapping[j]];
+  end;
+
+begin
+  SetLength(depths, numJobs);
+  Traverse(0, 0);
+
+  SetLength(mapping, numJobs);
+  DepthsToMapping;
+
+  AdaptPrecedenceRelation;
+end;
+
 procedure ProjData.InvertPrecedence;
 begin
   THelper.Transpose(adjMx);
@@ -247,7 +302,7 @@ begin
 
   for j := 0 to numJobs-1 do
     for r := 0 to numRes-1 do
-      if (demands[j,r] > 0) and (sts[j] <> -1) then
+      if demands[j,r] > 0 then
         for t := sts[j] to sts[j]+durations[j]-1 do
           resRem[r,t] := resRem[r,t] - demands[j,r];
 end;
@@ -324,6 +379,15 @@ begin
   for r := 0 to numRes - 1 do
       for t := 0 to numPeriods - 1 do
           maxOc[r,t] := zmax[r];
+end;
+
+function ProjData.MaxValue(jobs: JobData): Integer;
+var j: Integer;
+begin
+  result := 0;
+  for j := 0 to numJobs - 1 do
+    if jobs[j] > result then
+      result := jobs[j];
 end;
 
 end.

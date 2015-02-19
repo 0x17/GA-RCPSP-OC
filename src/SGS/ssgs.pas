@@ -8,7 +8,8 @@ type
   TDecideFunc = function(const dset: JobData): Integer;
 
   TSSGS = class
-    class function ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean;
+    class function ResourceFeasible(const resRemaining, z: ResourceProfile; j, stj: Integer): Boolean; overload;
+    class function ResourceFeasible(const sts: JobData; const z: ResourceProfile; j, stj: Integer): Boolean; overload;
     class procedure SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);
     class procedure Solve(const order: JobData; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
     class procedure SolveWithDecider(decider: TDecideFunc; const z: ResourceProfile; out sts: JobData; out resRemaining: ResourceProfile);
@@ -36,7 +37,27 @@ begin
             result := false;
             exit;
           end;
-  result := true
+  result := true;
+end;
+
+class function TSSGS.ResourceFeasible(const sts: JobData; const z: ResourceProfile; j, stj: Integer): Boolean;
+var t, r, i, residual: Integer;
+begin
+  for r := 0 to ps.numRes-1 do
+    if ps.demands[j,r] > 0 then
+     for t := stj to stj+ps.durations[j]-1 do begin
+       residual := ps.capacities[r];
+
+       for i := 0 to ps.numJobs-1 do
+         if (sts[i] <> -1) and (sts[i] <= t) and (t < sts[i] + ps.durations[i]) then
+           residual := residual - ps.demands[i,r];
+
+       if residual - ps.demands[j,r] < -z[r,t] then begin
+         result := false;
+         exit;
+       end;
+     end;
+  result := true;
 end;
 
 class procedure TSSGS.SolveCore(const order: JobData; startFrom: Integer; const z: ResourceProfile; var sts, fts: JobData; var resRemaining: ResourceProfile);

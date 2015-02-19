@@ -6,7 +6,7 @@ type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
-  const NHEURS = 5;
+  const NHEURS = 8 + 2;
   type
     TComputeOpt = function: Double;
     THeur = record
@@ -17,8 +17,6 @@ private
 
   var
     heurs: THeurs;
-  const
-    active: Array[0..NHEURS-1] of Integer = (0, 0, 1, 0, 0);
 
   procedure InitProject(const fname: String);
   procedure WriteOptsAndTime(const path, outFname: String);
@@ -28,25 +26,65 @@ end;
 
 implementation
 
-uses classes, sysutils, projectdata, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, variants
+uses classes, sysutils, projectdata, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants
 {$ifdef MSWINDOWS}
   , comobj
   {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
 {$endif};
 
 constructor TMain.Create;
+var k: Integer;
 begin
+  k := 0;
   SetLength(heurs, NHEURS);
-  heurs[0].name := 'GA-SSGS-Zrt';
-  heurs[0].fn := @RunGASSGSZT;
-  heurs[1].name := 'GA-SSGS-Zr';
-  heurs[1].fn := @RunGASSGSZ;
-  heurs[2].name := 'GA-SSGS-Beta';
-  heurs[2].fn := @RunGASSGSBeta;
-  heurs[3].name := 'GA-SSGS-Tau';
-  heurs[3].fn := @RunGASSGSTau;
-  heurs[4].name := 'GA-SSGS-OC';
-  heurs[4].fn := @RunGASSGSOC;
+
+  (*heurs[k].name := 'GA-SSGS-Zrt';
+  heurs[k].fn := @RunGASSGSZT;
+  inc(k);
+  heurs[k].name := 'GA-SSGS-Zr';
+  heurs[k].fn := @RunGASSGSZ;
+  inc(k);*)
+
+  // BETA VARIANTS
+  heurs[k].name := 'GA-SSGS-Beta1';
+  heurs[k].fn := @RunGASSGSBeta1;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta2';
+  heurs[k].fn := @RunGASSGSBeta2;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta3';
+  heurs[k].fn := @RunGASSGSBeta3;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta4';
+  heurs[k].fn := @RunGASSGSBeta4;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta5';
+  heurs[k].fn := @RunGASSGSBeta5;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta6';
+  heurs[k].fn := @RunGASSGSBeta6;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta7';
+  heurs[k].fn := @RunGASSGSBeta7;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-Beta8';
+  heurs[k].fn := @RunGASSGSBeta8;
+  inc(k);
+
+  // OTHERS
+  heurs[k].name := 'GA-SSGS-Tau';
+  heurs[k].fn := @RunGASSGSTau;
+  inc(k);
+
+  heurs[k].name := 'GA-SSGS-OC';
+  heurs[k].fn := @RunGASSGSOC;
 end;
 
 procedure TMain.Entrypoint;
@@ -56,9 +94,9 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
+  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
   //RunTests;
-  RunBranchAndBound;
+  //RunBranchAndBound;
 end;
 
 procedure TMain.RunBranchAndBound;
@@ -100,6 +138,7 @@ begin
   if ps <> nil then FreeAndNil(ps);
   ps := ProjData.Create;
   ps.LoadFromFile(fname);
+  ps.ReorderJobsAscDepth; // disposition method
   TTopSort.Sort(ps.topOrder);
   TProfit.CalcMinMaxMakespanCosts;
   ps.ComputeESFTS;
@@ -121,8 +160,7 @@ var
   begin
     headerStr := 'filename';
     for i := 0 to NHEURS-1 do
-      if active[i] = 1 then
-        headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
+      headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
   end;
 
   procedure ExcelPreamble;
@@ -191,10 +229,8 @@ begin
 
     if ps.minMs <> ps.maxMs then begin
       line := ChangeFileExt(ExtractFileName(fname), '');
-      for i := 0 to NHEURS - 1 do begin
-        if active[i] = 1 then
-          SolveHeur(heurs[i]);
-      end;
+      for i := 0 to NHEURS - 1 do
+        SolveHeur(heurs[i]);
     end else
       line := 'NA;NA;NA;NA;NA;NA;NA;NA;NA;NA;NA';
 

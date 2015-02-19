@@ -2,19 +2,19 @@ unit fbi;
 
 interface
 
-uses projectdata;
+uses projectdata, ssgsoc;
 
 type TFBI = class
   class procedure Improve(var sts: JobData;  const z: ResourceProfile; out resRemaining: ResourceProfile); overload;
   class procedure Improve(var order: JobData; const z: ResourceProfile); overload;
-  class procedure Improve(var order: JobData; const tau: JobData); overload;
+  class procedure Improve(var order: JobData; const tau: ExtArray); overload;
 private
   class procedure FlipSchedule(var sts: JobData);
 end;
 
 implementation
 
-uses globals, ssgs, ssgsoc;
+uses globals, ssgs;
 
 class procedure TFBI.Improve(var sts: JobData; const z: ResourceProfile; out resRemaining: ResourceProfile);
 var
@@ -45,7 +45,7 @@ begin
   TSSGS.ScheduleToActivityList(sts, order);
 end;
 
-class procedure TFBI.Improve(var order: JobData; const tau: JobData);
+class procedure TFBI.Improve(var order: JobData; const tau: ExtArray);
 var
   sts: JobData;
   z, resRem: ResourceProfile;

@@ -2,12 +2,12 @@
 
 interface
 
-uses projectdata, individual, gassgsoc;
+uses individual, gassgsoc, ssgsoc;
 
 function RunGASSGSTau: Double;
 
 type TActivityListTauIndividual = class(TActivityListIndividual)
-  tau: JobData;
+  tau: ExtArray;
   procedure InitializePopulation(var population: IndivArray); override;
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
@@ -21,7 +21,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgsoc, helpers;
+uses classes, sysutils, globals, helpers;
 
 function AllocateIndividual: IIndividual;
 begin
@@ -43,7 +43,7 @@ begin
   begin
     SetLength(TActivityListTauIndividual(population[i]).tau, ps.numJobs);
     for j := 0 to ps.numJobs - 1 do begin
-      TActivityListTauIndividual(population[i]).tau[j] := THelper.RandomRangeIncl(0, 99);
+      TActivityListTauIndividual(population[i]).tau[j] := Random;
     end;
   end;
 
@@ -69,7 +69,7 @@ begin
   SwapNeighborhood;
   for j := 0 to ps.numJobs - 1 do
     if THelper.RandomRangeIncl(1, 100) <= PROB_MUTATE then
-      tau[j] := THelper.RandomRangeIncl(0, 99);
+      tau[j] := Random;
 end;
 
 function TActivityListTauIndividual.Fitness: Double;
@@ -86,7 +86,9 @@ begin
 end;
 
 procedure TActivityListTauIndividual.Swap(i1, i2: Integer);
-var tmp, tmp2: Integer;
+var
+  tmp: Integer;
+  tmp2: Extended;
 begin
   tmp := order[i1];
   tmp2 := tau[i1];

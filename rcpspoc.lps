@@ -3,29 +3,27 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="9"/>
-    <BuildModes Active="Debug"/>
+    <BuildModes Active="Release"/>
     <Units Count="93">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="rcpspoc"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="9"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
         <Filename Value="src\projectdata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="projectdata"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="235"/>
-        <CursorPos X="21" Y="250"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="180"/>
+        <CursorPos X="15" Y="38"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
@@ -33,12 +31,10 @@
         <Filename Value="src\SGS\ssgs.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgs"/>
-        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="143"/>
-        <CursorPos X="20" Y="11"/>
-        <UsageCount Value="49"/>
-        <Loaded Value="True"/>
+        <TopLine Value="74"/>
+        <CursorPos X="81" Y="61"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -48,7 +44,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="64"/>
         <CursorPos X="68" Y="146"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -57,9 +53,9 @@
         <UnitName Value="profit"/>
         <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="18" Y="12"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="7"/>
+        <CursorPos X="15" Y="48"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
@@ -70,7 +66,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="102"/>
         <CursorPos X="3" Y="107"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -80,8 +76,8 @@
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="48" Y="21"/>
-        <UsageCount Value="49"/>
+        <CursorPos X="48" Y="23"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
@@ -89,11 +85,12 @@
         <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
-        <EditorIndex Value="4"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="64"/>
-        <CursorPos X="15" Y="79"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="97"/>
+        <CursorPos X="51" Y="127"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
@@ -101,11 +98,11 @@
         <Filename Value="src\SGS\ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsmod"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="5" Y="34"/>
-        <UsageCount Value="49"/>
+        <CursorPos X="1" Y="3"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
@@ -115,9 +112,9 @@
         <UnitName Value="individual"/>
         <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="40" Y="10"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="140"/>
+        <CursorPos X="26" Y="98"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
@@ -128,7 +125,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="5"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
@@ -138,18 +135,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="24" Y="9"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
         <Filename Value="src\GeneticAlgorithms\gassgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsoc"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="114"/>
-        <CursorPos X="1" Y="94"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="94"/>
+        <CursorPos X="36" Y="135"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
@@ -159,9 +156,9 @@
         <UnitName Value="gassgsbeta"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3"/>
-        <CursorPos X="41" Y="23"/>
-        <UsageCount Value="49"/>
+        <TopLine Value="37"/>
+        <CursorPos X="9" Y="66"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
@@ -169,35 +166,31 @@
         <Filename Value="src\GeneticAlgorithms\gassgstau.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgstau"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="21"/>
-        <CursorPos X="42" Y="87"/>
-        <UsageCount Value="49"/>
-        <Loaded Value="True"/>
+        <TopLine Value="4"/>
+        <CursorPos X="15" Y="47"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
         <Filename Value="src\GeneticAlgorithms\gassgsz.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgsz"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="14" Y="54"/>
-        <UsageCount Value="49"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
         <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="55" Y="20"/>
-        <UsageCount Value="49"/>
+        <CursorPos X="69" Y="18"/>
+        <UsageCount Value="57"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
@@ -208,27 +201,31 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="46" Y="50"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="57"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit17>
       <Unit18>
         <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="59" Y="9"/>
-        <UsageCount Value="49"/>
+        <CursorPos X="71" Y="9"/>
+        <UsageCount Value="57"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="src\visualizer.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="visualizer"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="19"/>
-        <CursorPos X="64" Y="35"/>
-        <UsageCount Value="38"/>
+        <TopLine Value="83"/>
+        <CursorPos X="20" Y="104"/>
+        <UsageCount Value="46"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
@@ -238,7 +235,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="37" Y="10"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="46"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit20>
       <Unit21>
@@ -248,7 +245,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="115" Y="40"/>
-        <UsageCount Value="34"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit21>
       <Unit22>
@@ -258,7 +255,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="70" Y="39"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -268,7 +265,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="17"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -278,7 +275,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="111" Y="35"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -288,19 +285,18 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="45" Y="13"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="37"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="src\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="122"/>
-        <CursorPos X="30" Y="131"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="120"/>
+        <CursorPos X="11" Y="156"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
@@ -310,7 +306,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="6"/>
-        <UsageCount Value="44"/>
+        <UsageCount Value="43"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
@@ -319,7 +315,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="95" Y="16"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="39"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit28>
       <Unit29>
@@ -328,7 +324,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="55" Y="20"/>
-        <UsageCount Value="181"/>
+        <UsageCount Value="180"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit29>
       <Unit30>
@@ -337,7 +333,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="30" Y="17"/>
-        <UsageCount Value="181"/>
+        <UsageCount Value="180"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
@@ -346,7 +342,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="99"/>
         <CursorPos X="19" Y="10"/>
-        <UsageCount Value="181"/>
+        <UsageCount Value="180"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit31>
       <Unit32>
@@ -355,7 +351,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="42" Y="45"/>
-        <UsageCount Value="181"/>
+        <UsageCount Value="180"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit32>
       <Unit33>
@@ -364,7 +360,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="74" Y="30"/>
-        <UsageCount Value="178"/>
+        <UsageCount Value="177"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
@@ -378,7 +374,7 @@
           <TopLine Value="1"/>
           <CursorPos X="74" Y="90"/>
         </ExtraEditor1>
-        <UsageCount Value="177"/>
+        <UsageCount Value="176"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
@@ -386,7 +382,7 @@
         <UnitName Value="main"/>
         <TopLine Value="48"/>
         <CursorPos X="37" Y="143"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="172"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
       <Unit36>
@@ -395,7 +391,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="2"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="114"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit36>
       <Unit37>
@@ -404,7 +400,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="32"/>
-        <UsageCount Value="106"/>
+        <UsageCount Value="105"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit37>
       <Unit38>
@@ -413,7 +409,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="29" Y="14"/>
-        <UsageCount Value="130"/>
+        <UsageCount Value="129"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit38>
       <Unit39>
@@ -422,7 +418,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="14"/>
-        <UsageCount Value="105"/>
+        <UsageCount Value="104"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit39>
       <Unit40>
@@ -431,7 +427,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="8"/>
-        <UsageCount Value="105"/>
+        <UsageCount Value="104"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
@@ -440,7 +436,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="58"/>
         <CursorPos X="54" Y="30"/>
-        <UsageCount Value="97"/>
+        <UsageCount Value="96"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit41>
       <Unit42>
@@ -449,7 +445,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="53" Y="40"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="95"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit42>
       <Unit43>
@@ -458,7 +454,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="14" Y="89"/>
-        <UsageCount Value="73"/>
+        <UsageCount Value="72"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
       <Unit44>
@@ -467,7 +463,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="52" Y="49"/>
-        <UsageCount Value="72"/>
+        <UsageCount Value="71"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit44>
       <Unit45>
@@ -476,7 +472,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="39" Y="13"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="61"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit45>
       <Unit46>
@@ -485,7 +481,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="23" Y="51"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="30"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit46>
       <Unit47>
@@ -494,7 +490,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="69" Y="45"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="29"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit47>
       <Unit48>
@@ -503,7 +499,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="28" Y="1"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="26"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit48>
       <Unit49>
@@ -512,7 +508,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="105" Y="21"/>
-        <UsageCount Value="95"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit49>
       <Unit50>
@@ -521,7 +517,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="140"/>
         <CursorPos X="89" Y="164"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="52"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit50>
       <Unit51>
@@ -530,7 +526,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="20" Y="4"/>
-        <UsageCount Value="144"/>
+        <UsageCount Value="143"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit51>
       <Unit52>
@@ -539,13 +535,13 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="96" Y="19"/>
-        <UsageCount Value="138"/>
+        <UsageCount Value="137"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit52>
       <Unit53>
         <Filename Value="obsolete.pas"/>
         <UnitName Value="obsolete"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="25"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit53>
       <Unit54>
@@ -554,7 +550,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="44"/>
-        <UsageCount Value="44"/>
+        <UsageCount Value="43"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit54>
       <Unit55>
@@ -563,7 +559,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="25"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit55>
       <Unit56>
@@ -572,7 +568,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="11"/>
         <CursorPos X="44" Y="10"/>
-        <UsageCount Value="19"/>
+        <UsageCount Value="18"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit56>
       <Unit57>
@@ -581,7 +577,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="67" Y="5"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="53"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit57>
       <Unit58>
@@ -590,7 +586,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="15" Y="42"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="53"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit58>
       <Unit59>
@@ -599,7 +595,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="6" Y="13"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="53"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit59>
       <Unit60>
@@ -608,7 +604,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="37"/>
         <CursorPos X="27" Y="51"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="31"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit60>
       <Unit61>
@@ -617,7 +613,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="55" Y="13"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit61>
       <Unit62>
@@ -626,7 +622,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="26" Y="7"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit62>
       <Unit63>
@@ -635,7 +631,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="117" Y="33"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="24"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit63>
       <Unit64>
@@ -644,7 +640,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="8" Y="1"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
       </Unit64>
       <Unit65>
         <Filename Value="geneticalgorithm.pas"/>
@@ -652,7 +648,7 @@
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="74" Y="31"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="28"/>
       </Unit65>
       <Unit66>
         <Filename Value="psplibreader.pas"/>
@@ -660,7 +656,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="55" Y="16"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="16"/>
       </Unit66>
       <Unit67>
         <Filename Value="projdata.pas"/>
@@ -668,21 +664,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="11" Y="1"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit67>
       <Unit68>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\mathh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="14" Y="80"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit68>
       <Unit69>
         <Filename Value="ssgs-oc.pas"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="8" Y="2"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit69>
       <Unit70>
         <Filename Value="schedvis.pas"/>
@@ -690,21 +686,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="5" Y="17"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit70>
       <Unit71>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\sysutils\diskh.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="19"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit71>
       <Unit72>
         <Filename Value="..\..\..\..\Downloads\omnithreadlibrary-read-only\OtlOptions.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="31" Y="32"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit72>
       <Unit73>
         <Filename Value="..\..\..\..\Downloads\omnithreadlibrary-read-only\OtlCommon.pas"/>
@@ -712,35 +708,35 @@
         <WindowIndex Value="0"/>
         <TopLine Value="195"/>
         <CursorPos X="3" Y="222"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit73>
       <Unit74>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\objpash.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="167"/>
         <CursorPos X="23" Y="192"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit74>
       <Unit75>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1583"/>
         <CursorPos X="15" Y="1606"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit75>
       <Unit76>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\sysutils\sysutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="267"/>
         <CursorPos X="13" Y="290"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
       </Unit76>
       <Unit77>
         <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\win\wininc\func.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="231"/>
         <CursorPos X="10" Y="258"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit77>
       <Unit78>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\strutils.pp"/>
@@ -748,35 +744,35 @@
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="25" Y="31"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit78>
       <Unit79>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\classesh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1527"/>
         <CursorPos X="3" Y="1549"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit79>
       <Unit80>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysutils.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit80>
       <Unit81>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\system.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit81>
       <Unit82>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\filutilh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="67"/>
         <CursorPos X="10" Y="94"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit82>
       <Unit83>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\objpas.pp"/>
@@ -784,21 +780,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="8" Y="28"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit83>
       <Unit84>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\ascdef.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="439"/>
         <CursorPos X="10" Y="469"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit84>
       <Unit85>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\unifun.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="440"/>
         <CursorPos X="10" Y="470"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit85>
       <Unit86>
         <Filename Value="visualizer.pas"/>
@@ -806,7 +802,7 @@
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="43" Y="13"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit86>
       <Unit87>
@@ -814,7 +810,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="139"/>
         <CursorPos X="1" Y="164"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit87>
       <Unit88>
@@ -823,7 +819,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="3"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit88>
       <Unit89>
@@ -831,7 +827,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="81" Y="16"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit89>
       <Unit90>
@@ -839,14 +835,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit90>
       <Unit91>
         <Filename Value="..\..\..\..\AppData\Local\Temp\tmp7540.tmp.pas"/>
         <WindowIndex Value="0"/>
         <TopLine Value="59"/>
         <CursorPos X="55" Y="27"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit91>
       <Unit92>
@@ -854,7 +850,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="73"/>
         <CursorPos X="1" Y="83"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit92>
     </Units>
@@ -863,173 +859,126 @@
     </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="113" Column="1" TopLine="98"/>
+        <Filename Value="src\projectdata.pas"/>
+        <Caret Line="199" Column="14" TopLine="175"/>
       </Position1>
       <Position2>
         <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Caret Line="92" Column="31" TopLine="66"/>
       </Position2>
       <Position3>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="116" Column="18" TopLine="98"/>
+        <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
+        <Caret Line="20" Column="55" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Filename Value="src\projectdata.pas"/>
+        <Caret Line="388" Column="19" TopLine="345"/>
       </Position4>
       <Position5>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="113" Column="1" TopLine="98"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="62" Column="19" TopLine="25"/>
       </Position5>
       <Position6>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="72" Column="5" TopLine="29"/>
       </Position6>
       <Position7>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="113" Column="1" TopLine="98"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="70" Column="18" TopLine="25"/>
       </Position7>
       <Position8>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Filename Value="src\visualizer.pas"/>
+        <Caret Line="124" Column="43" TopLine="83"/>
       </Position8>
       <Position9>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="116" Column="29" TopLine="98"/>
+        <Filename Value="src\visualizer.pas"/>
+        <Caret Line="13" Column="57" TopLine="1"/>
       </Position9>
       <Position10>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="92" Column="30" TopLine="1"/>
       </Position10>
       <Position11>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="113" Column="1" TopLine="98"/>
+        <Filename Value="src\individual.pas"/>
+        <Caret Line="10" Column="40" TopLine="1"/>
       </Position11>
       <Position12>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="114" Column="1" TopLine="98"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="31" Column="147" TopLine="1"/>
       </Position12>
       <Position13>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="128" Column="1" TopLine="98"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="242" Column="43" TopLine="215"/>
       </Position13>
       <Position14>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="131" Column="1" TopLine="98"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="70" Column="18" TopLine="40"/>
       </Position14>
       <Position15>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="130" Column="43" TopLine="104"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="201" Column="13" TopLine="188"/>
       </Position15>
       <Position16>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="135" Column="1" TopLine="104"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="113" Column="26" TopLine="97"/>
       </Position16>
       <Position17>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="137" Column="1" TopLine="104"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="41" Column="21" TopLine="1"/>
       </Position17>
       <Position18>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="140" Column="1" TopLine="107"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="39" Column="14" TopLine="16"/>
       </Position18>
       <Position19>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="141" Column="1" TopLine="108"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="8" Column="12" TopLine="6"/>
       </Position19>
       <Position20>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="142" Column="1" TopLine="109"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="11" Column="17" TopLine="6"/>
       </Position20>
       <Position21>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="143" Column="1" TopLine="110"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="63" Column="19" TopLine="52"/>
       </Position21>
       <Position22>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="144" Column="1" TopLine="111"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="29" Column="66" TopLine="6"/>
       </Position22>
       <Position23>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="145" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="62" Column="39" TopLine="31"/>
       </Position23>
       <Position24>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="144" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="63" Column="11" TopLine="31"/>
       </Position24>
       <Position25>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="145" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="84" Column="17" TopLine="30"/>
       </Position25>
       <Position26>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="144" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="60" Column="7" TopLine="42"/>
       </Position26>
       <Position27>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="145" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="58" Column="106" TopLine="33"/>
       </Position27>
       <Position28>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="144" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="19" Column="80" TopLine="1"/>
       </Position28>
       <Position29>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="145" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="60" Column="21" TopLine="28"/>
       </Position29>
       <Position30>
-        <Filename Value="src\branchandbound.pas"/>
-        <Caret Line="128" Column="1" TopLine="112"/>
+        <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
+        <Caret Line="68" Column="35" TopLine="50"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
-  <Debugging>
-    <Watches Count="14">
-      <Item1>
-        <Expression Value="resRem[0]"/>
-      </Item1>
-      <Item2>
-        <Expression Value="ps.demands"/>
-      </Item2>
-      <Item3>
-        <Expression Value="ps.demands[26]"/>
-      </Item3>
-      <Item4>
-        <Expression Value="ps.demands[25]"/>
-      </Item4>
-      <Item5>
-        <Expression Value="eligibles[25]"/>
-      </Item5>
-      <Item6>
-        <Expression Value="eligibles[24]"/>
-      </Item6>
-      <Item7>
-        <Expression Value="eligibles[26]"/>
-      </Item7>
-      <Item8>
-        <Expression Value="eligibles[23]"/>
-      </Item8>
-      <Item9>
-        <Expression Value="eligibles[22]"/>
-      </Item9>
-      <Item10>
-        <Expression Value="eligibles"/>
-        <DisplayStyle Value="wdfMemDump"/>
-      </Item10>
-      <Item11>
-        <Expression Value="sts"/>
-      </Item11>
-      <Item12>
-        <Expression Value="sts[25]"/>
-      </Item12>
-      <Item13>
-        <Expression Value="sts[26]"/>
-      </Item13>
-      <Item14>
-        <Expression Value="resRem[0,5]"/>
-      </Item14>
-    </Watches>
-  </Debugging>
   <EditorMacros Count="0"/>
 </CONFIG>

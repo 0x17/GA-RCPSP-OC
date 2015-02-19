@@ -12,8 +12,10 @@ private
   lb: Double;
   lbSts: JobData;
 
-  procedure Branch(sts: JobData; resRem: ResourceProfile);
-  function ComputeUpperBound(const sts: JobData; const resRem: ResourceProfile): Double;
+  procedure Branch(sts, order: JobData; k: Integer);
+  function ComputeUpperBound(const sts: JobData): Double;
+  function IsEligible(const sts: JobData; j: Integer): Boolean;
+  procedure BranchLog(const sts: JobData); inline;
 end;
 
 implementation
@@ -44,21 +46,24 @@ end;
 
 function TBranchAndBound.Solve(out solution: JobData): Double;
 var
-  sts: JobData;
+  sts, order: JobData;
   i: Integer;
-  resRem: ResourceProfile;
 begin
   SetLength(sts, ps.numJobs);
-  for i := 0 to ps.numJobs-1 do
+  SetLength(order, ps.numJobs);
+  for i := 0 to ps.numJobs-1 do begin
     sts[i] := -1;
+    order[i] := -1;
+  end;
   sts[0] := 0;
-  TSSGS.InitializeResidualCapacity(resRem);
-  Branch(sts, resRem);
+  order[0] := 0;
+
+  Branch(sts, order, 1);
   result := lb;
   solution := Copy(lbSts, 0, ps.numJobs);
 end;
 
-procedure BranchLog(const sts: JobData); inline;
+procedure TBranchAndBound.BranchLog(const sts: JobData);
 var j: Integer;
 begin
   write('BRANCH (');
@@ -66,51 +71,30 @@ begin
   writeln(')');
 end;
 
-type BoolArray = Array of Boolean;
-
-function ComputeEligibles(const sts: JobData): BoolArray;
-var i, j: Integer;
+function TBranchAndBound.IsEligible(const sts: JobData; j: Integer): Boolean;
+var i: Integer;
 begin
-  SetLength(result, ps.numJobs);
-  for j := 0 to ps.numJobs-1 do begin
-    result[j] := False;
-    // Job itself not scheduled
-    if sts[j] = -1 then begin
-      // All preds scheduled?
-      result[j] := True;
-      for i := 0 to ps.numJobs-1 do
-        if (sts[i] = -1) and (ps.adjMx[i,j] = 1) then begin
-          result[j] := False;
-          break;
-        end;
-    end;
+  result := False;
+  // Job itself not scheduled
+  if sts[j] = -1 then begin
+    // All preds scheduled?
+    result := True;
+    for i := 0 to ps.numJobs-1 do
+      if (sts[i] = -1) and (ps.adjMx[i,j] = 1) then begin
+        result := False;
+        exit;
+      end;
   end;
 end;
 
-function MaxST(const sts: JobData; out mjob: Integer): Integer; inline;
-var j: Integer;
-begin
-  result := sts[0];
-  mjob := 0;
-  for j := 1 to ps.numJobs-1 do
-    if (sts[j] <> -1) and (sts[j] > result) then begin
-      result := sts[j];
-      mjob := j;
-    end;
-end;
-
-procedure TBranchAndBound.Branch(sts: JobData; resRem: ResourceProfile);
+procedure TBranchAndBound.Branch(sts, order: JobData; k: Integer);
 var
-  i, j, tPrecFeas, tResFeas, t, tau, r, mjob: Integer;
-  eligibles: BoolArray;
+  i, j, tPrecFeas, tResFeas, t, prev: Integer;
   ub, nprofit: Double;
-  resRemCp: ResourceProfile;
-
-  resRemDbg: ResourceProfile;
 begin
   // Found leaf? Update lower bound (if better)!
-  if sts[ps.numJobs-1] <> -1 then begin
-    nprofit := TProfit.CalcProfit(sts, resRem);
+  if k = ps.numJobs-1 then begin
+    nprofit := TProfit.CalcProfit(sts);
     if nprofit > lb then begin
       lb := nprofit;
       lbSts := Copy(sts, 0, ps.numJobs);
@@ -118,68 +102,43 @@ begin
     exit;
   end;
 
-  // Compute eligibles
-  eligibles := ComputeEligibles(sts);
-
   // Branch over eligibles
   for j := 0 to ps.numJobs-1 do begin
-    if eligibles[j] then begin
-        // First period of precedence feasibility (all preds finished)
-        tPrecFeas := 0;
-        for i := 0 to ps.numJobs - 1 do
-          if (ps.adjMx[i, j] = 1) and (sts[i] + ps.durations[i] > tPrecFeas) then
-            tPrecFeas := sts[i] + ps.durations[i];
+    if IsEligible(sts, j) then begin
+      order[k] := j;
 
-        // First period of resource feasibility (enough capacity throughout runtime)
-        for tResFeas := tPrecFeas to ps.numPeriods - 1 do
-          if TSSGS.ResourceFeasible(resRem, ps.zeroOc, j, tResFeas) then
-            break;
+      // First period of precedence feasibility (all preds finished)
+      tPrecFeas := 0;
+      for i := 0 to ps.numJobs - 1 do
+        if (ps.adjMx[i, j] = 1) and (sts[i] + ps.durations[i] > tPrecFeas) then
+          tPrecFeas := sts[i] + ps.durations[i];
 
-        // Branch on all possible periods between precedence and resource feasibility
-        for t := tPrecFeas to tResFeas do begin
-          if not TSSGS.ResourceFeasible(resRem, ps.maxOc, j, t) then
-            continue;
+      // First period of resource feasibility (enough capacity throughout runtime)
+      for tResFeas := tPrecFeas to ps.numPeriods - 1 do
+        if TSSGS.ResourceFeasible(sts, ps.zeroOc, j, tResFeas) then
+          break;
 
-          // Prevent duplicate scheduling orders ("activity lists")
-          if t < MaxST(sts, mjob) then // or build activity list while branching?
-            continue;
-          if (t = sts[mjob]) and (mjob > j) then
-            continue;
+      // Branch on all feasible periods between precedence and resource feasibility
+      for t := tPrecFeas to tResFeas do begin
+        // Prevent duplicate scheduling orders ("activity lists") yielding same schedule
+        prev := order[k-1];
+        if (t < sts[prev]) or ((t = sts[prev]) and (prev > j)) then continue;
 
-          writeln(j, ' ', t);
+        // Don't overrun max overtime!
+        if not TSSGS.ResourceFeasible(sts, ps.maxOc, j, t) then continue;
 
-          //sts[j] := -1;
+        sts[j] := t;
 
-          (*ps.InferProfileFromSchedule(sts, resRemDbg);
-          if TProfit.TotalOCCosts(resRem) <> TProfit.TotalOCCosts(resRemDbg) then
-            writeln(TProfit.TotalOCCosts(resRem), TProfit.TotalOCCosts(resRemDbg));
-          assert(TProfit.TotalOCCosts(resRem) = TProfit.TotalOCCosts(resRemDbg));*)
-
-          sts[j] := t;
-          // Copy residual capacities and update
-          resRemCp := resRem;
-          SetLength(resRemCp, ps.numRes, ps.numPeriods);
-          for r := 0 to ps.numRes-1 do
-            if ps.demands[j,r] > 0 then
-              for tau := t to t+ps.durations[j]-1 do begin
-                resRemCp[r,tau] := resRemCp[r,tau] - ps.demands[j,r];
-                Assert(resRem[r,tau] = resRemCp[r,tau] + ps.demands[j,r]);
-              end;
-
-          ps.InferProfileFromSchedule(sts, resRemDbg);
-          assert(TProfit.TotalOCCosts(resRemCp) = TProfit.TotalOCCosts(resRemDbg));
-
-          // Compute upper bound profit for completed schedule
-          ub := ComputeUpperBound(sts, resRemCp);
-          if ub > lb then begin
-            Branch(Copy(sts, 0, ps.numJobs), resRemCp);
-          end else writeln('BOUND'); // FIXME: resRem und sts werden beim BOUNDING unsync!!!!!!!!!!!
-        end;
+        // Compute upper bound profit for completed schedule
+        ub := ComputeUpperBound(sts);
+        if ub > lb then
+          Branch(Copy(sts, 0, ps.numJobs), Copy(order, 0, ps.numJobs), k+1);
       end;
+    end;
   end;
 end;
 
-function TBranchAndBound.ComputeUpperBound(const sts: JobData; const resRem: ResourceProfile): Double;
+function TBranchAndBound.ComputeUpperBound(const sts: JobData): Double;
 var alpha, sumUnits, maxSum, maxRes, ftpartial, j, r: Integer;
 begin
   maxSum := 0;
@@ -203,9 +162,8 @@ begin
     if (sts[j] <> -1) and (sts[j] + ps.durations[j] > ftpartial) then
       ftpartial := sts[j] + ps.durations[j];
 
-  // FIXME: Also use zmax but ut getting negative!
   alpha := Ceil(maxSum / (ps.capacities[maxRes] + ps.zmax[maxRes]));
-  result := TProfit.Revenue(ftpartial + alpha) - TProfit.TotalOCCosts(resRem);
+  result := TProfit.Revenue(ftpartial + alpha) - TProfit.TotalOCCosts(sts);
 end;
 
 end.

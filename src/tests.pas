@@ -6,7 +6,7 @@ procedure RunTests;
 
 implementation
 
-uses projectdata, ssgs, globals, sysutils, topsort, profit;
+uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer;
 
 procedure InitExampleProject;
 const FNAME = '../Projekte/j30filtered/j3011_7.sm';
@@ -56,11 +56,19 @@ begin
     Assert(order[j] = revOrder[j]);
 end;
 
+procedure TestDispositionMethod;
+begin
+  TVisualizer.VisualizeGraph('beforedisposition');
+  ps.ReorderJobsAscDepth;
+  TVisualizer.VisualizeGraph('afterdisposition');
+end;
+
 procedure RunTests;
 begin
   InitExampleProject;
-  TestScheduleToActivityList;
-  TestReverseActivityList;
+  //TestScheduleToActivityList;
+  //TestReverseActivityList;
+  //TestDispositionMethod;
   FreeAndNil(ps);
 end;
 

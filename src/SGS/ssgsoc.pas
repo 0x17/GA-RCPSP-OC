@@ -9,31 +9,33 @@ interface
 
 uses projectdata;
 
+type ExtArray = Array of Extended;
+
 type TSSGSOC = class
-  class function SolveWithTau(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
+  class function SolveWithTau(const order: JobData; const tau: ExtArray; out sts: JobData; out resRemaining: ResourceProfile): Double;
   class function Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
 private
-  class function SolveCommon(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
+  class function SolveCommon(const order: JobData; const tau: ExtArray; out sts: JobData; out resRemaining: ResourceProfile): Double;
 end;
 
 implementation
 
 uses classes, sysutils, profit, ssgs, globals, math;
 
-class function TSSGSOC.SolveWithTau(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
+class function TSSGSOC.SolveWithTau(const order: JobData; const tau: ExtArray; out sts: JobData; out resRemaining: ResourceProfile): Double;
 begin
   result := SolveCommon(order, tau, sts, resRemaining);
 end;
 
 class function TSSGSOC.Solve(const order: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
-var tau: JobData;
+var tau: ExtArray;
 begin
   SetLength(tau, ps.numJobs);
-  tau[0] := -1;
+  tau[0] := -1.0;
   result := SolveCommon(order, tau, sts, resRemaining);
 end;
 
-class function TSSGSOC.SolveCommon(const order, tau: JobData; out sts: JobData; out resRemaining: ResourceProfile): Double;
+class function TSSGSOC.SolveCommon(const order: JobData; const tau: ExtArray; out sts: JobData; out resRemaining: ResourceProfile): Double;
 var
   ix, j, tauPrecFeas, tauResFeas, t, bestT, k1, k2: Integer;
   resRemainingTmp: ResourceProfile;
@@ -60,7 +62,7 @@ begin
       if TSSGS.ResourceFeasible(resRemaining, ps.zeroOc, j, tauResFeas) then
         break;
 
-    if tau[0] = -1 then
+    if tau[0] = -1.0 then
       begin
         // Probiere alle t in tauPrecFeas..tauResFeas und wähle bestes
         bestProfit := -4.56E100;
@@ -87,7 +89,7 @@ begin
     else
       begin
         // Wähle t zwischen tauPrecFeas..tauResFeas mithilfe von tau-Vektor
-        bestT := tauPrecFeas + Round((tauResFeas - tauPrecFeas) / 100 * tau[j]);
+        bestT := tauResFeas - Round((tauResFeas - tauPrecFeas) * tau[j]);
         while not(TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, bestT)) do inc(bestT);
       end;
 
@@ -99,4 +101,4 @@ begin
 end;
 
 end.
-
+
