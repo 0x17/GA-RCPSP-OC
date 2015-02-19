@@ -28,10 +28,10 @@ end;
 
 implementation
 
-uses classes, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants
+uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants
 {$ifdef MSWINDOWS}
   , comobj
-  {$ifdef FPC}{$else}, excel2000, types, strutils{$endif}
+  {$ifdef FPC}{$else}, excel2000, types{$endif}
 {$endif};
 
 constructor TMain.Create;
@@ -166,7 +166,6 @@ function ParseOptProfit(const projName: String): Double;
 var
   fp: TextFile;
   line: String;
-  parts: TArray<String>;
 begin
   result := -1.0;
   AssignFile(fp, 'OptProfits.csv');
@@ -174,9 +173,9 @@ begin
 
   while not eof(fp) do begin
     ReadLn(fp, line);
-    if line.StartsWith(projName) then begin
-      parts := line.Split([';']);
-      result := StrToFloat(parts[1]);
+    if AnsiStartsStr(projName, line) then begin
+      AnsiReplaceStr(line, projName+';', '');
+      result := StrToFloat(line);
       break;
     end;
   end;
@@ -186,12 +185,11 @@ end;
 
 procedure TMain.EvaluateResultsToTeX(const profits, solvetimes: TResultTable; const outFname: String);
 const
-  NCHARACTERISTICS = 4;
-  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', (*'vark(deviation)',*) 'optimal', '$\varnothing$ solvetime');
+  NCHARACTERISTICS = 5;
+  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', 'vark(deviation)', 'optimal', '$\varnothing$ solvetime');
 var
   i, j: Integer;
-  fp: TextFile;
-  val, columnFormat: String;
+  val, columnFormat, contents: String;
 
   function Gap(heurProfit, optProfit: Double): Double;
   begin
@@ -216,9 +214,21 @@ var
         result := Gap(profits[k, heurIndex+1], profits[k,0]);
   end;
 
-  function GetVarCoeffDev(heurIndex: Integer): Double;
+  function GetStdDev(heurIndex: Integer): Double;
+  var
+     k: Integer;
+     avg: Double;
   begin
     result := 0.0;
+    avg := GetAvgDeviation(heurIndex);
+    for k := 0 to High(profits) do
+      result := result + Power(Gap(profits[k, heurIndex+1], profits[k, 0]) - avg, 2);
+    result := Sqr(result / (Length(profits) - 1));
+  end;
+
+  function GetVarCoeffDev(heurIndex: Integer): Double;
+  begin
+    result := GetStdDev(heurIndex) / GetAvgDeviation(heurIndex);
   end;
 
   function GetPercOptimal(heurIndex: Integer): Double;
@@ -240,52 +250,69 @@ var
     result := result / Length(profits);
   end;
 
-begin
-  AssignFile(fp, outFname);
-  Rewrite(fp);
+  procedure InsertContentsInSkeleton(const skeletonFn: String);
+  var
+    fp: TextFile;
+    composed, line: String;
+  begin
+    AssignFile(fp, skeletonFn);
+    Reset(fp);
+    composed := '';
+    while not eof(fp) do begin
+      ReadLn(fp, line);
+      if AnsiContainsStr(line, '%%CONTENTS%%') then
+        AnsiReplaceStr(line, '%%CONTENTS%%', contents);
+      composed := composed + line;
+    end;
+    CloseFile(fp);
 
+    AssignFile(fp, outFname);
+    Rewrite(fp);
+    Write(fp, composed);
+    CloseFile(fp);
+  end;
+
+begin
   columnFormat := '';
   for i := 0 to NHEURS do
     columnFormat := columnFormat + 'c';
 
-  WriteLn(fp, '\begin{tabular}{'+columnFormat+'}'+#10+'\hline');
+  contents := '\begin{tabular}{'+columnFormat+'}'+#10+'\hline';
 
   // Write head row
   for i := 0 to NHEURS do begin
-    if i = 0 then Write(fp, 'representation')
-    else Write(fp, heurs[i-1].texName);
+    if i = 0 then contents := contents + 'representation'
+    else contents := contents + '$' + heurs[i-1].texName + '$';
 
-    if i < NHEURS then
-      Write(fp, '&')
-    else
-      Write(fp, '\\'+#10+'\hline'+#10);
+    if i < NHEURS then contents := contents + '&'
+    else contents := contents + '\\'+#10+'\hline'+#10;
   end;
 
   // Write body
   for i := 0 to NCHARACTERISTICS-1 do
     for j := 0 to NHEURS do begin
-      if j = 0 then Write(fp, characteristics[i])
+      if j = 0 then contents := contents + characteristics[i]
       else begin
         case i of
           0: val := FloatToStr(RoundTo(GetAvgDeviation(j-1)*100, -2))+'\%';
           1: val := FloatToStr(RoundTo(GetMaxDeviation(j-1)*100, -2))+'\%';
-          //2: val := FloatToStr(RoundTo(GetVarCoeffDev(j-1), -2));
-          2: val := FloatToStr(RoundTo(GetPercOptimal(j-1)*100, -2))+'\%';
-          3: val := FloatToStr(RoundTo(GetAvgSolvetime(j-1), -2))+'s';
+          2: val := FloatToStr(RoundTo(GetVarCoeffDev(j-1), -2));
+          3: val := FloatToStr(RoundTo(GetPercOptimal(j-1)*100, -2))+'\%';
+          4: val := FloatToStr(RoundTo(GetAvgSolvetime(j-1), -2))+'s';
         end;
-        Write(fp, val);
+        contents := contents + val;
       end;
 
       if j < NHEURS then
-        Write(fp, '&')
+        contents := contents + '&'
       else
-        Write(fp, '\\'+#10'\hline'+#10);
+        contents := contents + '\\'+#10'\hline'+#10;
 
     end;
 
-  WriteLn(fp, '\hline'+#10+'\end{tabular}');
+  contents := contents + '\hline'+#10+'\end{tabular}';
 
-  CloseFile(fp);
+  InsertContentsInSkeleton('skeleton.tex');
 end;
 
 procedure TMain.WriteOptsAndTime(const path, outFname: String);
@@ -439,4 +466,4 @@ begin
 end;
 
 end.
-
+

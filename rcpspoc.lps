@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Debug"/>
-    <Units Count="98">
+    <Units Count="99">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -19,12 +19,11 @@
         <Filename Value="src\projectdata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="projectdata"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="233"/>
-        <CursorPos X="16" Y="219"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="280"/>
+        <CursorPos X="36" Y="256"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
@@ -35,7 +34,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="74"/>
         <CursorPos X="81" Y="61"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
@@ -45,17 +44,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="64"/>
         <CursorPos X="68" Y="146"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
         <Filename Value="src\profit.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="profit"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="7"/>
-        <CursorPos X="15" Y="48"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="23"/>
+        <CursorPos X="11" Y="55"/>
+        <UsageCount Value="62"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -65,7 +66,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="102"/>
         <CursorPos X="3" Y="107"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -75,18 +76,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="48" Y="23"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="127"/>
-        <CursorPos X="26" Y="140"/>
-        <UsageCount Value="58"/>
+        <TopLine Value="188"/>
+        <CursorPos X="40" Y="226"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
@@ -97,14 +99,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="25" Y="13"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="src\GeneticAlgorithms\individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="24"/>
       </Unit9>
       <Unit10>
         <Filename Value="src\SGS\esschedule.pas"/>
@@ -113,7 +115,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="5"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
@@ -123,7 +125,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="24" Y="9"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
@@ -133,7 +135,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="92" Y="33"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
@@ -143,7 +145,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="39"/>
         <CursorPos X="23" Y="61"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
@@ -153,7 +155,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="7" Y="103"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
@@ -163,7 +165,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="38" Y="18"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
@@ -173,14 +175,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="5" Y="58"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="src\Methods\fbi.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fbi"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="24"/>
       </Unit17>
       <Unit18>
         <Filename Value="src\tests.pas"/>
@@ -189,7 +191,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="71" Y="9"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="62"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
@@ -199,20 +201,20 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="43" Y="13"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="51"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
         <Filename Value="src\Methods\peakcrossover.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="peakcrossover"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="24"/>
       </Unit20>
       <Unit21>
         <Filename Value="src\GeneticAlgorithms\compfitness.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="compfitness"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="24"/>
       </Unit21>
       <Unit22>
         <Filename Value="src\Sampling\bbrsm.pas"/>
@@ -221,7 +223,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="70" Y="39"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -231,7 +233,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="17"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -241,7 +243,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="111" Y="35"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -251,14 +253,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="45" Y="13"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="42"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="src\Exact\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="24"/>
       </Unit26>
       <Unit27>
         <Filename Value="src\individual.pas"/>
@@ -858,95 +860,141 @@
         <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit97>
+      <Unit98>
+        <Filename Value="..\..\..\..\..\..\usr\local\share\fpcsrc\rtl\objpas\sysutils\sysstrh.inc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="40" Y="27"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit98>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="18" HistoryIndex="17">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="src\main.pas"/>
-        <Caret Line="170" Column="5" TopLine="146"/>
+        <Caret Line="233" Column="1" TopLine="202"/>
       </Position1>
       <Position2>
         <Filename Value="src\main.pas"/>
-        <Caret Line="276" Column="52" TopLine="201"/>
+        <Caret Line="195" Column="1" TopLine="171"/>
       </Position2>
       <Position3>
         <Filename Value="src\main.pas"/>
-        <Caret Line="233" Column="1" TopLine="202"/>
+        <Caret Line="196" Column="1" TopLine="171"/>
       </Position3>
       <Position4>
         <Filename Value="src\main.pas"/>
-        <Caret Line="195" Column="1" TopLine="171"/>
+        <Caret Line="198" Column="1" TopLine="171"/>
       </Position4>
       <Position5>
         <Filename Value="src\main.pas"/>
-        <Caret Line="196" Column="1" TopLine="171"/>
+        <Caret Line="199" Column="1" TopLine="171"/>
       </Position5>
       <Position6>
         <Filename Value="src\main.pas"/>
-        <Caret Line="198" Column="1" TopLine="171"/>
+        <Caret Line="200" Column="1" TopLine="171"/>
       </Position6>
       <Position7>
         <Filename Value="src\main.pas"/>
-        <Caret Line="199" Column="1" TopLine="171"/>
+        <Caret Line="201" Column="1" TopLine="171"/>
       </Position7>
       <Position8>
         <Filename Value="src\main.pas"/>
-        <Caret Line="200" Column="1" TopLine="171"/>
+        <Caret Line="204" Column="96" TopLine="127"/>
       </Position8>
       <Position9>
         <Filename Value="src\main.pas"/>
-        <Caret Line="201" Column="1" TopLine="171"/>
+        <Caret Line="229" Column="8" TopLine="199"/>
       </Position9>
       <Position10>
         <Filename Value="src\main.pas"/>
-        <Caret Line="204" Column="96" TopLine="127"/>
+        <Caret Line="96" Column="11" TopLine="70"/>
       </Position10>
       <Position11>
         <Filename Value="src\main.pas"/>
-        <Caret Line="229" Column="8" TopLine="199"/>
+        <Caret Line="140" Column="26" TopLine="127"/>
       </Position11>
       <Position12>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="96" Column="11" TopLine="70"/>
+        <Filename Value="src\projectdata.pas"/>
+        <Caret Line="259" Column="1" TopLine="231"/>
       </Position12>
       <Position13>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="140" Column="26" TopLine="127"/>
+        <Filename Value="src\projectdata.pas"/>
+        <Caret Line="260" Column="1" TopLine="231"/>
       </Position13>
       <Position14>
         <Filename Value="src\projectdata.pas"/>
-        <Caret Line="216" Column="19" TopLine="230"/>
+        <Caret Line="262" Column="7" TopLine="234"/>
       </Position14>
       <Position15>
         <Filename Value="src\projectdata.pas"/>
-        <Caret Line="259" Column="1" TopLine="231"/>
+        <Caret Line="263" Column="1" TopLine="234"/>
       </Position15>
       <Position16>
-        <Filename Value="src\projectdata.pas"/>
-        <Caret Line="260" Column="1" TopLine="231"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="255" Column="35" TopLine="225"/>
       </Position16>
       <Position17>
-        <Filename Value="src\projectdata.pas"/>
-        <Caret Line="262" Column="7" TopLine="234"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="178" Column="14" TopLine="147"/>
       </Position17>
       <Position18>
-        <Filename Value="src\projectdata.pas"/>
-        <Caret Line="263" Column="1" TopLine="234"/>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="177" Column="44" TopLine="147"/>
       </Position18>
+      <Position19>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="255" Column="28" TopLine="225"/>
+      </Position19>
+      <Position20>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="254" Column="32" TopLine="225"/>
+      </Position20>
+      <Position21>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="177" Column="10" TopLine="139"/>
+      </Position21>
+      <Position22>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="176" Column="22" TopLine="146"/>
+      </Position22>
+      <Position23>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="169" Column="25" TopLine="138"/>
+      </Position23>
+      <Position24>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="255" Column="48" TopLine="225"/>
+      </Position24>
+      <Position25>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="169" Column="5" TopLine="139"/>
+      </Position25>
+      <Position26>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="325" Column="29" TopLine="305"/>
+      </Position26>
+      <Position27>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="253" Column="24" TopLine="224"/>
+      </Position27>
+      <Position28>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="252" Column="51" TopLine="222"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\..\..\..\..\..\usr\local\share\fpcsrc\rtl\objpas\sysutils\sysstrh.inc"/>
+        <Caret Line="218" Column="10" TopLine="188"/>
+      </Position29>
+      <Position30>
+        <Filename Value="src\main.pas"/>
+        <Caret Line="248" Column="27" TopLine="222"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="src\projectdata.pas"/>
-        <Line Value="259"/>
-      </Item1>
-    </BreakPoints>
-  </Debugging>
   <EditorMacros Count="0"/>
 </CONFIG>
