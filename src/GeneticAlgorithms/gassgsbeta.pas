@@ -50,6 +50,7 @@ function RunGASSGSBeta(i: Integer): Double;
 
 var digits: Array[0..2] of Boolean;
 begin
+  FillNthPermutation(i, digits);
   TActivityListBetaIndividual.SetOptions(digits[0], digits[1], digits[2]);
   result := TGACore.Run(AllocateIndiv, False);
 end;
