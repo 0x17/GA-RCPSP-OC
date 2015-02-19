@@ -30,7 +30,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling;src\Exact;src\Methods"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -75,7 +75,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling"/>
+            <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling;src\Exact;src\Methods"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -165,7 +165,7 @@
         <UnitName Value="ssgsmod"/>
       </Unit8>
       <Unit9>
-        <Filename Value="src\individual.pas"/>
+        <Filename Value="src\GeneticAlgorithms\individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
       </Unit9>
@@ -205,7 +205,7 @@
         <UnitName Value="gassgszt"/>
       </Unit16>
       <Unit17>
-        <Filename Value="src\fbi.pas"/>
+        <Filename Value="src\Methods\fbi.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fbi"/>
       </Unit17>
@@ -220,12 +220,12 @@
         <UnitName Value="visualizer"/>
       </Unit19>
       <Unit20>
-        <Filename Value="src\peakcrossover.pas"/>
+        <Filename Value="src\Methods\peakcrossover.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="peakcrossover"/>
       </Unit20>
       <Unit21>
-        <Filename Value="src\compfitness.pas"/>
+        <Filename Value="src\GeneticAlgorithms\compfitness.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="compfitness"/>
       </Unit21>
@@ -250,7 +250,7 @@
         <UnitName Value="algenerator"/>
       </Unit25>
       <Unit26>
-        <Filename Value="src\branchandbound.pas"/>
+        <Filename Value="src\Exact\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
       </Unit26>
@@ -264,7 +264,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="src\Sampling"/>
+      <OtherUnitFiles Value="src;src\GeneticAlgorithms;src\SGS;src\Sampling;src\Exact;src\Methods"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

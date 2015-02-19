@@ -9,7 +9,7 @@ uses
   main in 'src\main.pas',
   globals in 'src\globals.pas',
   helpers in 'src\helpers.pas',
-  peakcrossover in 'src\peakcrossover.pas',
+  peakcrossover in 'src\Methods\peakcrossover.pas',
   profit in 'src\profit.pas',
   projectdata in 'src\projectdata.pas',
   bbrsm in 'src\Sampling\bbrsm.pas',
@@ -24,14 +24,14 @@ uses
   topsort in 'src\topsort.pas',
   esschedule in 'src\SGS\esschedule.pas',
   visualizer in 'src\visualizer.pas',
-  individual in 'src\individual.pas',
+  individual in 'src\GeneticAlgorithms\individual.pas',
   gassgsz in 'src\GeneticAlgorithms\gassgsz.pas',
   gassgstau in 'src\GeneticAlgorithms\gassgstau.pas',
   gassgszt in 'src\GeneticAlgorithms\gassgszt.pas',
-  fbi in 'src\fbi.pas',
+  fbi in 'src\Methods\fbi.pas',
   tests in 'src\tests.pas',
-  compfitness in 'src\compfitness.pas',
-  branchandbound in 'src\branchandbound.pas';
+  compfitness in 'src\GeneticAlgorithms\compfitness.pas',
+  branchandbound in 'src\Exact\branchandbound.pas';
 
 var main: TMain;
 begin

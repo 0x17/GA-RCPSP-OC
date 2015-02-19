@@ -216,7 +216,7 @@ end;
 // Disposition method
 procedure ProjData.ReorderJobsAscDepth;
 var
-  depths, mapping: JobData;
+  depths, mapping, invMapping: JobData;
 
   procedure Traverse(src, depth: Integer);
   var k: Integer;
@@ -239,6 +239,7 @@ var
       for j := 0 to numJobs-1 do
         if depths[j] = d then begin
           mapping[ctr] := j;
+          invMapping[j] := ctr;
           inc(ctr);
         end;
   end;
@@ -255,14 +256,34 @@ var
         adjMx[i,j] := adjMxCp[mapping[i], mapping[j]];
   end;
 
+  procedure AdaptDurationsAndDemands;
+  var
+    j, r: Integer;
+    durationsCp: JobData;
+    demandsCp: JobResData;
+  begin
+    durationsCp := durations;
+    SetLength(durationsCp, numJobs);
+    for j := 0 to numJobs - 1  do
+      durations[invMapping[j]] := durationsCp[j];
+
+    demandsCp := demands;
+    SetLength(demandsCp, numJobs, numRes);
+    for j := 0 to numJobs - 1 do
+      for r := 0 to numRes - 1 do
+        demands[invMapping[j], r] := demandsCp[j, r];
+  end;
+
 begin
   SetLength(depths, numJobs);
   Traverse(0, 0);
 
   SetLength(mapping, numJobs);
+  SetLength(invMapping, numJobs);
   DepthsToMapping;
 
   AdaptPrecedenceRelation;
+  AdaptDurationsAndDemands;
 end;
 
 procedure ProjData.InvertPrecedence;

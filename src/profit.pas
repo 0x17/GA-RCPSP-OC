@@ -59,9 +59,9 @@ end;
 
 class function TProfit.Revenue(makespan: Integer): Double;
 begin
-  if makespan < ps.minMs then
+  (*if makespan < ps.minMs then
     result := ps.maxCosts
-  else
+  else*)
     result := ps.maxCosts - ps.maxCosts / Power(ps.maxMs - ps.minMs, 2) * Power(makespan - ps.minMs, 2);
 end;
 

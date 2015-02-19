@@ -68,7 +68,7 @@ begin
   InitExampleProject;
   //TestScheduleToActivityList;
   //TestReverseActivityList;
-  //TestDispositionMethod;
+  TestDispositionMethod;
   FreeAndNil(ps);
 end;
 

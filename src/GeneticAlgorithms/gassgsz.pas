@@ -14,7 +14,7 @@ type TActivityListZIndividual = class(TActivityListIndividual)
   function Fitness: Double; override;
 private
   procedure RandomCrossoverOC(const mother, father: ResData; var daughter: ResData);
-  procedure MutateOC(var z: ResData);
+  procedure MutateOC;
 end;
 
 implementation
@@ -75,7 +75,7 @@ end;
 procedure TActivityListZIndividual.Mutate;
 begin
   SwapNeighborhood(order);
-  MutateOC(z);
+  MutateOC;
 end;
 
 function TActivityListZIndividual.Fitness: Double;
@@ -105,7 +105,7 @@ begin
   end;
 end;
 
-procedure TActivityListZIndividual.MutateOC(var z: ResData);
+procedure TActivityListZIndividual.MutateOC;
 var
   r, q: Integer;
 begin

@@ -6,7 +6,7 @@ type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
-  const NHEURS = 8 + 2;
+  const NHEURS = 8; // + 4;
   type
     TComputeOpt = function: Double;
     THeur = record
@@ -15,8 +15,7 @@ private
     end;
     THeurs = Array of THeur;
 
-  var
-    heurs: THeurs;
+  var heurs: THeurs;
 
   procedure InitProject(const fname: String);
   procedure WriteOptsAndTime(const path, outFname: String);
@@ -79,12 +78,13 @@ begin
   inc(k);
 
   // OTHERS
-  heurs[k].name := 'GA-SSGS-Tau';
+  (*heurs[k].name := 'GA-SSGS-Tau';
   heurs[k].fn := @RunGASSGSTau;
   inc(k);
 
   heurs[k].name := 'GA-SSGS-OC';
   heurs[k].fn := @RunGASSGSOC;
+  inc(k);*)
 end;
 
 procedure TMain.Entrypoint;
@@ -94,8 +94,8 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
-  //RunTests;
+  RunTests;
+  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
   //RunBranchAndBound;
 end;
 
@@ -138,7 +138,7 @@ begin
   if ps <> nil then FreeAndNil(ps);
   ps := ProjData.Create;
   ps.LoadFromFile(fname);
-  ps.ReorderJobsAscDepth; // disposition method
+  ps.ReorderJobsAscDepth;
   TTopSort.Sort(ps.topOrder);
   TProfit.CalcMinMaxMakespanCosts;
   ps.ComputeESFTS;
@@ -229,6 +229,7 @@ begin
 
     if ps.minMs <> ps.maxMs then begin
       line := ChangeFileExt(ExtractFileName(fname), '');
+      writeln(line);
       for i := 0 to NHEURS - 1 do
         SolveHeur(heurs[i]);
     end else

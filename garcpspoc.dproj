@@ -5,7 +5,7 @@
         <FrameworkType>None</FrameworkType>
         <MainSource>garcpspoc.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Console</AppType>
@@ -155,7 +155,7 @@
         <DCCReference Include="src\main.pas"/>
         <DCCReference Include="src\globals.pas"/>
         <DCCReference Include="src\helpers.pas"/>
-        <DCCReference Include="src\peakcrossover.pas"/>
+        <DCCReference Include="src\Methods\peakcrossover.pas"/>
         <DCCReference Include="src\profit.pas"/>
         <DCCReference Include="src\projectdata.pas"/>
         <DCCReference Include="src\Sampling\bbrsm.pas"/>
@@ -170,14 +170,14 @@
         <DCCReference Include="src\topsort.pas"/>
         <DCCReference Include="src\SGS\esschedule.pas"/>
         <DCCReference Include="src\visualizer.pas"/>
-        <DCCReference Include="src\individual.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\individual.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgsz.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgstau.pas"/>
         <DCCReference Include="src\GeneticAlgorithms\gassgszt.pas"/>
-        <DCCReference Include="src\fbi.pas"/>
+        <DCCReference Include="src\Methods\fbi.pas"/>
         <DCCReference Include="src\tests.pas"/>
-        <DCCReference Include="src\compfitness.pas"/>
-        <DCCReference Include="src\branchandbound.pas"/>
+        <DCCReference Include="src\GeneticAlgorithms\compfitness.pas"/>
+        <DCCReference Include="src\Exact\branchandbound.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -13,6 +13,9 @@ type TActivityListOCIndividual = class(TActivityListIndividual)
   procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); override;
   procedure Mutate; override;
   function Fitness: Double; override;
+private
+  procedure MutateOC;
+  procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
 end;
 
 implementation
@@ -54,8 +57,6 @@ begin
   end
 end;
 
-procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual); forward;
-
 procedure TActivityListOCIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 var otherC, daughterC, sonC: TActivityListOCIndividual;
 begin
@@ -67,12 +68,10 @@ begin
   OnePointCrossoverSmart(otherC, self, sonC);
 end;
 
-procedure MutateOC(var oc: ResourceProfile); forward;
-
 procedure TActivityListOCIndividual.Mutate;
 begin
   SwapNeighborhood(order);
-  MutateOC(oc);
+  MutateOC;
 end;
 
 function TActivityListOCIndividual.Fitness: Double;
@@ -85,9 +84,8 @@ begin
     fts[j] := sts[j] + ps.durations[j];
 end;
 
-procedure MutateOC(var oc: ResourceProfile);
-var
-  r, t: Integer;
+procedure TActivityListOCIndividual.MutateOC;
+var r, t: Integer;
 begin
   for r := 0 to ps.numRes-1 do
     for t := 0 to ps.numPeriods - 1 do
@@ -95,7 +93,27 @@ begin
         oc[r,t] := THelper.RandomRangeIncl(0, ps.zmax[r]);
 end;
 
-procedure RandomCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
+procedure TActivityListOCIndividual.OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
+var j, q, maxFt, r, t: Integer;
+begin
+  // Crossover von Aktivitätenliste
+  q := TActivityListIndividual(daughter).OnePointCrossover(TActivityListIndividual(mother), TActivityListIndividual(father));
+
+  // Crossover von Zrt
+  maxFt := 0;
+  for j := 0 to q-1 do
+    if mother.fts[j] > maxFt then
+      maxFt := mother.fts[j];
+
+  for t := 0 to ps.numPeriods-1 do
+    for r := 0 to ps.numRes-1 do
+      if t <= maxFt then
+        daughter.oc[r,t] := mother.oc[r,t]
+      else
+        daughter.oc[r,t] := father.oc[r,t];
+end;
+
+(*procedure RandomCrossoverOC(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
 var r, t, q: Integer;
 begin
   for r := 0 to ps.numRes - 1 do
@@ -119,26 +137,6 @@ begin
            daughter.oc[r,t] := mother.oc[r,t]
         else
            daughter.oc[r,t] := father.oc[r,t];
-end;
-
-procedure OnePointCrossoverSmart(const mother, father: TActivityListOCIndividual; var daughter: TActivityListOCIndividual);
-var j, q, maxFt, r, t: Integer;
-begin
-  // Crossover von Aktivitätenliste
-  q := TActivityListIndividual(daughter).OnePointCrossover(TActivityListIndividual(mother), TActivityListIndividual(father));
-
-  // Crossover von Zrt
-  maxFt := 0;
-  for j := 0 to q-1 do
-    if mother.fts[j] > maxFt then
-      maxFt := mother.fts[j];
-
-  for t := 0 to ps.numPeriods-1 do
-    for r := 0 to ps.numRes-1 do
-      if t <= maxFt then
-        daughter.oc[r,t] := mother.oc[r,t]
-      else
-        daughter.oc[r,t] := father.oc[r,t];
-end;
+end;*)
 
 end.

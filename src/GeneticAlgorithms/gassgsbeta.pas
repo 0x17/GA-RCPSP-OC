@@ -15,6 +15,7 @@ function RunGASSGSBeta8: Double;
 
 type TActivityListBetaIndividual = class(TActivityListIndividual)
   b: JobData;
+  crossB: Boolean;
   class var linked, separateCrossover, upperSgs: Boolean;
   class procedure SetOptions(pLinked, pSeparateCrossover, pUpperSgs: Boolean);
 
@@ -24,7 +25,6 @@ type TActivityListBetaIndividual = class(TActivityListIndividual)
   function Fitness: Double; override;
 private
   procedure Swap(i1, i2: Integer); inline;
-  procedure OPC(const mother, father: JobData; var daughter: JobData);
 protected
   procedure InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer); override;
 end;
@@ -52,6 +52,7 @@ var digits: Array[0..2] of Boolean;
 begin
   FillNthPermutation(i, digits);
   TActivityListBetaIndividual.SetOptions(digits[0], digits[1], digits[2]);
+  writeln('Beta ', i, ' linked=', digits[0], ' sepcross=', digits[1], ' upperSgs=', digits[2]);
   result := TGACore.Run(AllocateIndiv, False);
 end;
 
@@ -67,8 +68,8 @@ function RunGASSGSBeta8: Double; begin result := RunGASSGSBeta(7); end;
 class procedure TActivityListBetaIndividual.SetOptions(pLinked, pSeparateCrossover, pUpperSgs: Boolean);
 begin
   linked := pLinked; // if linked b_j=1 means OC for activity order[j] OTHERWISE for activity j
-  upperSgs := pUpperSgs; // enforce OC usage on b_j=1 (von oben planung)
   separateCrossover := pSeparateCrossover; // different q vals for OPC of order and b
+  upperSgs := pUpperSgs; // enforce OC usage on b_j=1 (von oben planung)
 end;
 
 procedure TActivityListBetaIndividual.InitializePopulation(var population: IndivArray);
@@ -84,43 +85,15 @@ begin
   end;
 end;
 
-procedure TActivityListBetaIndividual.OPC(const mother, father: JobData; var daughter: JobData);
-var
-  q, i, j, k, len: Integer;
-  fromOther: Boolean;
-begin
-  len := Length(mother);
-
-  q := THelper.RandomRangeIncl(1, len);
-  for i := 0 to q - 1 do
-    daughter[i] := mother[i];
-
-  k := q;
-  // Probiere alle von Elternteil
-  for i := 0 to len - 1 do
-  begin
-    // Nehme nur, falls nicht bereits in 0,..,q-1 von anderem Elternteil
-    fromOther := False;
-    for j := 0 to q - 1 do
-      if daughter[j] = mother[i] then
-        fromOther := True;
-
-    if not(fromOther) then begin
-      daughter[k] := father[i];
-      inc(k);
-    end;
-  end;
-
-end;
-
 procedure TActivityListBetaIndividual.Crossover(const other: IIndividual; var daughter, son: IIndividual);
 begin
   if separateCrossover then begin
-    OPC(self.order, TActivityListBetaIndividual(other).order, TActivityListBetaIndividual(daughter).order);
-    OPC(self.b, TActivityListBetaIndividual(other).b, TActivityListBetaIndividual(daughter).b);
-
-    OPC(TActivityListBetaIndividual(other).order, self.order, TActivityListBetaIndividual(son).order);
-    OPC(TActivityListBetaIndividual(other).b, self.b, TActivityListBetaIndividual(son).b);
+    crossB := False;
+    TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
+    TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
+    crossB := True;
+    TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
+    TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
   end else begin
     TActivityListIndividual(daughter).OnePointCrossover(self, TActivityListIndividual(other));
     TActivityListIndividual(son).OnePointCrossover(TActivityListIndividual(other), self);
@@ -163,8 +136,15 @@ end;
 
 procedure TActivityListBetaIndividual.InheritGene(const parent: TActivityListIndividual; parentIndex, childIndex: Integer);
 begin
-  order[childIndex] := parent.order[parentIndex];
-  b[childIndex] := TActivityListBetaIndividual(parent).b[parentIndex];
+  if not(separateCrossover) then begin
+    order[childIndex] := parent.order[parentIndex];
+    b[childIndex] := TActivityListBetaIndividual(parent).b[parentIndex];
+  end else begin
+    if crossB then
+      b[childIndex] := TActivityListBetaIndividual(parent).b[parentIndex]
+    else
+      order[childIndex] := parent.order[parentIndex];
+  end;
 end;
 
 end.
