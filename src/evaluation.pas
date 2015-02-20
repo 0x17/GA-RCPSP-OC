@@ -16,7 +16,7 @@ uses math, strutils, sysutils;
 class procedure TEvaluator.EvalResultsToTeX(const names: TStrArr; const profits, solvetimes: TResultTable; const outFname: String);
 const
   NCHARACTERISTICS = 6;
-  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', 'vark(deviation)', 'optimal', '\# best', '$\varnothing$ solvetime');
+  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', 'varcoeff(deviation)', 'optimal', '\# best', '$\varnothing$ solvetime');
 var
   i, j, numHeurs: Integer;
   val, columnFormat, contents: String;
@@ -109,7 +109,7 @@ var
       ReadLn(fp, line);
       if AnsiContainsStr(line, '%%CONTENTS%%') then
         line := AnsiReplaceStr(line, '%%CONTENTS%%', contents);
-      composed := composed + line;
+      composed := composed + line + #10;
     end;
     CloseFile(fp);
 

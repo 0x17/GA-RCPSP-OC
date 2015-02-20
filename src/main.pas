@@ -294,6 +294,8 @@ begin
   for i := 0 to NHEURS - 1 do
     heurNames[i] := heurs[i].texName;
   TEvaluator.EvalResultsToTeX(heurNames, profits, solvetimes, 'results.tex');
+  THelper.RunCommand('pdflatex', 'results.tex');
+  THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\AcroRd32.exe', 'results.pdf');
 end;
 
 procedure TMain.WriteConvergence(const projFname, outFname: String; maxGens: Integer);
