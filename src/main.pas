@@ -2,11 +2,13 @@ unit main;
 
 interface
 
+const EXACT_FEASIBLE = false;
+
 type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
-  const NHEURS = 8 + 4;
+  const NHEURS = 2; //8 + 4;
   type
     TComputeOpt = function: Double;
     THeur = record
@@ -25,11 +27,7 @@ end;
 
 implementation
 
-uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, evaluation, variants
-{$ifdef MSWINDOWS}
-  , comobj
-  {$ifdef FPC}{$else}, excel2000, types{$endif}
-{$endif};
+uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, evaluation, variants;
 
 constructor TMain.Create;
 var k: Integer;
@@ -106,8 +104,8 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  RunTests;
-  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
+  //RunTests;
+  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
   //RunBranchAndBound;
 end;
 
@@ -185,12 +183,12 @@ var
   sw: TStopwatch;
   fp: TextFile;
   time: Cardinal;
-  ctr, fileCount, i: Integer;
-  excObj, excWb, excSheet: Variant;
+  ctr, i: Integer;
   solvetime, profit: Double;
 
   profits, solvetimes: TResultTable;
   heurNames: TStrArr;
+  bestHeurIx: Integer;
 
   procedure BuildHeaderStr;
   var i: Integer;
@@ -200,32 +198,11 @@ var
       headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
   end;
 
-  procedure ExcelPreamble;
-  begin
-    {$ifdef MSWINDOWS}
-    if USE_EXCEL then
-    begin
-      if FileExists('test.xlsx') then DeleteFile('test.xlsx');
-      excObj := CreateOleObject('Excel.Application');
-      excObj.SheetsInNewWorkbook := 1;
-      excWb := excObj.Workbooks.Add;
-      excSheet := excWb.Worksheets[1];
-      excSheet.Name := 'Sheet1';
-      FormatSettings.LongTimeFormat := 'yyyy-mm-dd-hh-mm-ss';
-      excWb.SaveAs('test.xlsx');
-      excObj.Visible := True;
-      //excSheet.Cells[1, 1] := 'Test';
-    end;
-    {$endif}
-  end;
-
-  procedure WriteStr(var fp: TextFile; const s: String; row: Integer);
+  procedure WriteStr(var fp: TextFile; const s: String);
   begin
     WriteLn(s);
     WriteLn(fp, s);
     Flush(fp);
-    if USE_EXCEL then
-      THelper.WriteCSVToExcel(excSheet, row, s);
   end;
 
   procedure SolveHeur(const h: THeur);
@@ -245,44 +222,46 @@ var
   end;
 
 begin
-  numSchedules := 50000;
+  sw := TStopwatch.Create;
 
-  BuildHeaderStr;
-  ExcelPreamble;
+  numSchedules := 50000;
 
   AssignFile(fp, outFname);
   Rewrite(fp);
 
-  WriteStr(fp, headerStr, 1);
+  BuildHeaderStr;
+  WriteStr(fp, headerStr);
 
   fnames := THelper.ListProjFilesInDir(path);
+
+  SetLength(profits, fnames.Count, 1+NHEURS);
+  SetLength(solvetimes, fnames.Count, 1+NHEURS);
+
   ctr := 0;
-  sw := TStopwatch.Create;
-
-  fileCount := fnames.Count;
-
-  SetLength(profits, fileCount, 1+NHEURS);
-  SetLength(solvetimes, fileCount, 1+NHEURS);
-
   for fname in fnames do begin
     InitProject(fname);
 
     if ps.minMs <> ps.maxMs then begin
       line := ChangeFileExt(ExtractFileName(fname), '');
-      profits[ctr, 0] := ParseOptProfit(line);
-      solvetimes[ctr, 0] := -1.0;
       for i := 0 to NHEURS - 1 do
         SolveHeur(heurs[i]);
-    end else
-      line := 'NA;NA;NA;NA;NA;NA;NA;NA;NA;NA;NA';
 
-    WriteStr(fp, line, ctr+1);
-    WriteLn(Format('Progress: %.0f%%', [ctr/fileCount*100]));
-    inc(ctr);
+      if EXACT_FEASIBLE then begin
+        profits[ctr, 0] := ParseOptProfit(line);
+        solvetimes[ctr, 0] := -1.0;
+      end else begin
+        bestHeurIx := 1;
+        for i := 1 to NHEURS do
+          if profits[ctr, i] > profits[ctr, bestHeurIx] then
+            bestHeurIx := i;
+        profits[ctr, 0] := profits[ctr, bestHeurIx];
+        solvetimes[ctr, 0] := solvetimes[ctr, bestHeurIx];
+      end;
+
+      WriteStr(fp, line);
+      inc(ctr);
+    end
   end;
-
-  if USE_EXCEL then
-    excWb.Close(SaveChanges := True);
 
   CloseFile(fp);
 
@@ -335,4 +314,4 @@ begin
 end;
 
 end.
-
+

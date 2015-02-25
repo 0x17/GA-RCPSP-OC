@@ -16,7 +16,6 @@ private
   procedure Branch(sts, order: JobData; k: Integer);
   function ComputeUpperBound(const sts: JobData): Double;
   function IsEligible(const sts: JobData; j: Integer): Boolean;
-  procedure BranchLog(const sts: JobData); inline;
   function ComputeMakespanLowerBound: Integer;
 end;
 
@@ -66,14 +65,6 @@ begin
   Branch(sts, order, 1);
   result := lb;
   solution := Copy(lbSts, 0, ps.numJobs);
-end;
-
-procedure TBranchAndBound.BranchLog(const sts: JobData);
-var j: Integer;
-begin
-  write('BRANCH (');
-  for j := 0 to ps.numJobs-1 do write(sts[j], '; ');
-  writeln(')');
 end;
 
 function TBranchAndBound.ComputeMakespanLowerBound: Integer;

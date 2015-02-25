@@ -16,21 +16,22 @@ uses math, strutils, sysutils;
 class procedure TEvaluator.EvalResultsToTeX(const names: TStrArr; const profits, solvetimes: TResultTable; const outFname: String);
 const
   NCHARACTERISTICS = 6;
-  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', 'varcoeff(deviation)', 'optimal', '\# best', '$\varnothing$ solvetime');
+  characteristics: Array[0..NCHARACTERISTICS-1] of String = ('$\varnothing$ deviation', 'max. deviation', 'varcoeff(deviation)', 'best known solution', '\# best', '$\varnothing$ solvetime');
 var
   i, j, numHeurs: Integer;
   val, columnFormat, contents: String;
 
   function Gap(heurProfit, optProfit: Double): Double;
   begin
-    result := (optProfit - heurProfit) / optProfit;
+    if optProfit = 0 then result := 0
+    else result := (optProfit - heurProfit) / optProfit;
   end;
 
   function GetAvgDeviation(heurIndex: Integer): Double;
   var k: Integer;
   begin
     result := 0.0;
-    for k := 0 to High(profits) do
+    for k := Low(profits) to High(profits) do
       result := result + Gap(profits[k, heurIndex+1], profits[k, 0]);
     result := result / Length(profits);
   end;
@@ -39,7 +40,7 @@ var
   var k: Integer;
   begin
     result := 0.0;
-    for k := 0 to High(profits) do
+    for k := Low(profits) to High(profits) do
       if Gap(profits[k, heurIndex+1], profits[k,0]) > result then
         result := Gap(profits[k, heurIndex+1], profits[k,0]);
   end;
@@ -57,15 +58,18 @@ var
   end;
 
   function GetVarCoeffDev(heurIndex: Integer): Double;
+  var avgDev: Double;
   begin
-    result := GetStdDev(heurIndex) / GetAvgDeviation(heurIndex);
+    avgDev := GetAvgDeviation(heurIndex);
+    if avgDev = 0.0 then result := 0.0
+    else result := GetStdDev(heurIndex) / avgDev;
   end;
 
   function GetPercOptimal(heurIndex: Integer): Double;
   var k: Integer;
   begin
     result := 0.0;
-    for k := 0 to High(profits) do
+    for k := Low(profits) to High(profits) do
       if Gap(profits[k, heurIndex+1], profits[k,0]) = 0.0 then
         result := result + 1.0;
     result := result / Length(profits);
@@ -75,7 +79,7 @@ var
   var k: Integer;
   begin
     result := 0.0;
-    for k := 0 to High(solvetimes) do
+    for k := Low(profits) to High(solvetimes) do
       result := result + solvetimes[k, heurIndex+1];
     result := result / Length(profits);
   end;
@@ -86,7 +90,7 @@ var
     isMax: Boolean;
   begin
     result := 0;
-    for k := 0 to High(profits) do begin
+    for k := Low(profits) to High(profits) do begin
       isMax := true;
       for h := 1 to High(profits[0]) do
         if profits[k,h] > profits[k, heurIndex+1] then begin
@@ -119,10 +123,10 @@ var
     CloseFile(fp);
   end;
 
-  function FormatPercent(n: Double): String; inline;
+  function FormatPercent(n: Double): String;
   begin result := FloatToStr(RoundTo(n*100, -2)) + '\%'; end;
 
-  function FormatDecimal(n: Double): String; inline;
+  function FormatDecimal(n: Double): String;
   begin result := FloatToStr(RoundTo(n, -2)); end;
 
 begin
