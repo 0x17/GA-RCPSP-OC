@@ -106,8 +106,8 @@ begin
   {$endif}
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
-  //RunTests;
-  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
+  RunTests;
+  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
   //RunBranchAndBound;
 end;
 

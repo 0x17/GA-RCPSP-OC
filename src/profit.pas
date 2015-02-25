@@ -82,9 +82,11 @@ begin
   for t := 0 to ps.numPeriods-1 do
     for r := 0 to ps.numRes-1 do begin
       residual := ps.capacities[r];
-      for j := 0 to ps.numJobs-1 do
+      for j := 0 to ps.numJobs-1 do begin
+        if sts[j] = -1 then continue;
         if (sts[j] <= t) and (t < sts[j] + ps.durations[j]) then
           residual := residual - ps.demands[j,r];
+      end;
       if residual < 0 then
         result := result - residual * ps.kappa[r];
     end;

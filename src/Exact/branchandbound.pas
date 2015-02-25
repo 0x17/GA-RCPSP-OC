@@ -11,11 +11,13 @@ type TBranchAndBound = class
 private
   lb: Double;
   lbSts: JobData;
+  makespanLb: Integer;
 
   procedure Branch(sts, order: JobData; k: Integer);
   function ComputeUpperBound(const sts: JobData): Double;
   function IsEligible(const sts: JobData; j: Integer): Boolean;
   procedure BranchLog(const sts: JobData); inline;
+  function ComputeMakespanLowerBound: Integer;
 end;
 
 implementation
@@ -32,10 +34,13 @@ begin
   ps.LoadFromFile(fname);
   TTopSort.Sort(ps.topOrder);
   TProfit.CalcMinMaxMakespanCosts;
+  ps.ReorderJobsAscDepth;
+  TTopSort.Sort(ps.topOrder);
   ps.ComputeESFTS;
 
   TSSGS.Solve(ps.topOrder, ps.maxOc, sts, resRem);
   lb := TProfit.CalcProfit(sts, resRem);
+  makespanLb := ComputeMakespanLowerBound;
 end;
 
 destructor TBranchAndBound.Destroy;
@@ -69,6 +74,19 @@ begin
   write('BRANCH (');
   for j := 0 to ps.numJobs-1 do write(sts[j], '; ');
   writeln(')');
+end;
+
+function TBranchAndBound.ComputeMakespanLowerBound: Integer;
+var r, j, accum: Integer;
+begin
+  result := 0;
+  for r := 0 to ps.numRes - 1 do begin
+    accum := 0;
+    for j := 0 to ps.numJobs - 1 do
+      accum := accum + ps.demands[j, r] * ps.durations[j];
+    accum := Ceil(accum / (ps.capacities[r] + ps.zmax[r]));
+    result := Max(accum, result);
+  end;
 end;
 
 function TBranchAndBound.IsEligible(const sts: JobData; j: Integer): Boolean;
@@ -139,31 +157,8 @@ begin
 end;
 
 function TBranchAndBound.ComputeUpperBound(const sts: JobData): Double;
-var alpha, sumUnits, maxSum, maxRes, ftpartial, j, r: Integer;
 begin
-  maxSum := 0;
-  maxRes := 0;
-  for r := 0 to ps.numRes-1 do begin
-    sumUnits := 0;
-
-    for j := 0 to ps.numJobs-1 do
-      if sts[j] = -1 then
-        sumUnits := sumUnits + ps.durations[j] * ps.demands[j,r];
-
-    if sumUnits > maxSum then begin
-      maxSum := sumUnits;
-      maxRes := r;
-    end;
-  end;
-
-  // Finishing time of partial schedule
-  ftpartial := 0;
-  for j := 0 to ps.numJobs-1 do
-    if (sts[j] <> -1) and (sts[j] + ps.durations[j] > ftpartial) then
-      ftpartial := sts[j] + ps.durations[j];
-
-  alpha := Ceil(maxSum / (ps.capacities[maxRes] + ps.zmax[maxRes]));
-  result := TProfit.Revenue(ftpartial + alpha) - TProfit.TotalOCCosts(sts);
+  result := TProfit.Revenue(makespanLb) - TProfit.TotalOCCosts(sts);
 end;
 
 end.
