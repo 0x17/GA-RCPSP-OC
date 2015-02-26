@@ -2,14 +2,13 @@ unit main;
 
 interface
 
-const EXACT_FEASIBLE = false;
-
 type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
-  const NHEURS = 2; //8 + 4;
+  const NHEURS = 8 + 4;
   type
+    TDoubleArr = Array of Double;
     TComputeOpt = function: Double;
     THeur = record
       name, texName: String;
@@ -20,7 +19,7 @@ private
   var heurs: THeurs;
 
   procedure InitProject(const fname: String);
-  procedure WriteOptsAndTime(const path, outFname: String);
+  procedure WriteOptsAndTime(const path, outFname: String; exactFeasible: Boolean);
   procedure WriteConvergence(const projFname, outFname: String; maxGens: Integer);
   procedure RunBranchAndBound;
 end;
@@ -105,7 +104,10 @@ begin
 
   //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
   //RunTests;
-  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
+  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt', true);
+  //WriteOptsAndTime('../Projekte/j60', 'heursOptsAndTime60.txt', false);
+  WriteOptsAndTime('../Projekte/j90', 'heursOptsAndTime90.txt', false);
+  //WriteOptsAndTime('../Projekte/j120', 'heursOptsAndTime120.txt', false);
   //RunBranchAndBound;
 end;
 
@@ -119,7 +121,7 @@ var
   sw: TStopwatch;
   resRem: ResourceProfile;
 begin
-  bb := TBranchAndBound.Create('../Projekte/j30filtered/j3011_7.sm');
+  bb := TBranchAndBound.Create('testproj.sm');
   SetLength(sts, ps.numJobs);
 
   sw := TStopwatch.Create;
@@ -176,19 +178,18 @@ begin
   CloseFile(fp);
 end;
 
-procedure TMain.WriteOptsAndTime(const path, outFname: String);
+procedure TMain.WriteOptsAndTime(const path, outFname: String; exactFeasible: Boolean);
 var
   fnames: TStringList;
   headerStr, line, fname: String;
   sw: TStopwatch;
   fp: TextFile;
   time: Cardinal;
-  ctr, i: Integer;
+  ctr, i, bestHeurIx, takeCount: Integer;
   solvetime, profit: Double;
 
   profits, solvetimes: TResultTable;
   heurNames: TStrArr;
-  bestHeurIx: Integer;
 
   procedure BuildHeaderStr;
   var i: Integer;
@@ -200,7 +201,6 @@ var
 
   procedure WriteStr(var fp: TextFile; const s: String);
   begin
-    WriteLn(s);
     WriteLn(fp, s);
     Flush(fp);
   end;
@@ -234,8 +234,10 @@ begin
 
   fnames := THelper.ListProjFilesInDir(path);
 
-  SetLength(profits, fnames.Count, 1+NHEURS);
-  SetLength(solvetimes, fnames.Count, 1+NHEURS);
+  takeCount := fnames.Count;
+
+  SetLength(profits, takeCount, 1+NHEURS);
+  SetLength(solvetimes, takeCount, 1+NHEURS);
 
   ctr := 0;
   for fname in fnames do begin
@@ -246,7 +248,7 @@ begin
       for i := 0 to NHEURS - 1 do
         SolveHeur(heurs[i]);
 
-      if EXACT_FEASIBLE then begin
+      if exactFeasible then begin
         profits[ctr, 0] := ParseOptProfit(line);
         solvetimes[ctr, 0] := -1.0;
       end else begin
@@ -260,6 +262,8 @@ begin
 
       WriteStr(fp, line);
       inc(ctr);
+
+      if ctr >= takeCount then break;
     end
   end;
 
@@ -273,8 +277,8 @@ begin
   for i := 0 to NHEURS - 1 do
     heurNames[i] := heurs[i].texName;
   TEvaluator.EvalResultsToTeX(heurNames, profits, solvetimes, 'results.tex');
-  THelper.RunCommand('pdflatex', 'results.tex');
-  THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\AcroRd32.exe', 'results.pdf');
+  //THelper.RunCommand('pdflatex', 'results.tex');
+  //THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\AcroRd32.exe', 'results.pdf');
 end;
 
 procedure TMain.WriteConvergence(const projFname, outFname: String; maxGens: Integer);
