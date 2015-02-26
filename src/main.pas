@@ -2,14 +2,15 @@ unit main;
 
 interface
 
+uses individual;
+
 type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
   const NHEURS = 8 + 4;
   type
-    TDoubleArr = Array of Double;
-    TComputeOpt = function: Double;
+    TComputeOpt = function: TDblArr;
     THeur = record
       name, texName: String;
       fn: TComputeOpt;
@@ -19,14 +20,13 @@ private
   var heurs: THeurs;
 
   procedure InitProject(const fname: String);
-  procedure WriteOptsAndTime(const path, outFname: String; exactFeasible: Boolean);
-  procedure WriteConvergence(const projFname, outFname: String; maxGens: Integer);
+  procedure WriteOptsAndTime(const path, outFname: String);
   procedure RunBranchAndBound;
 end;
 
 implementation
 
-uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, evaluation, variants;
+uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
 
 constructor TMain.Create;
 var k: Integer;
@@ -102,12 +102,11 @@ begin
   ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
-  //WriteConvergence('j30filtered/j3011_7.sm' ,'convergence.txt', 100);
   //RunTests;
-  //WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt', true);
-  //WriteOptsAndTime('../Projekte/j60', 'heursOptsAndTime60.txt', false);
-  WriteOptsAndTime('../Projekte/j90', 'heursOptsAndTime90.txt', false);
-  //WriteOptsAndTime('../Projekte/j120', 'heursOptsAndTime120.txt', false);
+  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime.txt');
+  //WriteOptsAndTime('../Projekte/j60', 'heursOptsAndTime60.txt');
+  //WriteOptsAndTime('../Projekte/j90', 'heursOptsAndTime90.txt');
+  //WriteOptsAndTime('../Projekte/j120', 'heursOptsAndTime120.txt');
   //RunBranchAndBound;
 end;
 
@@ -157,46 +156,20 @@ begin
   ps.ComputeESFTS;
 end;
 
-function ParseOptProfit(const projName: String): Double;
-var
-  fp: TextFile;
-  line: String;
-begin
-  result := -1.0;
-  AssignFile(fp, 'OptProfits.csv');
-  Reset(fp);
-
-  while not eof(fp) do begin
-    ReadLn(fp, line);
-    if AnsiStartsStr(projName, line) then begin
-      line := AnsiReplaceStr(line, projName+';', '');
-      result := StrToFloat(line);
-      break;
-    end;
-  end;
-
-  CloseFile(fp);
-end;
-
-procedure TMain.WriteOptsAndTime(const path, outFname: String; exactFeasible: Boolean);
+procedure TMain.WriteOptsAndTime(const path, outFname: String);
 var
   fnames: TStringList;
   headerStr, line, fname: String;
-  sw: TStopwatch;
   fp: TextFile;
-  time: Cardinal;
-  ctr, i, bestHeurIx, takeCount: Integer;
-  solvetime, profit: Double;
-
-  profits, solvetimes: TResultTable;
-  heurNames: TStrArr;
+  ctr, i, takeCount: Integer;
+  profits: TDblArr;
 
   procedure BuildHeaderStr;
   var i: Integer;
   begin
     headerStr := 'filename';
     for i := 0 to NHEURS-1 do
-      headerStr := headerStr + ';profit(' + heurs[i].name + ');solvetime(' + heurs[i].name + ')';
+      headerStr := headerStr + ';' + heurs[i].texName;
   end;
 
   procedure WriteStr(var fp: TextFile; const s: String);
@@ -206,26 +179,21 @@ var
   end;
 
   procedure SolveHeur(const h: THeur);
+  var
+    x: Integer;
+    profitsLine: String;
   begin
-    WriteLn(h.name);
-
-    sw.Start;
-    profit := h.fn;
-    time := sw.Stop;
-    solvetime := time / 1000.0;
-
-    line := line + ';' + FloatToStr(profit)  + ';' + FloatToStr(solvetime);
-    WriteLn('Profit=' + FloatToStr(profit) + #10 + 'Solvetime=' + FloatToStr(solvetime) + #10);
-
-    profits[ctr, i+1] := RoundTo(profit, -2);
-    solvetimes[ctr, i+1] := solvetime;
+    profits := h.fn;
+    profitsLine := '';
+    for x := Low(profits) to High(profits) do begin
+      profitsLine := profitsLine + FloatToStr(RoundTo(profits[x], -2));
+      if x < High(profits) then
+        profitsLine := profitsLine + ':';
+    end;
+    line := line + ';' + profitsLine
   end;
 
 begin
-  sw := TStopwatch.Create;
-
-  numSchedules := 50000;
-
   AssignFile(fp, outFname);
   Rewrite(fp);
 
@@ -236,29 +204,15 @@ begin
 
   takeCount := fnames.Count;
 
-  SetLength(profits, takeCount, 1+NHEURS);
-  SetLength(solvetimes, takeCount, 1+NHEURS);
-
   ctr := 0;
   for fname in fnames do begin
     InitProject(fname);
 
     if ps.minMs <> ps.maxMs then begin
       line := ChangeFileExt(ExtractFileName(fname), '');
+      WriteLn('Solving ', line, '...');
       for i := 0 to NHEURS - 1 do
         SolveHeur(heurs[i]);
-
-      if exactFeasible then begin
-        profits[ctr, 0] := ParseOptProfit(line);
-        solvetimes[ctr, 0] := -1.0;
-      end else begin
-        bestHeurIx := 1;
-        for i := 1 to NHEURS do
-          if profits[ctr, i] > profits[ctr, bestHeurIx] then
-            bestHeurIx := i;
-        profits[ctr, 0] := profits[ctr, bestHeurIx];
-        solvetimes[ctr, 0] := solvetimes[ctr, bestHeurIx];
-      end;
 
       WriteStr(fp, line);
       inc(ctr);
@@ -269,52 +223,8 @@ begin
 
   CloseFile(fp);
 
-  FreeAndNil(sw);
   FreeAndNil(fnames);
   FreeAndNil(ps);
-
-  SetLength(heurNames, NHEURS);
-  for i := 0 to NHEURS - 1 do
-    heurNames[i] := heurs[i].texName;
-  TEvaluator.EvalResultsToTeX(heurNames, profits, solvetimes, 'results.tex');
-  //THelper.RunCommand('pdflatex', 'results.tex');
-  //THelper.RunCommand('C:\Program Files (x86)\Adobe\Acrobat 11.0\Acrobat\AcroRd32.exe', 'results.pdf');
-end;
-
-procedure TMain.WriteConvergence(const projFname, outFname: String; maxGens: Integer);
-var
-   fp: TextFile;
-   headerStr: String;
-   heurs: THeurs;
-   i, k: Integer;
-   profit: Double;
-begin
-  InitProject(projFname);
-
-  AssignFile(fp, outFname);
-  Rewrite(fp);
-
-  headerStr := 'ngens';
-  for i := 0 to NHEURS-1 do
-    headerStr := headerStr + ';profit(' + heurs[i].name + ')';
-
-  Writeln(fp, headerStr);
-
-  for k := 1 to maxGens do begin
-    numSchedules := k;
-    WriteLn('Num schedules = ' + IntToStr(numSchedules));
-    Write(fp, IntToStr(numSchedules));
-    for i := 0 to NHEURS - 1 do begin
-      WriteLn(heurs[i].name);
-      profit := heurs[i].fn;
-      Write(fp, ';' + FloatToStr(profit));
-      WriteLn('Profit=' + FloatToStr(profit));
-      WriteLn;
-    end;
-    WriteLn(fp);
-  end;
-
-  CloseFile(fp);
 end;
 
 end.

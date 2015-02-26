@@ -4,7 +4,7 @@ interface
 
 uses projectdata, individual, gassgsoc;
 
-function RunGASSGSZT: Double;
+function RunGASSGSZT: TDblArr;
 
 type TActivityListOCIndividual = class(TActivityListIndividual)
   oc: ResourceProfile;
@@ -27,7 +27,7 @@ begin
   result := TActivityListOCIndividual.Create;
 end;
 
-function RunGASSGSZT: Double;
+function RunGASSGSZT: TDblArr;
 begin
   result := TGACore.Run(AllocateIndividual, False);
 end;

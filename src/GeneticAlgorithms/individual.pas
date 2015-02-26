@@ -2,11 +2,15 @@ unit individual;
 
 interface
 
+uses globals;
+
 type
   IIndividual = class;
   IndivArray = Array of IIndividual;
+  TDblArr = Array of Double;
 
   IIndividual = class
+
     procedure InitializePopulation(var population: IndivArray); virtual;
     procedure FillNeighborhood(const origin: IIndividual; var population: IndivArray); virtual; abstract;
     procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;
@@ -24,8 +28,9 @@ type
   IndivAllocator = function: IIndividual;
 
   TGACore = class
-    class function Run(allocator: IndivAllocator; parallelComp: Boolean): Double;
-    class function MainLoop(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
+    class var tstart: TDateTime;
+    class function Run(allocator: IndivAllocator; parallelComp: Boolean): TDblArr;
+    class function MainLoop(var population: IndivArray; parallelComp: Boolean): TDblArr;
     class procedure FreePopulation(var population: IndivArray);
   private
     class procedure Cross(var population: IndivArray);
@@ -33,7 +38,7 @@ type
 
 implementation
 
-uses globals, helpers, sysutils, compfitness;
+uses helpers, sysutils, compfitness, dateutils;
 
 procedure AllocIndividuals(out population: IndivArray; size: Integer; allocator: IndivAllocator);
 var i: Integer;
@@ -80,35 +85,30 @@ begin
 end;
 
 //==============================================================================
-class function TGACore.Run(allocator: IndivAllocator; parallelComp: Boolean): Double;
+class function TGACore.Run(allocator: IndivAllocator; parallelComp: Boolean): TDblArr;
 var
   population: IndivArray;
-  bestIndiv: IIndividual;
 begin
+  tstart := Now;
   AllocIndividuals(population, POP_SIZE*2, allocator);
   population[0].InitializePopulation(population);
-  result := TGACore.MainLoop(population, bestIndiv, parallelComp);
-
-  // Populationsgröße halbieren
-  {for i := POP_SIZE to POP_SIZE * 2 - 1 do
-    population[i].Free;
-  SetLength(population, POP_SIZE);
-
-  population[0].FillNeighborhood(bestIndiv, population);
-  result := TGACore.MainLoop(population, bestIndiv, True);}
-
+  result := TGACore.MainLoop(population, parallelComp);
   TGACore.FreePopulation(population);
 end;
 
-class function TGACore.MainLoop(var population: IndivArray; out best: IIndividual; parallelComp: Boolean): Double;
+class function TGACore.MainLoop(var population: IndivArray; parallelComp: Boolean): TDblArr;
 var
-  i, j, numIter: Integer;
+  i, j: Integer;
   maxParentIx, minChildIx, maxChildIx: Integer;
   fvals: TFValArray;
+  elapsed: TDateTime;
 begin
   maxParentIx := Length(population) div 2 - 1;
   minChildIx := maxParentIx + 1;
   maxChildIx := Length(population) - 1;
+
+  SetLength(result, NLIMITS);
+  for i := 0 to NLIMITS-1 do result[i] := -1.0;
 
   // Compute fitness (objective value, schedule, residual capacity) for all parents
   SetLength(fvals, Length(population));
@@ -116,10 +116,7 @@ begin
     fvals[i] := -population[i].Fitness;
   TSortHelper.QuickSortKeys(population, fvals, 0, maxParentIx);
 
-  //numIter := (numSchedules div 2) div (Length(population) div 2);
-  numIter := 100;
-
-  for i := 1 to numIter do
+  while true do
   begin
     Cross(population);
 
@@ -132,10 +129,13 @@ begin
     else TFitnessComputation.CalcSerial(population, fvals, minChildIx, maxChildIx);
 
     TSortHelper.QuickSortKeys(population, fvals, 0, maxChildIx);
-  end;
 
-  best := population[0];
-  result := population[0].Fitness;
+    elapsed := MilliSecondsBetween(Now, tstart) / 1000.0;
+    for i := 0 to NLIMITS-1 do
+      if (result[i] = -1.0) and (elapsed >= TIME_LIMITS[i]) then
+        result[i] := population[0].Fitness;
+    if elapsed >= TIME_LIMITS[NLIMITS-1] then break;
+  end;
 end;
 
 class procedure TGACore.FreePopulation(var population: IndivArray);

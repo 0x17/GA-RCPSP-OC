@@ -4,14 +4,14 @@ interface
 
 uses gassgsoc, projectdata, individual;
 
-function RunGASSGSBeta1: Double;
-function RunGASSGSBeta2: Double;
-function RunGASSGSBeta3: Double;
-function RunGASSGSBeta4: Double;
-function RunGASSGSBeta5: Double;
-function RunGASSGSBeta6: Double;
-function RunGASSGSBeta7: Double;
-function RunGASSGSBeta8: Double;
+function RunGASSGSBeta1: TDblArr;
+function RunGASSGSBeta2: TDblArr;
+function RunGASSGSBeta3: TDblArr;
+function RunGASSGSBeta4: TDblArr;
+function RunGASSGSBeta5: TDblArr;
+function RunGASSGSBeta6: TDblArr;
+function RunGASSGSBeta7: TDblArr;
+function RunGASSGSBeta8: TDblArr;
 
 function GetBetaName(i: Integer): String;
 function GetBetaTexName(i: Integer): String;
@@ -50,7 +50,7 @@ begin
   end;
 end;
 
-function RunGASSGSBeta(i: Integer): Double;
+function RunGASSGSBeta(i: Integer): TDblArr;
 var digits: Array[0..2] of Boolean;
 begin
   FillNthPermutation(i, digits);
@@ -78,14 +78,14 @@ begin
   result := result + '})';
 end;
 
-function RunGASSGSBeta1: Double; begin result := RunGASSGSBeta(0); end;
-function RunGASSGSBeta2: Double; begin result := RunGASSGSBeta(1); end;
-function RunGASSGSBeta3: Double; begin result := RunGASSGSBeta(2); end;
-function RunGASSGSBeta4: Double; begin result := RunGASSGSBeta(3); end;
-function RunGASSGSBeta5: Double; begin result := RunGASSGSBeta(4); end;
-function RunGASSGSBeta6: Double; begin result := RunGASSGSBeta(5); end;
-function RunGASSGSBeta7: Double; begin result := RunGASSGSBeta(6); end;
-function RunGASSGSBeta8: Double; begin result := RunGASSGSBeta(7); end;
+function RunGASSGSBeta1: TDblArr; begin result := RunGASSGSBeta(0); end;
+function RunGASSGSBeta2: TDblArr; begin result := RunGASSGSBeta(1); end;
+function RunGASSGSBeta3: TDblArr; begin result := RunGASSGSBeta(2); end;
+function RunGASSGSBeta4: TDblArr; begin result := RunGASSGSBeta(3); end;
+function RunGASSGSBeta5: TDblArr; begin result := RunGASSGSBeta(4); end;
+function RunGASSGSBeta6: TDblArr; begin result := RunGASSGSBeta(5); end;
+function RunGASSGSBeta7: TDblArr; begin result := RunGASSGSBeta(6); end;
+function RunGASSGSBeta8: TDblArr; begin result := RunGASSGSBeta(7); end;
 
 class procedure TActivityListBetaIndividual.SetOptions(pLinked, pSeparateCrossover, pUpperSgs: Boolean);
 begin

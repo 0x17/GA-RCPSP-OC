@@ -4,7 +4,7 @@ interface
 
 uses individual, gassgsoc, ssgsoc;
 
-function RunGASSGSTau: Double;
+function RunGASSGSTau: TDblArr;
 
 type TActivityListTauIndividual = class(TActivityListIndividual)
   tau: ExtArray;
@@ -28,7 +28,7 @@ begin
   result := TActivityListTauIndividual.Create;
 end;
 
-function RunGASSGSTau: Double;
+function RunGASSGSTau: TDblArr;
 begin
   result := TGACore.Run(AllocateIndividual, False);
 end;

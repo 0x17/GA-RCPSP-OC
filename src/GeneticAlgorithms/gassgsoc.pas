@@ -4,7 +4,7 @@ interface
 
 uses projectdata, individual;
 
-function RunGASSGSOC: Double;
+function RunGASSGSOC: TDblArr;
 
 type TActivityListIndividual = class(IIndividual)
   order, sts: JobData;
@@ -35,7 +35,7 @@ begin
   result := TActivityListIndividual.Create;
 end;
 
-function RunGASSGSOC: Double;
+function RunGASSGSOC: TDblArr;
 begin
   result := TGACore.Run(AllocateIndividual, True);
 end;
