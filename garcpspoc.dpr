@@ -31,8 +31,7 @@ uses
   fbi in 'src\Methods\fbi.pas',
   tests in 'src\tests.pas',
   compfitness in 'src\GeneticAlgorithms\compfitness.pas',
-  branchandbound in 'src\Exact\branchandbound.pas',
-  evaluation in 'src\evaluation.pas';
+  branchandbound in 'src\Exact\branchandbound.pas';
 
 var main: TMain;
 begin

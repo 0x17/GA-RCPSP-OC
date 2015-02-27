@@ -9,12 +9,10 @@
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="rcpspoc"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="12" Y="8"/>
+        <CursorPos X="43" Y="5"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -71,22 +69,21 @@
         <Filename Value="src\SGS\ssgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsoc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="55"/>
         <CursorPos X="48" Y="23"/>
         <UsageCount Value="62"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="31"/>
-        <CursorPos X="5" Y="53"/>
+        <TopLine Value="185"/>
+        <CursorPos X="23" Y="196"/>
         <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -95,19 +92,23 @@
         <Filename Value="src\SGS\ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsmod"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="40" Y="18"/>
         <UsageCount Value="62"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="src\GeneticAlgorithms\individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="91"/>
+        <CursorPos X="32" Y="135"/>
         <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
         <Filename Value="src\SGS\esschedule.pas"/>
@@ -123,10 +124,12 @@
         <Filename Value="src\globals.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="globals"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="24" Y="9"/>
+        <CursorPos X="7" Y="13"/>
         <UsageCount Value="62"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
@@ -173,10 +176,12 @@
         <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="35"/>
-        <CursorPos X="5" Y="58"/>
+        <TopLine Value="1"/>
+        <CursorPos X="21" Y="7"/>
         <UsageCount Value="62"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
@@ -189,24 +194,20 @@
         <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="19" Y="9"/>
+        <TopLine Value="9"/>
+        <CursorPos X="1" Y="39"/>
         <UsageCount Value="62"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
         <Filename Value="src\visualizer.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="visualizer"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="57" Y="13"/>
         <UsageCount Value="51"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
@@ -273,15 +274,11 @@
       </Unit26>
       <Unit27>
         <Filename Value="src\evaluation.pas"/>
-        <IsPartOfProject Value="True"/>
         <UnitName Value="evaluation"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="30" Y="27"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit27>
       <Unit28>
@@ -893,127 +890,103 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="24" HistoryIndex="23">
       <Position1>
         <Filename Value="src\main.pas"/>
-        <Caret Line="96" Column="11" TopLine="70"/>
+        <Caret Line="325" Column="29" TopLine="305"/>
       </Position1>
       <Position2>
         <Filename Value="src\main.pas"/>
-        <Caret Line="140" Column="26" TopLine="127"/>
+        <Caret Line="253" Column="24" TopLine="224"/>
       </Position2>
       <Position3>
         <Filename Value="src\main.pas"/>
-        <Caret Line="255" Column="35" TopLine="225"/>
+        <Caret Line="252" Column="51" TopLine="222"/>
       </Position3>
       <Position4>
         <Filename Value="src\main.pas"/>
-        <Caret Line="178" Column="14" TopLine="147"/>
+        <Caret Line="248" Column="27" TopLine="222"/>
       </Position4>
       <Position5>
         <Filename Value="src\main.pas"/>
-        <Caret Line="177" Column="44" TopLine="147"/>
+        <Caret Line="207" Column="61" TopLine="189"/>
       </Position5>
       <Position6>
         <Filename Value="src\main.pas"/>
-        <Caret Line="255" Column="28" TopLine="225"/>
+        <Caret Line="316" Column="43" TopLine="267"/>
       </Position6>
       <Position7>
         <Filename Value="src\main.pas"/>
-        <Caret Line="254" Column="32" TopLine="225"/>
+        <Caret Line="30" Column="157" TopLine="5"/>
       </Position7>
       <Position8>
         <Filename Value="src\main.pas"/>
-        <Caret Line="177" Column="10" TopLine="139"/>
+        <Caret Line="294" Column="43" TopLine="267"/>
       </Position8>
       <Position9>
         <Filename Value="src\main.pas"/>
-        <Caret Line="176" Column="22" TopLine="146"/>
+        <Caret Line="248" Column="30" TopLine="224"/>
       </Position9>
       <Position10>
         <Filename Value="src\main.pas"/>
-        <Caret Line="169" Column="25" TopLine="138"/>
+        <Caret Line="203" Column="1" TopLine="176"/>
       </Position10>
       <Position11>
         <Filename Value="src\main.pas"/>
-        <Caret Line="255" Column="48" TopLine="225"/>
+        <Caret Line="232" Column="25" TopLine="207"/>
       </Position11>
       <Position12>
         <Filename Value="src\main.pas"/>
-        <Caret Line="169" Column="5" TopLine="139"/>
+        <Caret Line="259" Column="1" TopLine="236"/>
       </Position12>
       <Position13>
         <Filename Value="src\main.pas"/>
-        <Caret Line="325" Column="29" TopLine="305"/>
+        <Caret Line="248" Column="30" TopLine="224"/>
       </Position13>
       <Position14>
         <Filename Value="src\main.pas"/>
-        <Caret Line="253" Column="24" TopLine="224"/>
+        <Caret Line="53" Column="5" TopLine="31"/>
       </Position14>
       <Position15>
         <Filename Value="src\main.pas"/>
-        <Caret Line="252" Column="51" TopLine="222"/>
+        <Caret Line="29" Column="157" TopLine="4"/>
       </Position15>
       <Position16>
         <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="27" TopLine="222"/>
+        <Caret Line="29" Column="15" TopLine="4"/>
       </Position16>
       <Position17>
         <Filename Value="src\main.pas"/>
-        <Caret Line="207" Column="61" TopLine="189"/>
+        <Caret Line="106" Column="72" TopLine="91"/>
       </Position17>
       <Position18>
         <Filename Value="src\main.pas"/>
-        <Caret Line="316" Column="43" TopLine="267"/>
+        <Caret Line="109" Column="70" TopLine="101"/>
       </Position18>
       <Position19>
         <Filename Value="src\main.pas"/>
-        <Caret Line="30" Column="157" TopLine="5"/>
+        <Caret Line="209" Column="30" TopLine="182"/>
       </Position19>
       <Position20>
         <Filename Value="src\main.pas"/>
-        <Caret Line="294" Column="43" TopLine="267"/>
+        <Caret Line="13" Column="50" TopLine="28"/>
       </Position20>
       <Position21>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="30" TopLine="224"/>
+        <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
+        <Caret Line="30" Column="21" TopLine="10"/>
       </Position21>
       <Position22>
         <Filename Value="src\main.pas"/>
-        <Caret Line="203" Column="1" TopLine="176"/>
+        <Caret Line="186" Column="20" TopLine="110"/>
       </Position22>
       <Position23>
         <Filename Value="src\main.pas"/>
-        <Caret Line="232" Column="25" TopLine="207"/>
+        <Caret Line="197" Column="18" TopLine="173"/>
       </Position23>
       <Position24>
-        <Filename Value="src\visualizer.pas"/>
-        <Caret Line="13" Column="43" TopLine="1"/>
+        <Filename Value="src\GeneticAlgorithms\individual.pas"/>
+        <Caret Line="137" Column="61" TopLine="101"/>
       </Position24>
-      <Position25>
-        <Filename Value="src\SGS\ssgsmod.pas"/>
-        <Caret Line="13" Column="25" TopLine="1"/>
-      </Position25>
-      <Position26>
-        <Filename Value="src\SGS\ssgsoc.pas"/>
-        <Caret Line="23" Column="48" TopLine="1"/>
-      </Position26>
-      <Position27>
-        <Filename Value="src\tests.pas"/>
-        <Caret Line="9" Column="71" TopLine="1"/>
-      </Position27>
-      <Position28>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="259" Column="1" TopLine="236"/>
-      </Position28>
-      <Position29>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="30" TopLine="224"/>
-      </Position29>
-      <Position30>
-        <Filename Value="rcpspoc.lpr"/>
-        <Caret Line="8" Column="12" TopLine="1"/>
-      </Position30>
     </JumpHistory>
   </ProjectSession>
   <EditorMacros Count="0"/>

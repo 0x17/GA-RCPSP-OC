@@ -118,7 +118,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="28">
+    <Units Count="27">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -254,11 +254,6 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
       </Unit26>
-      <Unit27>
-        <Filename Value="src\evaluation.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="evaluation"/>
-      </Unit27>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

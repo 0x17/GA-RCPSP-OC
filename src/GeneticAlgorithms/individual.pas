@@ -107,8 +107,8 @@ begin
   minChildIx := maxParentIx + 1;
   maxChildIx := Length(population) - 1;
 
-  SetLength(result, NLIMITS);
-  for i := 0 to NLIMITS-1 do result[i] := -1.0;
+  SetLength(result, g_upperLimitIx+1);
+  for i := Low(result) to High(result) do result[i] := -1.0;
 
   // Compute fitness (objective value, schedule, residual capacity) for all parents
   SetLength(fvals, Length(population));
@@ -131,10 +131,10 @@ begin
     TSortHelper.QuickSortKeys(population, fvals, 0, maxChildIx);
 
     elapsed := MilliSecondsBetween(Now, tstart) / 1000.0;
-    for i := 0 to NLIMITS-1 do
+    for i := Low(result) to High(result) do
       if (result[i] = -1.0) and (elapsed >= TIME_LIMITS[i]) then
         result[i] := population[0].Fitness;
-    if elapsed >= TIME_LIMITS[NLIMITS-1] then break;
+    if elapsed >= TIME_LIMITS[Length(result)-1] then break;
   end;
 end;
 
