@@ -8,7 +8,7 @@ type TMain = class
   constructor Create;
   procedure Entrypoint();
 private
-  const NHEURS = 8 + 4;
+  const NHEURS = 12;
   type
     TComputeOpt = function: TDblArr;
     THeur = record
@@ -104,10 +104,10 @@ begin
 
   //RunTests;
 
-  WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.txt', 3);
-  (*WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.txt', 4);
-  WriteOptsAndTime('../Projekte/j90', 'HeursRawj90.txt', 6);
-  WriteOptsAndTime('../Projekte/j120', 'HeursRawj120.txt', 7);*)
+  WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.csv', 3);
+  WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.csv', 4);
+  WriteOptsAndTime('../Projekte/j90', 'HeursRawj90.csv', 6);
+  WriteOptsAndTime('../Projekte/j120', 'HeursRawj120.csv', 7);
 
   //RunBranchAndBound;
 end;

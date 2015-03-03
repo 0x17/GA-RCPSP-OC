@@ -121,9 +121,9 @@ end;
 function SetupTests: TList;
 begin
   result := TList.Create;
-  //result.Add(@TestVisualizeGraph);
-  //result.Add(@TestDispositionMethod);
-  //result.Add(@TestSSGSTau);
+  result.Add(@TestVisualizeGraph);
+  result.Add(@TestDispositionMethod);
+  result.Add(@TestSSGSTau);
   result.Add(@TestSSGSUpper);
   result.Add(@TestSSGSLower);
 end;
