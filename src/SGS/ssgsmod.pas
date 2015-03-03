@@ -29,17 +29,17 @@ begin
 end;
 
 class procedure TSSGSMod.SolveCore(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile; linked: Boolean);
-var i, j, t: Integer;
+var i, j, t, bval: Integer;
 begin
   for i := startFrom to ps.numJobs-1 do
   begin
-    if linked then
-      j := order[i]
-    else
-      j := i;
+    j := order[i];
 
     t := TSSGS.AllPredsFinished(fts, j);
-    if b[j] = 1 then while not TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, t) do inc(t)
+
+    if linked then bval := b[i] else bval := b[j];
+
+    if bval = 1 then while not TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, t) do inc(t)
     else while not TSSGS.ResourceFeasible(resRemaining, ps.zeroOc, j, t) do inc(t);
 
     TSSGS.ScheduleJob(j, t, sts, fts, resRemaining);
@@ -83,23 +83,23 @@ end;
 
 class procedure TSSGSMod.SolveCoreUpper(const order, b: JobData; startFrom: Integer; var sts, fts: JobData; var resRemaining: ResourceProfile; linked: Boolean);
 var
-  i, j, t: Integer;
+  i, j, t, bval: Integer;
   resRemNormal, resRemOvertime: ResourceProfile;
 begin
   InitializeSeparateResiduals(resRemNormal, resRemOvertime);
 
   for i := startFrom to ps.numJobs-1 do
   begin
-    if linked then
-      j := order[i]
-    else
-      j := i;
+    j := order[i];
 
     t := TSSGS.AllPredsFinished(fts, j);
-    if b[j] = 1 then while not TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, t) do inc(t)
+
+    if linked then bval := b[i] else bval := b[j];
+
+    if bval = 1 then while not TSSGS.ResourceFeasible(resRemaining, ps.maxOc, j, t) do inc(t)
     else while not TSSGS.ResourceFeasible(resRemNormal, ps.zeroOc, j, t) do inc(t);
 
-    ScheduleJobSepRem(b[j], j, t, sts, fts, resRemaining, resRemNormal, resRemOvertime);
+    ScheduleJobSepRem(bval, j, t, sts, fts, resRemaining, resRemNormal, resRemOvertime);
   end;
 end;
 

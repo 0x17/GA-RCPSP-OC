@@ -3,8 +3,8 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="9"/>
-    <BuildModes Active="Release"/>
-    <Units Count="100">
+    <BuildModes Active="Debug"/>
+    <Units Count="101">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -19,10 +19,12 @@
         <Filename Value="src\projectdata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="projectdata"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="301"/>
-        <CursorPos X="9" Y="327"/>
-        <UsageCount Value="62"/>
+        <TopLine Value="1"/>
+        <CursorPos X="53" Y="18"/>
+        <UsageCount Value="64"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -32,17 +34,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="74"/>
         <CursorPos X="81" Y="61"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
       <Unit3>
         <Filename Value="src\topsort.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="topsort"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="64"/>
-        <CursorPos X="68" Y="146"/>
-        <UsageCount Value="62"/>
+        <TopLine Value="55"/>
+        <CursorPos X="65" Y="89"/>
+        <UsageCount Value="64"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
       <Unit4>
@@ -52,7 +56,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="52"/>
         <CursorPos X="11" Y="55"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -62,29 +66,30 @@
         <WindowIndex Value="0"/>
         <TopLine Value="102"/>
         <CursorPos X="3" Y="107"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
         <Filename Value="src\SGS\ssgsoc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ssgsoc"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="48" Y="23"/>
-        <UsageCount Value="62"/>
+        <TopLine Value="33"/>
+        <CursorPos X="14" Y="55"/>
+        <UsageCount Value="64"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
         <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="185"/>
+        <TopLine Value="67"/>
         <CursorPos X="23" Y="196"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
@@ -95,19 +100,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="40" Y="18"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
         <Filename Value="src\GeneticAlgorithms\individual.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="individual"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="32" Y="135"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="26"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit9>
       <Unit10>
@@ -117,19 +120,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="18" Y="5"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
         <Filename Value="src\globals.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="globals"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="13"/>
-        <UsageCount Value="62"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit11>
       <Unit12>
@@ -139,7 +140,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="92" Y="33"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit12>
       <Unit13>
@@ -149,7 +150,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="39"/>
         <CursorPos X="23" Y="61"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit13>
       <Unit14>
@@ -159,7 +160,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="7" Y="103"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit14>
       <Unit15>
@@ -169,35 +170,36 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="38" Y="18"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit15>
       <Unit16>
         <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="gassgszt"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="7"/>
-        <UsageCount Value="62"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit16>
       <Unit17>
         <Filename Value="src\Methods\fbi.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="fbi"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="26"/>
       </Unit17>
       <Unit18>
         <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="tests"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="1" Y="39"/>
-        <UsageCount Value="62"/>
+        <TopLine Value="20"/>
+        <CursorPos X="15" Y="46"/>
+        <UsageCount Value="64"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit18>
       <Unit19>
@@ -207,20 +209,20 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="57" Y="13"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="53"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit19>
       <Unit20>
         <Filename Value="src\Methods\peakcrossover.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="peakcrossover"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="26"/>
       </Unit20>
       <Unit21>
         <Filename Value="src\GeneticAlgorithms\compfitness.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="compfitness"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="26"/>
       </Unit21>
       <Unit22>
         <Filename Value="src\Sampling\bbrsm.pas"/>
@@ -229,7 +231,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="70" Y="39"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="44"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit22>
       <Unit23>
@@ -239,7 +241,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="17"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="44"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit23>
       <Unit24>
@@ -249,7 +251,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="111" Y="35"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="44"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit24>
       <Unit25>
@@ -259,17 +261,19 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="45" Y="13"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="44"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit25>
       <Unit26>
         <Filename Value="src\Exact\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="107"/>
-        <CursorPos X="35" Y="114"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="25"/>
+        <CursorPos X="3" Y="38"/>
+        <UsageCount Value="26"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit26>
       <Unit27>
@@ -886,108 +890,156 @@
         <CursorPos X="40" Y="27"/>
         <UsageCount Value="11"/>
       </Unit99>
+      <Unit100>
+        <Filename Value="..\..\..\..\AppData\Local\Temp\tmpD7A1.tmp.pas"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="94" Y="51"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit100>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="24" HistoryIndex="23">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="src\main.pas"/>
-        <Caret Line="325" Column="29" TopLine="305"/>
+        <Caret Line="109" Column="70" TopLine="101"/>
       </Position1>
       <Position2>
         <Filename Value="src\main.pas"/>
-        <Caret Line="253" Column="24" TopLine="224"/>
+        <Caret Line="209" Column="30" TopLine="182"/>
       </Position2>
       <Position3>
         <Filename Value="src\main.pas"/>
-        <Caret Line="252" Column="51" TopLine="222"/>
+        <Caret Line="186" Column="20" TopLine="110"/>
       </Position3>
       <Position4>
         <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="27" TopLine="222"/>
+        <Caret Line="197" Column="18" TopLine="173"/>
       </Position4>
       <Position5>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="207" Column="61" TopLine="189"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="57" Column="20" TopLine="30"/>
       </Position5>
       <Position6>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="316" Column="43" TopLine="267"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="46" Column="3" TopLine="27"/>
       </Position6>
       <Position7>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="30" Column="157" TopLine="5"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="47" Column="12" TopLine="16"/>
       </Position7>
       <Position8>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="294" Column="43" TopLine="267"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="44" Column="15" TopLine="16"/>
       </Position8>
       <Position9>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="30" TopLine="224"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="50" Column="38" TopLine="20"/>
       </Position9>
       <Position10>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="203" Column="1" TopLine="176"/>
+        <Filename Value="src\tests.pas"/>
+        <Caret Line="53" Column="22" TopLine="20"/>
       </Position10>
       <Position11>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="232" Column="25" TopLine="207"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="27" Column="1" TopLine="3"/>
       </Position11>
       <Position12>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="259" Column="1" TopLine="236"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="44" Column="1" TopLine="29"/>
       </Position12>
       <Position13>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="248" Column="30" TopLine="224"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="45" Column="1" TopLine="29"/>
       </Position13>
       <Position14>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="53" Column="5" TopLine="31"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="47" Column="1" TopLine="29"/>
       </Position14>
       <Position15>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="29" Column="157" TopLine="4"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="49" Column="1" TopLine="29"/>
       </Position15>
       <Position16>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="29" Column="15" TopLine="4"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="52" Column="1" TopLine="29"/>
       </Position16>
       <Position17>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="106" Column="72" TopLine="91"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="53" Column="21" TopLine="32"/>
       </Position17>
       <Position18>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="109" Column="70" TopLine="101"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="55" Column="1" TopLine="32"/>
       </Position18>
       <Position19>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="209" Column="30" TopLine="182"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="58" Column="1" TopLine="32"/>
       </Position19>
       <Position20>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="13" Column="50" TopLine="28"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="61" Column="1" TopLine="45"/>
       </Position20>
       <Position21>
-        <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
-        <Caret Line="30" Column="21" TopLine="10"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="62" Column="1" TopLine="45"/>
       </Position21>
       <Position22>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="186" Column="20" TopLine="110"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="65" Column="1" TopLine="45"/>
       </Position22>
       <Position23>
-        <Filename Value="src\main.pas"/>
-        <Caret Line="197" Column="18" TopLine="173"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="92" Column="1" TopLine="59"/>
       </Position23>
       <Position24>
-        <Filename Value="src\GeneticAlgorithms\individual.pas"/>
-        <Caret Line="137" Column="61" TopLine="101"/>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="93" Column="1" TopLine="56"/>
       </Position24>
+      <Position25>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="96" Column="1" TopLine="49"/>
+      </Position25>
+      <Position26>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="54" Column="1" TopLine="46"/>
+      </Position26>
+      <Position27>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="55" Column="1" TopLine="46"/>
+      </Position27>
+      <Position28>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="58" Column="1" TopLine="46"/>
+      </Position28>
+      <Position29>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="61" Column="1" TopLine="46"/>
+      </Position29>
+      <Position30>
+        <Filename Value="src\SGS\ssgsoc.pas"/>
+        <Caret Line="55" Column="1" TopLine="46"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="src\SGS\ssgsoc.pas"/>
+        <Line Value="55"/>
+      </Item1>
+    </BreakPoints>
+    <Watches Count="1">
+      <Item1>
+        <Expression Value="TAU"/>
+      </Item1>
+    </Watches>
+  </Debugging>
   <EditorMacros Count="0"/>
 </CONFIG>

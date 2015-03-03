@@ -103,10 +103,12 @@ begin
   {$endif}
 
   //RunTests;
-  WriteOptsAndTime('../Projekte/j30filtered', 'heursOptsAndTime30.txt', 3);
-  WriteOptsAndTime('../Projekte/j60', 'heursOptsAndTime60.txt', 4);
-  WriteOptsAndTime('../Projekte/j90', 'heursOptsAndTime90.txt', 6);
-  WriteOptsAndTime('../Projekte/j120', 'heursOptsAndTime120.txt', 7);
+
+  WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.txt', 3);
+  (*WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.txt', 4);
+  WriteOptsAndTime('../Projekte/j90', 'HeursRawj90.txt', 6);
+  WriteOptsAndTime('../Projekte/j120', 'HeursRawj120.txt', 7);*)
+
   //RunBranchAndBound;
 end;
 
