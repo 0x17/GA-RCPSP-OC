@@ -59,10 +59,8 @@ end;
 
 class function TProfit.Revenue(makespan: Integer): Double;
 begin
-  (*if makespan < ps.minMs then
-    result := ps.maxCosts
-  else*)
-    result := ps.maxCosts - ps.maxCosts / Power(ps.maxMs - ps.minMs, 2) * Power(makespan - ps.minMs, 2);
+  //if makespan < ps.minMs then result := ps.maxCosts else
+  result := ps.maxCosts - ps.maxCosts / Power(ps.maxMs - ps.minMs, 2) * Power(makespan - ps.minMs, 2);
 end;
 
 class function TProfit.TotalOCCosts(const resRemaining: ResourceProfile): Double;

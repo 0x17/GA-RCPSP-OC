@@ -62,7 +62,7 @@ var
 begin
   if quiet then Exit;
 
-  DeleteFile('C:\Users\a.schnabel\Documents\'+filename+'.xlsx');
+  //DeleteFile('C:\Users\a.schnabel\Documents\'+filename+'.xlsx');
 
   excObj := CreateOleObject('Excel.Application');
   excObj.SheetsInNewWorkbook := 1;

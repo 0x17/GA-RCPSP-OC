@@ -32,6 +32,23 @@ procedure TestDispositionMethod; begin
   TVisualizer.VisualizeGraph('afterdisposition');
 end;
 
+procedure Reorder;
+begin
+  ps.ReorderJobsAscDepth;
+  TTopSort.Sort(ps.topOrder);
+  ps.ComputeESFTS;
+end;
+
+procedure TestSSGS;
+var
+  sts: JobData;
+  resRem: ResourceProfile;
+begin
+  Reorder;
+  TSSGS.Solve(ps.topOrder, ps.zeroOc, sts, resRem);
+  TVisualizer.VisualizeSchedule(sts, 'ssgsschedule');
+end;
+
 procedure TestSSGSTau;
 var
   sts: JobData;
@@ -39,9 +56,7 @@ var
   resRem: ResourceProfile;
   j: Integer;
 begin
-  ps.ReorderJobsAscDepth;
-  TTopSort.Sort(ps.topOrder);
-  ps.ComputeESFTS;
+  Reorder;
 
   SetLength(tau, 8);
   for j := 0 to 7 do
@@ -52,7 +67,7 @@ begin
   TVisualizer.VisualizeSchedule(sts, 'tauschedule');
 end;
 
-procedure TestSSGSLower;
+procedure TestSSGSLowerUnlinked;
 var
   order, b, sts: JobData;
   resRem: ResourceProfile;
@@ -62,9 +77,7 @@ begin
   linked := False;
   upper := False;
 
-  ps.ReorderJobsAscDepth;
-  TTopSort.Sort(ps.topOrder);
-  ps.ComputeESFTS;
+  Reorder;
 
   SetLength(order, 8);
   order[0] := 0;
@@ -85,7 +98,7 @@ begin
   TVisualizer.VisualizeSchedule(sts, 'lowerschedule');
 end;
 
-procedure TestSSGSUpper;
+procedure TestSSGSUpperUnlinked;
 var
   order, b, sts: JobData;
   resRem: ResourceProfile;
@@ -95,9 +108,7 @@ begin
   linked := False;
   upper := True;
 
-  ps.ReorderJobsAscDepth;
-  TTopSort.Sort(ps.topOrder);
-  ps.ComputeESFTS;
+  Reorder;
 
   SetLength(order, 8);
   order[0] := 0;
@@ -118,14 +129,33 @@ begin
   TVisualizer.VisualizeSchedule(sts, 'upperschedule');
 end;
 
+procedure TestSSGSOC;
+var
+  sts: JobData;
+  resRem: ResourceProfile;
+  profit: Double;
+begin
+  Reorder;
+  profit := TSSGSOC.Solve(ps.topOrder, sts, resRem);
+  TVisualizer.VisualizeSchedule(sts, 'ocschedule');
+end;
+
 function SetupTests: TList;
 begin
   result := TList.Create;
+
   result.Add(@TestVisualizeGraph);
   result.Add(@TestDispositionMethod);
+
+  result.Add(@TestSSGS);
   result.Add(@TestSSGSTau);
-  result.Add(@TestSSGSUpper);
-  result.Add(@TestSSGSLower);
+  result.Add(@TestSSGSUpperUnlinked);
+  result.Add(@TestSSGSLowerUnlinked);
+  result.Add(@TestSSGSOC);
+
+  // TODO: Linked ssgs mod tests
+
+  // TODO: GA operators / parts tests
 end;
 
 procedure RunTests;
