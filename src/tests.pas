@@ -144,14 +144,18 @@ function SetupTests: TList;
 begin
   result := TList.Create;
 
+  (*
   result.Add(@TestVisualizeGraph);
   result.Add(@TestDispositionMethod);
+  *)
 
+  (*
   result.Add(@TestSSGS);
   result.Add(@TestSSGSTau);
   result.Add(@TestSSGSUpperUnlinked);
   result.Add(@TestSSGSLowerUnlinked);
   result.Add(@TestSSGSOC);
+  *)
 
   // TODO: Linked ssgs mod tests
 
