@@ -19,6 +19,7 @@ uses
   ssgs in 'src\SGS\ssgs.pas',
   ssgsmod in 'src\SGS\ssgsmod.pas',
   ssgsoc in 'src\SGS\ssgsoc.pas',
+  sgsminoc in 'src\SGS\sgsminoc.pas',
   gassgsoc in 'src\GeneticAlgorithms\gassgsoc.pas',
   gassgsbeta in 'src\GeneticAlgorithms\gassgsbeta.pas',
   topsort in 'src\topsort.pas',

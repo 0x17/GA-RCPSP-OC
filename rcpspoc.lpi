@@ -59,9 +59,6 @@
             <Verbosity>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
-            <CompilerMessages>
-              <MsgFileName Value=""/>
-            </CompilerMessages>
             <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
@@ -100,9 +97,6 @@
             <Verbosity>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
-            <CompilerMessages>
-              <MsgFileName Value=""/>
-            </CompilerMessages>
             <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
@@ -118,41 +112,34 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="27">
+    <Units Count="28">
       <Unit0>
         <Filename Value="rcpspoc.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="rcpspoc"/>
       </Unit0>
       <Unit1>
         <Filename Value="src\projectdata.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="projectdata"/>
       </Unit1>
       <Unit2>
         <Filename Value="src\SGS\ssgs.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ssgs"/>
       </Unit2>
       <Unit3>
         <Filename Value="src\topsort.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="topsort"/>
       </Unit3>
       <Unit4>
         <Filename Value="src\profit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="profit"/>
       </Unit4>
       <Unit5>
         <Filename Value="src\helpers.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="helpers"/>
       </Unit5>
       <Unit6>
         <Filename Value="src\SGS\ssgsoc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ssgsoc"/>
       </Unit6>
       <Unit7>
         <Filename Value="src\main.pas"/>
@@ -162,7 +149,6 @@
       <Unit8>
         <Filename Value="src\SGS\ssgsmod.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ssgsmod"/>
       </Unit8>
       <Unit9>
         <Filename Value="src\GeneticAlgorithms\individual.pas"/>
@@ -172,17 +158,14 @@
       <Unit10>
         <Filename Value="src\SGS\esschedule.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="esschedule"/>
       </Unit10>
       <Unit11>
         <Filename Value="src\globals.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="globals"/>
       </Unit11>
       <Unit12>
         <Filename Value="src\GeneticAlgorithms\gassgsoc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgsoc"/>
       </Unit12>
       <Unit13>
         <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
@@ -197,17 +180,14 @@
       <Unit15>
         <Filename Value="src\GeneticAlgorithms\gassgsz.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgsz"/>
       </Unit15>
       <Unit16>
         <Filename Value="src\GeneticAlgorithms\gassgszt.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgszt"/>
       </Unit16>
       <Unit17>
         <Filename Value="src\Methods\fbi.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="fbi"/>
       </Unit17>
       <Unit18>
         <Filename Value="src\tests.pas"/>
@@ -217,43 +197,41 @@
       <Unit19>
         <Filename Value="src\visualizer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="visualizer"/>
       </Unit19>
       <Unit20>
         <Filename Value="src\Methods\peakcrossover.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="peakcrossover"/>
       </Unit20>
       <Unit21>
         <Filename Value="src\GeneticAlgorithms\compfitness.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="compfitness"/>
       </Unit21>
       <Unit22>
         <Filename Value="src\Sampling\bbrsm.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="bbrsm"/>
       </Unit22>
       <Unit23>
         <Filename Value="src\Sampling\naive.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="naive"/>
       </Unit23>
       <Unit24>
         <Filename Value="src\Sampling\rbbrsm.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="rbbrsm"/>
       </Unit24>
       <Unit25>
         <Filename Value="src\Sampling\algenerator.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="algenerator"/>
       </Unit25>
       <Unit26>
         <Filename Value="src\Exact\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="branchandbound"/>
       </Unit26>
+      <Unit27>
+        <Filename Value="src\SGS\sgsminoc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="sgsminoc"/>
+      </Unit27>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -282,9 +260,6 @@
       <Verbosity>
         <ShowHintsForSenderNotUsed Value="True"/>
       </Verbosity>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

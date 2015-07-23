@@ -69,7 +69,7 @@ begin
 
   // HACK
   // Force add topological ordering to ensure at least zero profit everywhere -> profits now ratio scaled
-  population[0].order := Copy(ps.topOrder, 0, ps.numJobs);
+  TActivityListIndividual(population[0]).order := Copy(ps.topOrder, 0, ps.numJobs);
   // ENDHACK
 end;
 
@@ -157,4 +157,4 @@ begin
 end;
 
 end.
-
+

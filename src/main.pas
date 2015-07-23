@@ -102,10 +102,10 @@ begin
   ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
-  RunTests;
+  //RunTests;
 
-  (*WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.csv', 3);
-  WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.csv', 4);
+  WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.csv', 3);
+  (*WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.csv', 4);
   WriteOptsAndTime('../Projekte/j90', 'HeursRawj90.csv', 6);
   WriteOptsAndTime('../Projekte/j120', 'HeursRawj120.csv', 7);*)
 
