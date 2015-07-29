@@ -90,13 +90,11 @@ begin
     end;
 end;
 
-class function TProfit.CalcProfit(const sts: JobData): Double;
-begin
+class function TProfit.CalcProfit(const sts: JobData): Double; begin
   result := Revenue(sts[ps.numJobs-1]) - TotalOCCosts(sts);
 end;
 
-class function TProfit.CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double;
-begin
+class function TProfit.CalcProfit(const sts: JobData; const resRemaining: ResourceProfile): Double; begin
   result := Revenue(sts[ps.numJobs-1]) - TotalOCCosts(resRemaining);
 end;
 

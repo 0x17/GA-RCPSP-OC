@@ -133,10 +133,9 @@ procedure TestSSGSOC;
 var
   sts: JobData;
   resRem: ResourceProfile;
-  profit: Double;
 begin
   Reorder;
-  profit := TSSGSOC.Solve(ps.topOrder, sts, resRem);
+  TSSGSOC.Solve(ps.topOrder, sts, resRem);
   TVisualizer.VisualizeSchedule(sts, 'ocschedule');
 end;
 

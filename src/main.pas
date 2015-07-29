@@ -20,7 +20,7 @@ private
   var heurs: THeurs;
 
   procedure InitProject(const fname: String);
-  procedure WriteOptsAndTime(const path, outFname: String; upperLimitIx: Integer);
+  procedure WriteOptsAndTime(const path, outFname: String);
   procedure RunBranchAndBound;
 end;
 
@@ -104,10 +104,11 @@ begin
 
   //RunTests;
 
-  WriteOptsAndTime('../Projekte/j30filtered', 'HeursRawj30.csv', 3);
-  (*WriteOptsAndTime('../Projekte/j60', 'HeursRawj60.csv', 4);
-  WriteOptsAndTime('../Projekte/j90', 'HeursRawj90.csv', 6);
-  WriteOptsAndTime('../Projekte/j120', 'HeursRawj120.csv', 7);*)
+  g_upperTimeLimitIndex := 3;
+  WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30.csv');
+  (*WriteOptsAndTime('../../Projekte/j60', 'HeursRawj60.csv', 4);
+  WriteOptsAndTime('../../Projekte/j90', 'HeursRawj90.csv', 6);
+  WriteOptsAndTime('../../Projekte/j120', 'HeursRawj120.csv', 7);*)
 
   //RunBranchAndBound;
 end;
@@ -158,7 +159,7 @@ begin
   ps.ComputeESFTS;
 end;
 
-procedure TMain.WriteOptsAndTime(const path, outFname: String; upperLimitIx: Integer);
+procedure TMain.WriteOptsAndTime(const path, outFname: String);
 var
   fnames: TStringList;
   headerStr, line, fname: String;
@@ -196,8 +197,6 @@ var
   end;
 
 begin
-  g_upperLimitIx := upperLimitIx;
-
   AssignFile(fp, outFname);
   Rewrite(fp);
 

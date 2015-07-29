@@ -22,13 +22,11 @@ implementation
 
 uses classes, sysutils, globals, ssgs, helpers, profit;
 
-function AllocateIndividual: IIndividual;
-begin
+function AllocateIndividual: IIndividual; begin
   result := TActivityListOCIndividual.Create;
 end;
 
-function RunGASSGSZT: TDblArr;
-begin
+function RunGASSGSZT: TDblArr; begin
   result := TGACore.Run(AllocateIndividual, False);
 end;
 

@@ -23,13 +23,11 @@ implementation
 
 uses classes, sysutils, globals, helpers;
 
-function AllocateIndividual: IIndividual;
-begin
+function AllocateIndividual: IIndividual; begin
   result := TActivityListTauIndividual.Create;
 end;
 
-function RunGASSGSTau: TDblArr;
-begin
+function RunGASSGSTau: TDblArr; begin
   result := TGACore.Run(AllocateIndividual, False);
 end;
 

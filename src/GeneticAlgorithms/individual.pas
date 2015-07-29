@@ -48,8 +48,7 @@ begin
     population[i] := allocator;
 end;
 
-procedure IIndividual.InitializePopulation(var population: IndivArray);
-begin
+procedure IIndividual.InitializePopulation(var population: IndivArray); begin
   RandSeed := 23;
 end;
 
@@ -107,7 +106,7 @@ begin
   minChildIx := maxParentIx + 1;
   maxChildIx := Length(population) - 1;
 
-  SetLength(result, g_upperLimitIx+1);
+  SetLength(result, g_upperTimeLimitIndex+1);
   for i := Low(result) to High(result) do result[i] := -1.0;
 
   // Compute fitness (objective value, schedule, residual capacity) for all parents

@@ -59,7 +59,6 @@
             <Verbosity>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -97,7 +96,6 @@
             <Verbosity>
               <ShowHintsForSenderNotUsed Value="True"/>
             </Verbosity>
-            <CompilerPath Value="$(CompPath)"/>
           </Other>
         </CompilerOptions>
       </Item3>
@@ -144,7 +142,6 @@
       <Unit7>
         <Filename Value="src\main.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="main"/>
       </Unit7>
       <Unit8>
         <Filename Value="src\SGS\ssgsmod.pas"/>
@@ -153,7 +150,6 @@
       <Unit9>
         <Filename Value="src\GeneticAlgorithms\individual.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="individual"/>
       </Unit9>
       <Unit10>
         <Filename Value="src\SGS\esschedule.pas"/>
@@ -170,12 +166,10 @@
       <Unit13>
         <Filename Value="src\GeneticAlgorithms\gassgsbeta.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgsbeta"/>
       </Unit13>
       <Unit14>
         <Filename Value="src\GeneticAlgorithms\gassgstau.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="gassgstau"/>
       </Unit14>
       <Unit15>
         <Filename Value="src\GeneticAlgorithms\gassgsz.pas"/>
@@ -192,7 +186,6 @@
       <Unit18>
         <Filename Value="src\tests.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="tests"/>
       </Unit18>
       <Unit19>
         <Filename Value="src\visualizer.pas"/>
@@ -225,12 +218,10 @@
       <Unit26>
         <Filename Value="src\Exact\branchandbound.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="branchandbound"/>
       </Unit26>
       <Unit27>
         <Filename Value="src\SGS\sgsminoc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="sgsminoc"/>
       </Unit27>
     </Units>
   </ProjectOptions>
@@ -260,7 +251,6 @@
       <Verbosity>
         <ShowHintsForSenderNotUsed Value="True"/>
       </Verbosity>
-      <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
   <Debugging>

@@ -35,13 +35,11 @@ uses sysutils, strutils
 
 const PATH_SEP = {$ifdef MSWINDOWS}'\'{$else}'/'{$endif};
 
-class function THelper.FilenameFromPath(const path: String): String;
-begin
+class function THelper.FilenameFromPath(const path: String): String; begin
   result := RightStr(path, Length(path) - LastDelimiter(PATH_SEP, path));
 end;
 
-class function THelper.RandomRangeIncl(lb, ub: Integer): Integer;
-begin
+class function THelper.RandomRangeIncl(lb, ub: Integer): Integer; begin
   result := Random(ub-lb+1)+lb;
 end;
 
