@@ -21,12 +21,11 @@ private
 
   procedure InitProject(const fname: String);
   procedure WriteOptsAndTime(const path, outFname: String);
-  procedure RunBranchAndBound;
 end;
 
 implementation
 
-uses classes, strutils, sysutils, projectdata, math, topsort, branchandbound, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
+uses classes, strutils, sysutils, projectdata, math, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
 
 constructor TMain.Create;
 var k: Integer;
@@ -102,49 +101,15 @@ begin
   ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
-  //RunTests;
-
   g_upperTimeLimitIndex := 3;
-  WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30.csv');
+
+  RunTests;
+
+  //WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30.csv');
+
   (*WriteOptsAndTime('../../Projekte/j60', 'HeursRawj60.csv', 4);
   WriteOptsAndTime('../../Projekte/j90', 'HeursRawj90.csv', 6);
   WriteOptsAndTime('../../Projekte/j120', 'HeursRawj120.csv', 7);*)
-
-  //RunBranchAndBound;
-end;
-
-procedure TMain.RunBranchAndBound;
-var
-  bb: TBranchAndBound;
-  sts: JobData;
-  db, solvetime: Double;
-  time: Cardinal;
-  j: Integer;
-  sw: TStopwatch;
-  resRem: ResourceProfile;
-begin
-  bb := TBranchAndBound.Create('testproj.sm');
-  SetLength(sts, ps.numJobs);
-
-  sw := TStopwatch.Create;
-  sw.Start;
-  db := bb.Solve(sts);
-  time := sw.Stop;
-  solvetime := time / 1000.0;
-
-  writeln('makespan = ', sts[ps.numJobs-1]);
-  ps.InferProfileFromSchedule(sts, resRem);
-  writeln('oc costs = ', FloatToStr(TProfit.TotalOCCosts(resRem)));
-  writeln('revenue = ', FloatToStr(TProfit.Revenue(sts[ps.numJobs-1])));
-  writeln('profit = ', FloatToStr(db));
-  writeln('solvetime = ', FloatToStr(solvetime));
-  write('(');
-  for j := 0 to ps.numJobs-1 do write(sts[j], '; ');
-  writeln(')');
-  readln;
-
-  FreeAndNil(bb);
-  FreeAndNil(sw);
 end;
 
 procedure TMain.InitProject(const fname: String);

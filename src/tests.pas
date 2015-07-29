@@ -6,7 +6,7 @@ procedure RunTests;
 
 implementation
 
-uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer, classes, ssgsoc, ssgsmod;
+uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer, classes, ssgsoc, ssgsmod, stopwatch;
 
 type TTestFunc = procedure;
 
@@ -139,6 +139,13 @@ begin
   TVisualizer.VisualizeSchedule(sts, 'ocschedule');
 end;
 
+procedure TestStopwatch;
+var sw: TStopwatch;
+begin
+  sw := TStopwatch.Create;
+  FreeAndNil(sw);
+end;
+
 function SetupTests: TList;
 begin
   result := TList.Create;
@@ -156,25 +163,23 @@ begin
   result.Add(@TestSSGSOC);
   *)
 
-  // TODO: Linked ssgs mod tests
-
-  // TODO: GA operators / parts tests
+  result.Add(@TestStopwatch);
 end;
 
 procedure RunTests;
 var
-  testfs: TList;
+  testfns: TList;
   funcp: Pointer;
 begin
-  testfs := SetupTests;
+  testfns := SetupTests;
 
-  for funcp in testfs do begin
+  for funcp in testfns do begin
     InitExampleProject;
     TTestFunc(funcp)();
     FreeAndNil(ps);
   end;
 
-  FreeAndNil(testfs);
+  FreeAndNil(testfns);
 end;
 
 end.

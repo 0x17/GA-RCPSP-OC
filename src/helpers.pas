@@ -17,13 +17,6 @@ type
     class procedure RunCommand(const cmd, args: String);
 end;
 
-type TStopwatch = class(TObject)
-  procedure Start();
-  function Stop(): Cardinal;
-private
-  before: {$ifndef MSWINDOWS}TDateTime{$else}Cardinal{$endif};
-end;
-
 implementation
 
 uses sysutils, strutils
@@ -118,25 +111,6 @@ begin
   StringToWideChar(args, argsWchar, BUF_SIZE);
   {$ifdef MSWINDOWS}
   ShellExecuteW(0, 'open', cmdWchar, argsWchar, nil, 1);
-  {$endif}
-end;
-
-//==============================================================================
-procedure TStopwatch.Start();
-begin
-  {$ifndef MSWINDOWS}
-  before := Now;
-  {$else}
-  before := GetTickCount;
-  {$endif}
-end;
-
-function TStopwatch.Stop(): Cardinal;
-begin
-  {$ifndef MSWINDOWS}
-  result := MilliSecondsBetween(Now, before);
-  {$else}
-  result := GetTickCount - before;
   {$endif}
 end;
 
