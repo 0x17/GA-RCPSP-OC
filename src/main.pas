@@ -2,7 +2,7 @@ unit main;
 
 interface
 
-uses individual;
+uses helpers;
 
 type TMain = class
   constructor Create;
@@ -22,12 +22,12 @@ private
   var heurs: THeurs;
 
   procedure InitHeuristic(const name, texName: String; const fn: TComputeOpt; var ix: Integer);
-  procedure WriteOptsAndTime(const path, outFname: String);
+  procedure WriteOptsAndTime(const path, outFname: String; takeCount: Integer = -1);
 end;
 
 implementation
 
-uses classes, strutils, sysutils, projectdata, math, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
+uses classes, strutils, sysutils, projectdata, math, topsort, profit, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
 
 constructor TMain.Create;
 var
@@ -66,7 +66,8 @@ begin
   ReportMemoryLeaksOnShutdown := False;
   {$endif}
 
-  g_upperTimeLimitIndex := 3;
+  if SINGLE_RESULT then g_upperTimeLimitIndex := 0
+  else g_upperTimeLimitIndex := 3;
 
   //RunTests;
 
@@ -97,12 +98,12 @@ begin
   inc(ix);
 end;
 
-procedure TMain.WriteOptsAndTime(const path, outFname: String);
+procedure TMain.WriteOptsAndTime(const path, outFname: String; takeCount: Integer);
 var
   fnames: TStringList;
   headerStr, line, fname: String;
   fp: TextFile;
-  ctr, i, takeCount: Integer;
+  ctr, i: Integer;
   profits: TDblArr;
 
   procedure BuildHeaderStr;
@@ -113,10 +114,10 @@ var
       headerStr := headerStr + ';' + heurs[i].texName;
   end;
 
-  procedure WriteStr(var fp: TextFile; const s: String);
-  begin
+  procedure WriteStr(var fp: TextFile; const s: String); begin
     WriteLn(fp, s);
     Flush(fp);
+    WriteLn(s);
   end;
 
   procedure SolveHeur(const h: THeur);
@@ -143,7 +144,8 @@ begin
 
   fnames := THelper.ListProjFilesInDir(path);
 
-  takeCount := fnames.Count;
+  if takeCount < 0 then
+    takeCount := fnames.Count;
 
   ctr := 0;
   for fname in fnames do begin

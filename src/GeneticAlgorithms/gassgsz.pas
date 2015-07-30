@@ -2,7 +2,7 @@ unit gassgsz;
 
 interface
 
-uses individual, gassgsoc, projectdata;
+uses individual, gassgsoc, projectdata, helpers;
 
 function RunGASSGSZ: TDblArr;
 
@@ -19,7 +19,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgs, helpers, profit;
+uses classes, sysutils, globals, ssgs, profit;
 
 function AllocateIndividual: IIndividual; begin
   result := TActivityListZIndividual.Create;

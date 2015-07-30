@@ -5,6 +5,7 @@ interface
 uses classes;
 
 type
+  TDblArr = Array of Double;
   ByteMx2D = Array of Array of Byte;
 
   THelper = class

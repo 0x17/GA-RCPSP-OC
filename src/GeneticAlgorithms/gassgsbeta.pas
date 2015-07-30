@@ -2,7 +2,7 @@
 
 interface
 
-uses gassgsoc, projectdata, individual;
+uses gassgsoc, projectdata, individual, helpers;
 
 function RunGASSGSBeta1: TDblArr;
 function RunGASSGSBeta2: TDblArr;
@@ -34,7 +34,7 @@ end;
 
 implementation
 
-uses globals, helpers, ssgsmod, profit;
+uses globals, ssgsmod, profit;
 
 function AllocateIndiv: IIndividual;
 begin

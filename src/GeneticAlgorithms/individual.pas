@@ -2,12 +2,11 @@ unit individual;
 
 interface
 
-uses globals;
+uses globals, helpers;
 
 type
   IIndividual = class;
   IndivArray = Array of IIndividual;
-  TDblArr = Array of Double;
 
   IIndividual = class
     procedure InitializePopulation(var population: IndivArray); virtual;
@@ -37,7 +36,7 @@ type
 
 implementation
 
-uses helpers, sysutils, compfitness, dateutils;
+uses sysutils, compfitness, dateutils;
 
 procedure AllocIndividuals(out population: IndivArray; size: Integer; allocator: IndivAllocator);
 var i: Integer;

@@ -2,7 +2,7 @@
 
 interface
 
-uses individual, gassgsoc, ssgsoc;
+uses individual, gassgsoc, ssgsoc, helpers;
 
 function RunGASSGSTau: TDblArr;
 
@@ -21,7 +21,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, helpers;
+uses classes, sysutils, globals;
 
 function AllocateIndividual: IIndividual; begin
   result := TActivityListTauIndividual.Create;

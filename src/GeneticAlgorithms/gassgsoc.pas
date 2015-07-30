@@ -2,7 +2,7 @@
 
 interface
 
-uses projectdata, individual;
+uses projectdata, helpers, individual;
 
 function RunGASSGSOC: TDblArr;
 
@@ -28,7 +28,7 @@ end;
 
 implementation
 
-uses classes, sysutils, globals, ssgsoc, helpers, algenerator, bbrsm, rbbrsm;
+uses classes, sysutils, globals, ssgsoc, algenerator, bbrsm, rbbrsm;
 
 function AllocateIndividual: IIndividual;
 begin
