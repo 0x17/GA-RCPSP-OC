@@ -10,7 +10,6 @@ type
   TDblArr = Array of Double;
 
   IIndividual = class
-
     procedure InitializePopulation(var population: IndivArray); virtual;
     procedure FillNeighborhood(const origin: IIndividual; var population: IndivArray); virtual; abstract;
     procedure Crossover(const other: IIndividual; var daughter, son: IIndividual); virtual; abstract;

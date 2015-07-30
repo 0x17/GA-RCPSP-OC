@@ -6,23 +6,9 @@ procedure RunTests;
 
 implementation
 
-uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer, classes, ssgsoc, ssgsmod, stopwatch;
+uses projectdata, ssgs, globals, sysutils, topsort, profit, visualizer, classes, ssgsoc, ssgsmod, stopwatch, main;
 
 type TTestFunc = procedure;
-
-procedure InitExampleProject;
-const FNAME = 'testproj.sm';
-begin
-  if ps <> nil then FreeAndNil(ps);
-
-  ps := ProjData.Create;
-  ps.LoadFromFile(fname);
-
-  TTopSort.Sort(ps.topOrder);
-  TProfit.CalcMinMaxMakespanCosts;
-
-  ps.ComputeESFTS;
-end;
 
 procedure TestVisualizeGraph; begin TVisualizer.VisualizeGraph('testgraph'); end;
 
@@ -174,7 +160,7 @@ begin
   testfns := SetupTests;
 
   for funcp in testfns do begin
-    InitExampleProject;
+    TMain.InitProject('testproj.sm');
     TTestFunc(funcp)();
     FreeAndNil(ps);
   end;

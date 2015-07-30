@@ -7,6 +7,8 @@ uses individual;
 type TMain = class
   constructor Create;
   procedure Entrypoint();
+
+  class procedure InitProject(const fname: String);
 private
   const NHEURS = 12;
   type
@@ -19,7 +21,7 @@ private
 
   var heurs: THeurs;
 
-  procedure InitProject(const fname: String);
+  procedure InitHeuristic(const name, texName: String; const fn: TComputeOpt; var ix: Integer);
   procedure WriteOptsAndTime(const path, outFname: String);
 end;
 
@@ -28,71 +30,34 @@ implementation
 uses classes, strutils, sysutils, projectdata, math, topsort, profit, helpers, globals, gassgsoc, gassgsbeta, gassgsz, gassgszt, gassgstau, tests, variants;
 
 constructor TMain.Create;
-var k: Integer;
+var
+  k: Integer;
+  fns: Array of TComputeOpt;
+  i: Integer;
 begin
   k := 0;
   SetLength(heurs, NHEURS);
 
-  heurs[k].name := 'GA-SSGS-Zrt';
-  heurs[k].texName := '(\lambda|z_{rt})';
-  heurs[k].fn := @RunGASSGSZT;
-  inc(k);
-  heurs[k].name := 'GA-SSGS-Zr';
-  heurs[k].texName := '(\lambda|z_r)';
-  heurs[k].fn := @RunGASSGSZ;
-  inc(k);
+  InitHeuristic('GA-SSGS-Zrt', '(\lambda|z_{rt})', @RunGASSGSZT, k);
+  InitHeuristic('GA-SSGS-Zr', '(\lambda|z_r)', @RunGASSGSZ, k);
 
   // BETA VARIANTS
-  heurs[k].name := 'GA-SSGS-Beta1-'+GetBetaName(0);
-  heurs[k].texName := GetBetaTexName(0);
-  heurs[k].fn := @RunGASSGSBeta1;
-  inc(k);
+  SetLength(fns, 8);
+  fns[0] := @RunGASSGSBeta1;
+  fns[1] := @RunGASSGSBeta2;
+  fns[2] := @RunGASSGSBeta3;
+  fns[3] := @RunGASSGSBeta4;
+  fns[4] := @RunGASSGSBeta5;
+  fns[5] := @RunGASSGSBeta6;
+  fns[6] := @RunGASSGSBeta7;
+  fns[7] := @RunGASSGSBeta8;
 
-  heurs[k].name := 'GA-SSGS-Beta2-'+GetBetaName(1);
-  heurs[k].texName := GetBetaTexName(1);
-  heurs[k].fn := @RunGASSGSBeta2;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta3-'+GetBetaName(2);
-  heurs[k].texName := GetBetaTexName(2);
-  heurs[k].fn := @RunGASSGSBeta3;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta4-'+GetBetaName(3);
-  heurs[k].texName := GetBetaTexName(3);
-  heurs[k].fn := @RunGASSGSBeta4;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta5-'+GetBetaName(4);
-  heurs[k].texName := GetBetaTexName(4);
-  heurs[k].fn := @RunGASSGSBeta5;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta6-'+GetBetaName(5);
-  heurs[k].texName := GetBetaTexName(5);
-  heurs[k].fn := @RunGASSGSBeta6;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta7-'+GetBetaName(6);
-  heurs[k].texName := GetBetaTexName(6);
-  heurs[k].fn := @RunGASSGSBeta7;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-Beta8-'+GetBetaName(7);
-  heurs[k].texName := GetBetaTexName(7);
-  heurs[k].fn := @RunGASSGSBeta8;
-  inc(k);
+  for i := 0 to 7 do
+    InitHeuristic('GA-SSGS-Beta' + IntToStr(i+1) + '-' + GetBetaName(i), GetBetaTexName(i), fns[i], k);
 
   // OTHERS
-  heurs[k].name := 'GA-SSGS-Tau';
-  heurs[k].texName := '(\lambda|\tau)';
-  heurs[k].fn := @RunGASSGSTau;
-  inc(k);
-
-  heurs[k].name := 'GA-SSGS-OC';
-  heurs[k].texName := '(\lambda)';
-  heurs[k].fn := @RunGASSGSOC;
-  inc(k);
+  InitHeuristic('GA-SSGS-Tau', '(\lambda|\tau)', @RunGASSGSTau, k);
+  InitHeuristic('GA-SSGS-OC', '(\lambda)', @RunGASSGSOC, k);
 end;
 
 procedure TMain.Entrypoint;
@@ -103,16 +68,16 @@ begin
 
   g_upperTimeLimitIndex := 3;
 
-  RunTests;
+  //RunTests;
 
-  //WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30.csv');
+  WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30out.csv');
 
   (*WriteOptsAndTime('../../Projekte/j60', 'HeursRawj60.csv', 4);
   WriteOptsAndTime('../../Projekte/j90', 'HeursRawj90.csv', 6);
   WriteOptsAndTime('../../Projekte/j120', 'HeursRawj120.csv', 7);*)
 end;
 
-procedure TMain.InitProject(const fname: String);
+class procedure TMain.InitProject(const fname: String);
 begin
   if ps <> nil then FreeAndNil(ps);
   ps := ProjData.Create;
@@ -122,6 +87,14 @@ begin
   ps.ReorderJobsAscDepth;
   TTopSort.Sort(ps.topOrder);
   ps.ComputeESFTS;
+end;
+
+procedure TMain.InitHeuristic(const name, texName: String; const fn: TComputeOpt; var ix: Integer);
+begin
+  heurs[ix].name := name;
+  heurs[ix].texName := texName;
+  heurs[ix].fn := fn;
+  inc(ix);
 end;
 
 procedure TMain.WriteOptsAndTime(const path, outFname: String);
