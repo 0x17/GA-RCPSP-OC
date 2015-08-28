@@ -69,9 +69,9 @@ begin
   if SINGLE_RESULT then g_upperTimeLimitIndex := 0
   else g_upperTimeLimitIndex := 3;
 
-  //RunTests;
+  RunTests;
 
-  WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30out.csv');
+  //WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30out.csv');
 
   (*WriteOptsAndTime('../../Projekte/j60', 'HeursRawj60.csv', 4);
   WriteOptsAndTime('../../Projekte/j90', 'HeursRawj90.csv', 6);

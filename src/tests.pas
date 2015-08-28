@@ -132,6 +132,68 @@ begin
   FreeAndNil(sw);
 end;
 
+procedure CostMinHeurRelaxed(const prioVals: JobData; out sts: JobData);
+var
+  cests, clsts: JobData;
+  jobsRemaining, j, k: Integer;
+
+  function JobWithHighestPriority: Integer;
+  var i: Integer;
+  begin
+    result := 0;
+    for i := 1 to ps.numJobs-1 do
+      if (prioVals[i] > prioVals[result]) and (sts[i] = -1) then
+        result := i;
+  end;
+
+  function ExtensionCosts(job: Integer; stj: Integer): Double;
+  begin
+    result := 0.0;
+  end;
+
+  function ComputeBestStartingTime(job: Integer): Integer;
+  var
+    candidateSt: Integer;
+    candidateCosts: Double;
+  begin
+    candidateSt := cests[job];
+    candidateCosts := ExtensionCosts(job, cests[job]);
+  end;
+
+  procedure UpdateTimeWindows(job: Integer);
+  begin
+
+  end;
+
+begin
+  SetLength(cests, ps.numJobs);
+  SetLength(clsts, ps.numJobs);
+  SetLength(sts, ps.numJobs);
+
+  cests := Copy(ps.ests, 0, ps.numJobs);
+  clsts := Copy(ps.lsts, 0, ps.numJobs);
+  ps.Fill(sts, -1);
+  sts[0] := 0;
+
+  jobsRemaining := ps.numJobs-1;
+
+  while jobsRemaining > 0 do begin
+    j := JobWithHighestPriority;
+    sts[j] := ComputeBestStartingTime(j);
+    UpdateTimeWindows(j);
+  end;
+
+end;
+
+procedure TestCostMinHeurRelaxed;
+var
+  sts: JobData;
+  prioVals: JobData;
+begin
+  prioVals := Copy(ps.topOrder, 0, ps.numJobs);
+  CostMinHeurRelaxed(prioVals, sts);
+end;
+
 function SetupTests: TList;
 begin
   result := TList.Create;
@@ -149,7 +211,9 @@ begin
   result.Add(@TestSSGSOC);
   *)
 
-  result.Add(@TestStopwatch);
+  //result.Add(@TestStopwatch);
+
+  result.Add(@TestCostMinHeurRelaxed);
 end;
 
 procedure RunTests;
