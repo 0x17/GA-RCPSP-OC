@@ -87,7 +87,7 @@ begin
   TProfit.CalcMinMaxMakespanCosts;
   ps.ReorderJobsAscDepth;
   TTopSort.Sort(ps.topOrder);
-  ps.ComputeESFTS;
+  ps.ComputeELSFTS;
 end;
 
 procedure TMain.InitHeuristic(const name, texName: String; const fn: TComputeOpt; var ix: Integer);

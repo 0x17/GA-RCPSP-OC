@@ -36,7 +36,7 @@ type
     class procedure InitPriorityRulesFromFile(const ps: ProjData; out rules: JobDataArray);
 
     procedure LoadFromFile(const filename: String);
-    procedure ComputeESFTS;
+    procedure ComputeELSFTS;
 
     procedure InvertPrecedence;
     procedure ReorderJobsAscDepth;
@@ -57,6 +57,9 @@ type
     function MaxValue(jobs: JobData): Integer; inline;
 
   private
+    procedure ComputeESFTS;
+    procedure ComputeLSFTS;
+
     procedure ParsePrecedenceLine(var fp: TextFile);
     procedure ParseReqDur(var fp: TextFile);
 
@@ -111,12 +114,10 @@ begin
 end;
 
 procedure ProjData.ComputeESFTS;
-var i, j, k, l, lastPredFt, firstSuccSt: Integer;
+var i, j, k, l, lastPredFt: Integer;
 begin
   SetLength(ests, numJobs);
   SetLength(efts, numJobs);
-  SetLength(lsts, numJobs);
-  SetLength(lfts, numJobs);
 
   ests[0] := 0;
   efts[0] := 0;
@@ -133,6 +134,13 @@ begin
     ests[j] := lastPredFt;
     efts[j] := ests[j] + durations[j];
   end;
+end;
+
+procedure ProjData.ComputeLSFTS;
+var i, j, k, l, firstSuccSt: Integer;
+begin
+  SetLength(lsts, numJobs);
+  SetLength(lfts, numJobs);
 
   lfts[numJobs-1] := T;
   lsts[numJobs-1] := lfts[numJobs-1];
@@ -149,6 +157,12 @@ begin
     lfts[j] := firstSuccSt;
     lsts[j] := lfts[j] - durations[j];
   end;
+end;
+
+procedure ProjData.ComputeELSFTS;
+begin
+  ComputeESFTS;
+  ComputeLSFTS;
 end;
 
 procedure ProjData.LoadFromFile(const filename: String);

@@ -22,7 +22,7 @@ procedure Reorder;
 begin
   ps.ReorderJobsAscDepth;
   TTopSort.Sort(ps.topOrder);
-  ps.ComputeESFTS;
+  ps.ComputeELSFTS;
 end;
 
 procedure TestSSGS;
