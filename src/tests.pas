@@ -213,7 +213,7 @@ begin
 
   //result.Add(@TestStopwatch);
 
-  result.Add(@TestCostMinHeurRelaxed);
+  //result.Add(@TestCostMinHeurRelaxed);
 end;
 
 procedure RunTests;

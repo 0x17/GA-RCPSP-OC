@@ -69,7 +69,10 @@ begin
   if SINGLE_RESULT then g_upperTimeLimitIndex := 0
   else g_upperTimeLimitIndex := 3;
 
-  RunTests;
+//  RunTests;
+    TMain.InitProject('QBWLBeispiel.DAT');
+    writeln;
+    FreeAndNil(ps);
 
   //WriteOptsAndTime('../../Projekte/j30filtered', 'HeursRawj30out.csv');
 
